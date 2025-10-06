@@ -1,0 +1,177 @@
+/* Reset y estilos base para la tabla */
+.table {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    border-radius: 0;
+}
+
+/* Eliminar todos los bordes por defecto */
+.table, .table th, .table td {
+    border: none;
+}
+
+/* Header */
+.table thead {
+    background-color: #1e1e1e;
+}
+
+.table thead th {
+    background-color: #1e1e1e;
+    color: #9ca3af;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 16px 24px;
+    border-bottom: 1px solid #333333;
+    text-transform: none;
+}
+
+/* Filas del cuerpo */
+.table tbody tr {
+    background-color: #1e1e1e;
+    border-bottom: 1px solid #333333;
+}
+
+.table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.table tbody td {
+    padding: 20px 24px;
+    background-color: #1e1e1e;
+    color: #ffffff;
+    vertical-align: middle;
+}
+
+/* Contenedor de avatar y texto */
+.d-flex.align-items-center {
+    gap: 16px;
+}
+
+.d-flex.align-items-center .ms-3 {
+    margin-left: 0 !important;
+}
+
+/* Nombre del empleado */
+.table .fw-bold {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 2px;
+    line-height: 1.3;
+}
+
+/* Email */
+.table .text-muted {
+    color: #9ca3af !important;
+    font-size: 13px;
+    margin-bottom: 0;
+    line-height: 1.3;
+}
+
+/* Título del trabajo */
+.table .fw-normal {
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 2px;
+    line-height: 1.3;
+}
+
+/* Departamento */
+.table td p.text-muted:last-child {
+    color: #9ca3af !important;
+}
+
+/* Avatar */
+.table img.rounded-circle {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+}
+
+/* Status badges */
+.badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 12px;
+    text-transform: none;
+}
+
+.badge-success {
+    background-color: #059669;
+    color: #ffffff;
+    border: none;
+}
+
+.badge-primary {
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+}
+
+.badge-warning {
+    background-color: #d97706;
+    color: #ffffff;
+    border: none;
+}
+
+/* Posición */
+.table tbody td:nth-child(4) {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Botón Edit */
+.btn-link {
+    color: #9ca3af;
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+}
+
+.btn-link:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.btn-link:focus {
+    box-shadow: none;
+    color: #ffffff;
+}
+
+/* Eliminar estilos de Bootstrap que puedan interferir */
+.bg-white {
+    background-color: #1e1e1e !important;
+}
+
+.bg-light {
+    background-color: #1e1e1e !important;
+}
+
+/* Asegurar que no haya espacios en blanco */
+.table-responsive {
+    background-color: #1e1e1e;
+}
+
+/* Ajustes adicionales para hacer que se vea exactamente como la imagen */
+.table thead th:first-child,
+.table tbody td:first-child {
+    padding-left: 24px;
+}
+
+.table thead th:last-child,
+.table tbody td:last-child {
+    padding-right: 24px;
+    text-align: left;
+}

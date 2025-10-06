@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - On a budget</title>
+
+    <!-- CSS principal (el mismo que ya tienes) -->
+    <link rel="stylesheet" href="css/daily_input.css">
+    <!-- CSS de íconos (el mismo que ya tienes) -->
+    <link rel="stylesheet" href="css/icons.css">
+    <!-- CSS adicional para configuración -->
+    <link rel="stylesheet" href="css/configuracion.css">
+</head>
+<body>
+<div class="contenedor-principal">
+
+    <!-- Cabecera -->
+    <header class="barra-superior">
+        <!-- Parte izquierda oscura con el título -->
+        <section class="seccion-izquierda">
+            <h1 class="titulo-app">On a budget</h1>
+        </section>
+
+        <!-- Parte derecha blanca -->
+        <section class="seccion-derecha">
+            <h2 class="subtitulo">Configuración</h2>
+
+            <!-- Info Usuario -->
+            <div class="info-usuario">
+                <span class="nombre-usuario">Pepe Grillo</span>
+                <span class="rol-usuario">Papa / Mama</span>
+            </div>
+        </section>
+    </header>
+
+    <!-- Contenido principal -->
+    <div class="contenedor-medio">
+        <!-- Menu lateral -->
+        <aside class="menu-lateral" id="menuLateral">
+            <nav>
+                <a class="opcion-menu" href="daily_input.html">
+                    <i class="icono icono-documento"></i>Registro Diario
+                </a>
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-grafico"></i>Balance
+                </a>
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-persona"></i>Cuenta
+                </a>
+                <a class="opcion-menu activa" href="configuracion.html">
+                    <i class="icono icono-configuracion"></i>Configuración
+                </a>
+            </nav>
+
+            <!-- Cerrar sesión abajo -->
+            <footer class="parte-abajo">
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-salir"></i>Cerrar sesión
+                </a>
+            </footer>
+        </aside>
+
+        <!-- Area principal con submenu -->
+        <div class="area-con-submenu">
+            <!-- Submenu de configuración -->
+            <aside class="submenu-configuracion">
+                <nav class="nav-submenu">
+                    <a class="opcion-submenu activa" href="#usuarios">Usuarios</a>
+                    <a class="opcion-submenu" href="#conceptos">Conceptos</a>
+                </nav>
+            </aside>
+
+            <!-- Contenido de configuración -->
+            <main class="contenido-configuracion">
+                <!-- Sección de usuarios -->
+                <section class="seccion-usuarios" id="usuarios">
+                    <!-- Barra de herramientas -->
+                    <div class="barra-herramientas">
+                        <div class="contenedor-busqueda">
+                            <input type="text" class="campo-busqueda" placeholder="Buscar">
+                            <i class="icono-buscar"></i>
+                        </div>
+                        <button class="boton-crear-usuario">
+                            Crear usuario
+                        </button>
+                    </div>
+
+                    <!-- Tabla de usuarios -->
+                    <div class="contenedor-tabla-usuarios">
+                        <table class="tabla-usuarios">
+                            <thead>
+                            <tr>
+                                <th class="columna-usuario">Usuario</th>
+                                <th class="columna-nombre">Nombre</th>
+                                <th class="columna-rol">Rol</th>
+                                <th class="columna-accion">Acción</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>PepitoGrillin123</td>
+                                <td>Pepe Grillo</td>
+                                <td>Papa / Mama</td>
+                                <td class="celda-accion">
+                                    <a href="#" class="link-borrar">Borrar</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>LuchitoGrillin456</td>
+                                <td>Luis Grillo</td>
+                                <td>Niños / Adulto</td>
+                                <td class="celda-accion">
+                                    <a href="#" class="link-borrar">Borrar</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>LolitaGrillin789</td>
+                                <td>Lola Grillo</td>
+                                <td>Niños / Adulto</td>
+                                <td class="celda-accion">
+                                    <a href="#" class="link-borrar">Borrar</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Sección de conceptos (oculta por defecto) -->
+                <section class="seccion-conceptos" id="conceptos" style="display: none;">
+                    <div class="barra-herramientas">
+                        <div class="contenedor-busqueda">
+                            <input type="text" class="campo-busqueda" placeholder="Buscar">
+                            <i class="icono-buscar"></i>
+                        </div>
+                        <button class="boton-crear-usuario">
+                            Crear Concepto
+                        </button>
+                    </div>
+
+                    <!-- Tabla de conceptos -->
+                    <div class="contenedor-tabla-usuarios">
+                        <table class="tabla-usuarios tabla-conceptos">
+                            <thead>
+                            <tr>
+                                <th class="columna-concepto">Concepto</th>
+                                <th class="columna-tipo">Tipo</th>
+                                <th class="columna-subido">Subido por</th>
+                                <th class="columna-costo">Costo</th>
+                                <th class="columna-periodo">Período</th>
+                                <th class="columna-accion">Acción</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Otros - Pago deuda</td>
+                                <td>Ingreso</td>
+                                <td>Luchito Grillo</td>
+                                <td>S/. 50.00</td>
+                                <td>Eventual</td>
+                                <td class="celda-accion">
+                                    <a href="#" class="link-editar-concepto">Editar</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Salario - Padre</td>
+                                <td>Ingreso</td>
+                                <td>Pepe Grillo</td>
+                                <td>S/. 2500.00</td>
+                                <td>Mensual</td>
+                                <td class="celda-accion">
+                                    <a href="#" class="link-editar-concepto">Editar</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Comida</td>
+                                <td>Egreso</td>
+                                <td>Pepe Grillo</td>
+                                <td>S/. 535.00</td>
+                                <td>Mensual</td>
+                                <td class="celda-accion">
+                                    <a href="#" class="link-editar-concepto">Editar</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Servicios básicos</td>
+                                <td>Egreso</td>
+                                <td>Pepe Grillo</td>
+                                <td>S/. 375.00</td>
+                                <td>Mensual</td>
+                                <td class="celda-accion">
+                                    <a href="#" class="link-editar-concepto">Editar</a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript para el submenu -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Manejo del submenu
+        const opcionesSubmenu = document.querySelectorAll('.opcion-submenu');
+        const seccionUsuarios = document.getElementById('usuarios');
+        const seccionConceptos = document.getElementById('conceptos');
+
+        opcionesSubmenu.forEach(opcion => {
+            opcion.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Remover clase activa de todas las opciones
+                opcionesSubmenu.forEach(op => op.classList.remove('activa'));
+                // Agregar clase activa a la opción clickeada
+                this.classList.add('activa');
+
+                // Mostrar/ocultar secciones
+                if (this.getAttribute('href') === '#usuarios') {
+                    seccionUsuarios.style.display = 'block';
+                    seccionConceptos.style.display = 'none';
+                    document.querySelector('.subtitulo').textContent = 'Configuración';
+                } else {
+                    seccionUsuarios.style.display = 'none';
+                    seccionConceptos.style.display = 'block';
+                    document.querySelector('.subtitulo').textContent = 'Configuración';
+                }
+            });
+        });
+
+        // Funcionalidad de búsqueda para ambas tablas
+        document.querySelectorAll('.campo-busqueda').forEach((campoBusqueda, index) => {
+            campoBusqueda.addEventListener('input', function() {
+                const valor = this.value.toLowerCase();
+                const tabla = index === 0 ? '.seccion-usuarios .tabla-usuarios' : '.seccion-conceptos .tabla-usuarios';
+                const filas = document.querySelectorAll(tabla + ' tbody tr');
+
+                filas.forEach(fila => {
+                    const texto = fila.textContent.toLowerCase();
+                    fila.style.display = texto.includes(valor) ? '' : 'none';
+                });
+            });
+        });
+
+        // Funcionalidad de borrar usuarios
+        document.querySelectorAll('.link-borrar').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm('¿Estás seguro de que deseas borrar este usuario?')) {
+                    this.closest('tr').remove();
+                }
+            });
+        });
+
+        // Funcionalidad de editar conceptos
+        document.querySelectorAll('.link-editar-concepto').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Función de edición en desarrollo');
+                // Aquí podrías abrir un modal o redirigir a una página de edición
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
