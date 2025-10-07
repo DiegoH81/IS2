@@ -1,82 +1,33 @@
-/* ===================================
-          CSS INTEGRADO - daily_input.css
-          =================================== */
-
-/* Reseteo básico */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+/* Info del usuario - ACTUALIZADO PARA SER VERTICAL */
+.info-usuario {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.5;
-    height: 100vh;
+.nombre-usuario {
+    font-size: 18px;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.rol-usuario {
+    color: #9ca3af;
+    font-size: 13px;
+}
+
+/* Contenedor del medio */
+.contenedor-medio {
+    display: flex;
+    flex: 1;
     overflow: hidden;
 }
 
-/* Contenedor principal */
-.contenedor-principal {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background-color: #f3f4f6;
-}
-
-/* Barra superior - DIVIDIDA EN DOS SECCIONES */
-.barra-superior {
-    height: 80px;
-    display: flex;
-    flex-shrink: 0;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-/* Sección izquierda - mismo color que el menú */
-.seccion-izquierda {
-    width: 240px;
-    background-color: #2d3748;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.titulo-app {
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-}
-
-/* Sección derecha - barra blanca */
-.seccion-derecha {
-    flex: 1;
-    background-color: white;
-    padding: 20px 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.subtitulo {
-    font-size: 20px;
-    color: #374151;
-}
-
-
-
-
-/* Menu lateral - ACTUALIZADO */
-.menu-lateral {
-    background-color: #2d3748;
-    width: 240px;
+.parte-abajo {
+    margin-top: auto;
     padding: 8px;
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
 }
-
 
 /* Area de trabajo */
 .area-trabajo {
@@ -97,7 +48,11 @@ body {
     flex-shrink: 0;
 }
 
-
+.grupo-controles {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
 
 /* Switch */
 .contenedor-switch {
