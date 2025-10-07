@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro Diario</title>
 
+    <link rel="stylesheet" href="css/principal.css">
     <!-- CSS principal -->
     <link rel="stylesheet" href="css/daily_input.css">
     <!-- CSS de íconos -->
@@ -38,7 +39,7 @@
         <!-- Menu lateral - ACTUALIZADO -->
         <aside class="menu-lateral" id="menuLateral">
             <nav>
-                <a class="opcion-menu activa" href="daily_input.html">
+                <a class="opcion-menu activa" href="daily_input.php">
                     <i class="icono icono-documento"></i>Registro Diario
                 </a>
                 <a class="opcion-menu" href="#">
@@ -47,7 +48,13 @@
                 <a class="opcion-menu" href="#">
                     <i class="icono icono-persona"></i>Cuenta
                 </a>
-                <a class="opcion-menu" href="configuracion.html">
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-grafico"></i>Agenda
+                </a>
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-grafico"></i>Ranking
+                </a>
+                <a class="opcion-menu" href="visualizar_conceptos.php">
                     <i class="icono icono-configuracion"></i>Configuración
                 </a>
             </nav>
@@ -74,18 +81,8 @@
                             <input type="checkbox" checked>
                             <span class="deslizador"></span>
                         </label>
-                    </div>
-
-                    <!-- Calendario -->
-                    <div class="caja-fecha">
-                        <input type="date" value="2025-08-26" class="campo-fecha">
-                    </div>
+                    </div>                    
                 </div>
-
-                <!-- Botón de balance -->
-                <button class="boton-balance-rango">
-                    Balance por rango
-                </button>
             </section>
 
             <!-- Las dos tablas -->
@@ -246,7 +243,7 @@
             <footer class="seccion-inferior">
                 <!-- Boton de balance semanal -->
                 <button class="boton-balance-semanal">
-                    Balance Semanal (Domingo)
+                    Corte semanal
                 </button>
 
                 <!-- Caja de resumen -->
@@ -254,7 +251,7 @@
                     <h4 class="titulo-resumen">Resumen del Balance</h4>
                     <div class="linea-resumen">
                         <span class="texto-resumen">Diario</span>
-                        <span class="valor-resumen">S/. 12.00</span>
+                        <span class="valor-resumen">S/. -12.00</span>
                     </div>
                     <div class="linea-resumen">
                         <span class="texto-resumen">Mensual</span>
@@ -276,13 +273,6 @@
             switchBtn.addEventListener('change', function() {
                 console.log('Modo:', this.checked ? 'Personal' : 'Familiar');
             });
-        }
-
-        // Calendario
-        const campoFecha = document.querySelector('.campo-fecha');
-        if (campoFecha) {
-            const hoy = new Date().toISOString().split('T')[0];
-            campoFecha.value = hoy;
         }
     });
 </script>
