@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </nav>
 
             <footer class="parte-abajo">
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-01_InicioDeSesion.php">
                     <i class="icono icono-salir"></i>Cerrar sesión
                 </a>
             </footer>

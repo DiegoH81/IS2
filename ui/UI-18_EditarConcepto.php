@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </nav>
 
             <footer class="parte-abajo">
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-01_InicioDeSesion.php">
                     <i class="icono icono-salir"></i>Cerrar sesión
                 </a>
             </footer>
@@ -128,7 +128,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <main class="contenedor-medio">
             <aside class="submenu-configuracion" id="Sub_menuConfig">
-                <!-- submenu igual -->
+                <nav>
+                    <a class="opcion-submenu" href="#">
+                        <i></i>Usuarios
+                    </a>
+                    <a class="opcion-submenu activa" href="UI-16_VisualizarConceptos.php">
+                        <i></i>Conceptos
+                    </a>
+                    <a class="opcion-submenu" href="#">
+                        <i></i>Categorías
+                    </a>
+                </nav>
             </aside>
 
             <section class="contenedor-tablas">
