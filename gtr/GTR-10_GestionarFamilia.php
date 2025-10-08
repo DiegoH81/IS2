@@ -3,7 +3,7 @@ require_once 'Database.php';
 
 class GestionarFamilia {
 
-    // Verifica si existe la contraseña familiar
+    // FUN-12 existeContrasenaFamiliar
     public static function existeContrasenaFamiliar($contrasena) {
         $conn = Database::connect();
         $query = "SELECT existecontrasenafamiliar($1);";
@@ -13,7 +13,7 @@ class GestionarFamilia {
         return $row[0]; // true o false
     }
 
-    // Crea una nueva familia
+    // FUN-11 crearFamilia
     public static function crearFamilia($apellido, $contrasena) {
         $conn = Database::connect();
         $query = "SELECT crearfamilia($1, $2);";

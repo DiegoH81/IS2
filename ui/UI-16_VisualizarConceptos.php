@@ -1,9 +1,18 @@
 <?php
+
+// ------------------------------------------------------------
+// UI-16: Visualizar conceptos
+// Caso de uso asociado: CU-15 Gestionar conceptos
+// ------------------------------------------------------------
+
 session_start();
 require_once '../gtr/GTR-02_GestionarConcepto.php';
 
+// Paso 7 del CU-16: La interfaz presenta el campo de búsqueda.
+
 // Capturar la búsqueda si existe
 $cadena = isset($_GET['cadena']) ? $_GET['cadena'] : '';
+
 
 // Si hay texto en la barra, filtrar (esto puedes implementarlo en tu función SQL más adelante)
 if ($cadena !== '') {
@@ -98,6 +107,7 @@ if ($cadena !== '') {
 
             <section class="contenedor-tablas">
                 <article class="tabla">
+                    <!-- Paso 8 del CU-16: Mostrar opción de Crear concepto. -->
                     <header>
                         <div class="encabezado-tabla-superior">
                             <a href="UI-17_CrearConcepto.php" class="boton-crear">Crear concepto</a>
@@ -107,6 +117,7 @@ if ($cadena !== '') {
                         <div class="linea-azul"></div>
                     </header>
 
+                    <!-- Paso 10 del CU-16: Presentar la lista de conceptos con nombre, tipo, categoría, etc. -->
                     <table class="tabla-datos">
                         <thead>
                             <tr>
@@ -132,10 +143,14 @@ if ($cadena !== '') {
                                     <td class="celda"><?= htmlspecialchars($c['periodicidad']) ?></td>
                                     <td class="celda"><?= $c['estado'] ?></td>
                                     <td class="celda">
+
                                         <form action="UI-18_EditarConcepto.php" method="GET">
+                                             <!-- Paso 9 del CU-16: Mostrar opciones de gestión según el rol. -->
+                                             <!-- Paso 9.1/9.2: Si es familiar, solo puede editar los suyos. -->
                                             <input type="hidden" name="id" value="<?= $c['id_concepto'] ?>">
                                             <button type="submit" class="link-editar">Editar</button>
                                         </form>
+
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
