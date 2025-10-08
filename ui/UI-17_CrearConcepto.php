@@ -8,12 +8,13 @@ $categorias = GestionarCategoria::obtenerCategorias();
 // Verificar si el formulario fue enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre   = $_POST['nombre'];
-    $categoria = $_POST['categoria'];
     $tipo     = $_POST['tipo'];
     $monto    = $_POST['monto'];
     $fecha_inicio = $_POST['fecha_inicio'];
     $fecha_fin    = $_POST['fecha_fin'];
-    $usuario_id   = $_SESSION['usuario_id']; // usuario logueado
+    $categoriaId = $_POST['categoria'];
+    $usuarioId   = $_SESSION['id_usuario'];
+    $descripcion = '';
 
     // Determinar periodicidad según la opción
     $periodo_sel = $_POST['periodo'];
@@ -30,7 +31,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Llamar al gestor para crear el concepto
-    $resultado = GestionarConcepto::crearConcepto($nombre, $categoria, $tipo, $periodo, $monto, $fecha_inicio, $fecha_fin, $usuario_id);
+    $resultado = GestionarConcepto::crearConcepto(
+        $nombre,
+        $descripcion,
+        $tipo,
+        $monto,
+        $periodo,
+        $periodo_sel,
+        $fecha_inicio,
+        $fecha_fin,
+        $categoriaId,
+        $usuarioId
+    );
 
     // Redireccionar o mostrar mensaje
     if ($resultado) {
@@ -123,7 +135,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
 
                     <form class="form-crear-concepto" method="POST">
-                        <input type="hidden" name="usuario_id" value="<?= $_SESSION['usuario_id'] ?>">
 
                         <!-- Categoría -->
                         <div class="campo-formulario">
@@ -131,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <select id="categoria" name="categoria" required>
                                 <option value="">Seleccionar categoría</option>
                                 <?php foreach($categorias as $cat): ?>
-                                    <option value="<?= htmlspecialchars($cat['nombre']) ?>">
+                                    <option value="<?= $cat['id_categoria'] ?>">
                                         <?= htmlspecialchars($cat['nombre']) ?>
                                     </option>
                                 <?php endforeach; ?>

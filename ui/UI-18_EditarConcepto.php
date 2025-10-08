@@ -18,32 +18,49 @@ if (!$concepto) {
 
 // Procesar formulario POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombre   = $_POST['nombre'];
-    $categoria = $_POST['categoria'];
-    $tipo     = $_POST['tipo'];
-    $monto    = $_POST['monto'];
-    $fecha_inicio = $_POST['fecha_inicio'];
-    $fecha_fin    = $_POST['fecha_fin'];
+    $nombre        = $_POST['nombre'];
+    $tipo          = $_POST['tipo'];
+    $monto         = $_POST['monto'];
+    $fecha_inicio  = $_POST['fecha_inicio'];
+    $fecha_fin     = $_POST['fecha_fin'];
+    $categoriaId   = $_POST['categoria'];
+    $usuarioId = $_SESSION['id_usuario'];
+    $descripcion   = '';
 
-    // Determinar periodicidad según la opción
+    // Determinar periodo numérico
     $periodo_sel = $_POST['periodo'];
     switch ($periodo_sel) {
         case 'Diario': $periodo = 1; break;
         case 'Semanal': $periodo = 7; break;
         case 'Quincenal': $periodo = 15; break;
         case 'Mensual': $periodo = 30; break;
-        case 'Eventual': $periodo = 30; break;
+        case 'Eventual': $periodo = 0; break;
         case 'Personalizado':
             $periodo = isset($_POST['periodicidad']) ? (int)$_POST['periodicidad'] : 1;
             break;
         default: $periodo = 1;
     }
 
-    // Llamar al gestor para actualizar
-    $resultado = GestionarConcepto::editarConcepto($id_concepto, $nombre, $categoria, $tipo, $periodo, $periodicidad, $monto, $fecha_inicio, $fecha_fin);
+    // Guardar la cadena seleccionada
+    $periodicidad = $periodo_sel;
+
+    // Llamar al gestor con **todos los parámetros y en el orden correcto**
+    $resultado = GestionarConcepto::editarConcepto(
+        $id_concepto,
+        $nombre,
+        $descripcion,
+        $tipo,
+        $monto,
+        $periodo,
+        $periodicidad,
+        $fecha_inicio,
+        $fecha_fin,
+        $categoriaId,
+        $usuarioId
+    );
 
     if ($resultado) {
-        header("Location: visualizar_conceptos.php");
+        header("Location: UI-16_VisualizarConceptos.php");
         exit;
     } else {
         $error = "Ocurrió un error al actualizar el concepto.";
@@ -133,8 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <select id="categoria" name="categoria" required>
                                 <option value="">Seleccionar categoría</option>
                                 <?php foreach($categorias as $cat): ?>
-                                    <option value="<?= htmlspecialchars($cat['nombre']) ?>" 
-                                        <?= $cat['nombre'] == $concepto['categoria_nombre'] ? 'selected' : '' ?>>
+                                    <option value="<?= $cat['id_categoria'] ?>" <?= $cat['id_categoria'] == $concepto['categoria_id'] ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($cat['nombre']) ?>
                                     </option>
                                 <?php endforeach; ?>

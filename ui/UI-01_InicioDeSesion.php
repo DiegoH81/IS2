@@ -12,13 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (GestionarUsuario::validarCredenciales($usuario, $contrasena)) {
         // Obtener datos completos del usuario
         $usuarioData = GestionarUsuario::obtenerUsuario($usuario);
-
+        var_dump($usuarioData);
         // Guardar datos en sesión
-        $_SESSION['usuario_id'] = $usuarioData['id_usuario'];
+        $_SESSION['id_usuario'] = $usuarioData['id_usuario'];
         $_SESSION['nombre'] = $usuarioData['nombre'];
         $_SESSION['usuario'] = $usuarioData['usuario'];
         $_SESSION['rol'] = $usuarioData['rol'];
-        $_SESSION['familia_id'] = $usuarioData['familia_id'];
+        $_SESSION['id_familia'] = $usuarioData['familia_id'];
         $_SESSION['nombre_familia'] = $usuarioData['nombre_familia'];
 
         // Redirigir a la página principal
