@@ -16,14 +16,14 @@ if (!isset($_GET['id'])) {
 $id_concepto = (int)$_GET['id'];
 
 
-// Paso 1 del CU-18: La interfaz Editar concepto (UI-18) solicita al GTR-09 Gestionar categoría las categorías.
+// Paso 1 del CU-17: La interfaz Editar concepto (UI-18) solicita al GTR-09 Gestionar categoría las categorías.
 $categorias = GestionarCategoria::obtenerCategorias();
 $concepto = GestionarConcepto::obtenerConcepto($id_concepto);
 if (!$concepto) {
     die("Concepto no encontrado");
 }
 
-// Paso 13 del CU-18: El AC-02-Familiar selecciona la opción Guardar.
+// Paso 13 del CU-17: El AC-02-Familiar selecciona la opción Guardar.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre        = $_POST['nombre'];
     $tipo          = $_POST['tipo'];
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuarioId = $_SESSION['id_usuario'];
     $descripcion   = '';
 
-    // Paso 10 del CU-18: El AC-02-Familiar modifica el período (Diario, Semanal, Quincenal, Mensual, Personalizado, Eventual).
+    // Paso 10 del CU-17: El AC-02-Familiar modifica el período (Diario, Semanal, Quincenal, Mensual, Personalizado, Eventual).
     $periodo_sel = $_POST['periodo'];
     switch ($periodo_sel) {
         case 'Diario': $periodo = 1; break;
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Guardar la cadena seleccionada
     $periodicidad = $periodo_sel;
 
-    // Paso 17 del CU-18: El GTR-02 Gestionar concepto actualiza la información del concepto en TAB-02 Concepto.
+    // Paso 17 del CU-17: El GTR-02 Gestionar concepto actualiza la información del concepto en TAB-02 Concepto.
     $resultado = GestionarConcepto::editarConcepto(
         $id_concepto,
         $nombre,
@@ -67,8 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     );
 
     if ($resultado) {
-        // Paso 18 del CU-18: La interfaz muestra un mensaje de confirmación de cambios guardados.
-        // Paso 19 del CU-18: La interfaz redirige al AC-02-Familiar a la interfaz Visualizar conceptos (UI-16).
+        // Paso 18 del CU-17: La interfaz muestra un mensaje de confirmación de cambios guardados.
+        // Paso 19 del CU-17: La interfaz redirige al AC-02-Familiar a la interfaz Visualizar conceptos (UI-16).
         header("Location: UI-16_VisualizarConceptos.php");
         exit;
     } else {
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
 
     <div class="contenedor-medio">
-        <!-- Paso 4 del CU-18: La interfaz muestra la opción de Crear categoría. -->
+        <!-- Paso 4 del CU-17: La interfaz muestra la opción de Crear categoría. -->
         <!-- Menú lateral -->
         <aside class="menu-lateral" id="menuLateral">
             <nav>
@@ -177,13 +177,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </select>
                         </div>
 
-                        <!-- Paso 5 y 7 del CU-18: El AC-02-Familiar modifica el nombre del concepto si es necesario. -->
+                        <!-- Paso 5 y 7 del CU-17: El AC-02-Familiar modifica el nombre del concepto si es necesario. -->
                         <div class="campo-formulario">
                             <label for="nombre">Nombre:</label>
                             <input type="text" id="nombre" name="nombre" value="<?= htmlspecialchars($concepto['nombre']) ?>" required>
                         </div>
 
-                        <!-- Paso 8 del CU-18: El AC-02-Familiar modifica el tipo (Ingreso o Egreso). -->
+                        <!-- Paso 8 del CU-17: El AC-02-Familiar modifica el tipo (Ingreso o Egreso). -->
                         <div class="campo-formulario">
                             <label>Tipo:</label>
                             <div class="opciones-radio">
@@ -192,13 +192,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
-                        <!-- Paso 9 del CU-18: El AC-02-Familiar modifica el monto si es necesario. -->
+                        <!-- Paso 9 del CU-17: El AC-02-Familiar modifica el monto si es necesario. -->
                         <div class="campo-formulario">
                             <label for="monto">Monto:</label>
                             <input type="number" id="monto" name="monto" step="0.01" value="<?= $concepto['monto'] ?>" required>
                         </div>
 
-                        <!-- Paso 10 del CU-18: El AC-02-Familiar modifica el período. -->
+                        <!-- Paso 10 del CU-17: El AC-02-Familiar modifica el período. -->
                         <div class="campo-formulario"><label>Periodo:</label>
                             <div class="opciones-radio columna-vertical">
                                 <?php 
@@ -215,7 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="number" name="periodicidad" value="<?= $concepto['periodo'] ?>" placeholder="Ingrese número">
                         </div>
 
-                        <!-- Paso 11 y 12 del CU-18: El AC-02-Familiar modifica las fechas si es necesario. -->
+                        <!-- Paso 11 y 12 del CU-17: El AC-02-Familiar modifica las fechas si es necesario. -->
                         <div class="campo-formulario">
                             <label>Día de inicio / Día de fin:</label>
                             <div class="fechas">
@@ -224,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
-                        <!-- Paso 13 del CU-18: El AC-02-Familiar selecciona “Guardar”. -->
+                        <!-- Paso 13 del CU-17: El AC-02-Familiar selecciona “Guardar”. -->
                         <div class="campo-formulario">
                             <button type="submit" class="boton-crear">Guardar concepto</button>
                         </div>

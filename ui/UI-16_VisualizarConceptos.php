@@ -8,7 +8,7 @@
 session_start();
 require_once '../gtr/GTR-02_GestionarConcepto.php';
 
-// Paso 7 del CU-16: La interfaz presenta el campo de búsqueda.
+// Paso 7 del CU-15: La interfaz presenta el campo de búsqueda.
 
 // Capturar la búsqueda si existe
 $cadena = isset($_GET['cadena']) ? $_GET['cadena'] : '';
@@ -126,7 +126,7 @@ if ($cadena !== '') {
 
             <section class="contenedor-tablas">
                 <article class="tabla">
-                    <!-- Paso 8 del CU-16: Mostrar opción de Crear concepto. -->
+                    <!-- Paso 8 del CU-15: Mostrar opción de Crear concepto. -->
                     <header>
                         <div class="encabezado-tabla-superior">
                             <a href="UI-17_CrearConcepto.php" class="boton-crear">Crear concepto</a>
@@ -136,7 +136,6 @@ if ($cadena !== '') {
                         <div class="linea-azul"></div>
                     </header>
 
-                    <!-- Paso 10 del CU-16: Presentar la lista de conceptos con nombre, tipo, categoría, etc. -->
                     <table class="tabla-datos">
                         <thead>
                             <tr>
@@ -178,7 +177,7 @@ if ($cadena !== '') {
                                         </button>
                                     </td>
 
-                                    <!-- Paso 9 del CU-16: Mostrar opciones de gestión según el rol. -->
+                                    <!-- Paso 9 del CU-15: Mostrar opciones de gestión según el rol. -->
                                     <!-- Paso 9.1/9.2: Si es familiar, solo puede editar los suyos. -->
 
                                     <td class="celda">
