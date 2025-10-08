@@ -61,20 +61,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <section class="seccion-derecha">
             <h2 class="subtitulo">Configuración</h2>
             <div class="info-usuario">
-                <span class="nombre-usuario"><?= htmlspecialchars($_SESSION['nombre_usuario']) ?></span>
-                <span class="rol-usuario"><?= htmlspecialchars($_SESSION['rol_usuario']) ?></span>
+                <span class="nombre-usuario"><?= htmlspecialchars($_SESSION['nombre']) ?></span>
+                <span class="rol-usuario"><?= htmlspecialchars($_SESSION['rol']) ?></span>
             </div>
         </section>
     </header>
 
     <div class="contenedor-medio">
         <aside class="menu-lateral" id="menuLateral">
-            <!-- menú lateral igual que tu UI -->
+            <nav>
+                <a class="opcion-menu" href="daily_input.php">
+                    <i class="icono icono-documento"></i>Registro Diario
+                </a>
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-grafico"></i>Balance
+                </a>
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-persona"></i>Cuenta
+                </a>
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-grafico"></i>Agenda
+                </a>
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-grafico"></i>Ranking
+                </a>
+                <a class="opcion-menu activa" href="UI-16_VisualizarConceptos.php">
+                    <i class="icono icono-configuracion"></i>Configuración
+                </a>
+            </nav>
+
+            <footer class="parte-abajo">
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-salir"></i>Cerrar sesión
+                </a>
+            </footer>
         </aside>
 
         <main class="contenedor-medio">
             <aside class="submenu-configuracion" id="Sub_menuConfig">
-                <!-- submenu igual que tu UI -->
+                <nav>
+                    <a class="opcion-submenu" href="#">
+                        <i></i>Usuarios
+                    </a>
+                    <a class="opcion-submenu activa" href="UI-16_VisualizarConceptos.php">
+                        <i></i>Conceptos
+                    </a>
+                    <a class="opcion-submenu" href="#">
+                        <i></i>Categorías
+                    </a>
+                </nav>
             </aside>
 
             <section class="contenedor-tablas">

@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once '../gtr/GTR-02_GestionarConcepto.php';
 
 // Capturar la búsqueda si existe
@@ -42,8 +43,8 @@ if ($cadena !== '') {
             <h2 class="subtitulo">Configuración</h2>
 
             <div class="info-usuario">
-                <span class="nombre-usuario">Pepe Grillo</span>
-                <span class="rol-usuario">Papa / Mama</span>
+                <span class="nombre-usuario"><?= htmlspecialchars($_SESSION['nombre']) ?></span>
+                <span class="rol-usuario"><?= htmlspecialchars($_SESSION['rol']) ?></span>
             </div>
         </section>
     </header>
@@ -128,7 +129,7 @@ if ($cadena !== '') {
                                     <td class="celda"><?= htmlspecialchars($c['tipo']) ?></td>
                                     <td class="celda"><?= htmlspecialchars($c['subido_por']) ?></td>
                                     <td class="celda">S/. <?= number_format($c['monto'], 2) ?></td>
-                                    <td class="celda"><?= htmlspecialchars($c['periodo']) ?></td>
+                                    <td class="celda"><?= htmlspecialchars($c['periodicidad']) ?></td>
                                     <td class="celda"><?= $c['estado'] ?></td>
                                     <td class="celda">
                                         <form action="UI-18_EditarConcepto.php" method="GET">
