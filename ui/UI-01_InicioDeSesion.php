@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../gtr/GTR-01_GestionarUsuario.php';
+require_once '../gtr/GTR-04_Validar.php';
 
 $error = '';
 
@@ -16,9 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Paso 8-12 del CU-01: Validar credenciales a través del gestor
 
-    if (GestionarUsuario::validarCredenciales($usuario, $contrasena)) {
+    if (Validar::validarCredenciales($usuario, $contrasena)) {
         // Obtener datos completos del usuario
-        $usuarioData = GestionarUsuario::obtenerUsuario($usuario);
+        $usuarioData = Validar::obtenerUsuario($usuario);
         var_dump($usuarioData);
         // Guardar datos en sesión
         $_SESSION['id_usuario'] = $usuarioData['id_usuario'];

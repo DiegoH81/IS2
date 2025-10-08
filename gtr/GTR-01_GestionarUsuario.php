@@ -3,6 +3,14 @@ require_once '../DatabaseConnection.php';
 
 class GestionarUsuario {
 
+    // FUN- obtenerUsuarios
+    public static function obtenerrUsuarios() {
+        $conn = Database::connect();
+        $query = "SELECT * FROM obtenerrusuarios();";
+        $result = pg_query($conn, $query);
+        return pg_fetch_all($result);
+    }
+
     // FUN-01 validarUsuario
     public static function validarUsuario($usuario) {
         $conn = Database::connect();
