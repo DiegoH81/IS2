@@ -3,7 +3,7 @@ require_once '../DatabaseConnection.php';
 
 class GestionarConcepto {
 
-    // ✅ Crear un nuevo concepto
+    // FUN-06 crearConcepto
     public static function crearConcepto($nombre, $descripcion, $tipo, $monto, $periodo, $periodicidad, $diaInicio, $diaFin, $categoriaId, $usuarioId) {
         $conn = Database::connect();
         $query = "SELECT crearconcepto($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)";
@@ -11,7 +11,7 @@ class GestionarConcepto {
         return pg_query_params($conn, $query, $params);
     }
 
-    // ✅ Obtener todos los conceptos
+    // FUN-07 obtenerConceptos
     public static function obtenerConceptos($usuarioId) {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerconceptos($1);";
@@ -20,7 +20,7 @@ class GestionarConcepto {
         return pg_fetch_all($result);
     }
 
-    // ✅ Obtener un concepto por ID
+    // FUN-08 obtenerConcepto
     public static function obtenerConcepto($idConcepto) {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerconcepto($1)";
@@ -29,7 +29,7 @@ class GestionarConcepto {
         return pg_fetch_assoc($result);
     }
 
-    // ✅ Editar un concepto
+    // FUN-09 editarConcepto
     public static function editarConcepto($idConcepto, $nombre, $descripcion, $tipo, $monto, $periodo, $periodicidad, $diaInicio, $diaFin, $categoriaId, $usuarioId) {
         $conn = Database::connect();
         $query = "SELECT editarconcepto($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)";
@@ -37,7 +37,7 @@ class GestionarConcepto {
         return pg_query_params($conn, $query, $params);
     }
 
-    // ✅ Cambiar el estado (habilitar/deshabilitar)
+    // FUN-10 editarEstadoConcepto
     public static function editarEstadoConcepto($idConcepto, $estado) {
         $conn = Database::connect();
         $query = "SELECT editarestadoconcepto($1, $2)";

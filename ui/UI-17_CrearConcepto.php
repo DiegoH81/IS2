@@ -1,8 +1,15 @@
 <?php
+
+// ------------------------------------------------------------
+// UI-17: Crear concepto
+// Caso de uso asociado: CU-16 - Crear concepto
+// ------------------------------------------------------------
+
 session_start();
 require_once '../gtr/GTR-02_GestionarConcepto.php';
 require_once '../gtr/GTR-09_GestionarCategoria.php';
 
+// Paso 1 del CU-17: El gestor GTR-02 consulta a TAB-05 Categoría para obtener las categorías disponibles.
 $categorias = GestionarCategoria::obtenerCategorias();
 
 // Verificar si el formulario fue enviado
@@ -16,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuarioId   = $_SESSION['id_usuario'];
     $descripcion = '';
 
-    // Determinar periodicidad según la opción
+    // Paso 9 del CU-17: Determinar la periodicidad seleccionada por el usuario.
     $periodo_sel = $_POST['periodo'];
     switch ($periodo_sel) {
         case 'Diario': $periodo = 1; break;
@@ -30,7 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         default: $periodo = 1;
     }
 
-    // Llamar al gestor para crear el concepto
+    // Paso 13-17 del CU-17: La interfaz valida los datos.
+
     $resultado = GestionarConcepto::crearConcepto(
         $nombre,
         $descripcion,
@@ -44,7 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $usuarioId
     );
 
-    // Redireccionar o mostrar mensaje
+    // Paso 18 del CU-17: Mostrar mensaje de confirmación.
+    // Paso 19 del CU-17: Redirigir a la interfaz de Visualizar conceptos (UI-16).
     if ($resultado) {
         header("Location: UI-16_VisualizarConceptos.php");
         exit;
@@ -134,6 +143,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
 
+                    <!-- Paso 3 del CU-17: La interfaz muestra la opción de Crear categoría. -->
+                    <!-- Paso 4 del CU-17: El AC-02 ingresa el nombre del concepto y selecciona la categoría. -->
+                    <!-- Paso 5 del CU-17: La interfaz muestra las categorías disponibles. -->
+                    <!-- Paso 6 del CU-17: El AC-02 selecciona una categoría. -->
+
                     <form class="form-crear-concepto" method="POST">
 
                         <!-- Categoría -->
@@ -148,8 +162,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php endforeach; ?>
                             </select>
                         </div>
-
-                        <!-- Nombre -->
+                        
+                        <!-- Paso 7 del CU-17: El AC-02 selecciona el tipo de concepto (Ingreso o Egreso). -->
                         <div class="campo-formulario">
                             <label for="nombre">Nombre:</label>
                             <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre" required>
@@ -164,13 +178,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
-                        <!-- Monto -->
+                        <!-- Paso 8 del CU-17: El AC-02 ingresa el monto. -->
                         <div class="campo-formulario">
                             <label for="monto">Monto:</label>
                             <input type="number" id="monto" name="monto" step="0.01" placeholder="S/. 0.00" required>
                         </div>
 
-                        <!-- Periodo -->
+                        <!-- Paso 9 del CU-17: El AC-02 selecciona el período. -->
                         <div class="campo-formulario">
                             <label>Periodo:</label>
                             <div class="opciones-radio columna-vertical">
@@ -188,7 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="number" name="periodicidad" placeholder="Ingrese número">
                         </div>
 
-                        <!-- Fechas -->
+                        <!-- Paso 10 y 11 del CU-17: El AC-02 selecciona las fechas de inicio y fin. -->
                         <div class="campo-formulario">
                             <label>Día de inicio / Día de fin:</label>
                             <div class="fechas">
@@ -197,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
-                        <!-- Botón -->
+                        <!-- Paso 12 del CU-17: El AC-02 selecciona la opción Crear. -->
                         <div class="campo-formulario">
                             <button type="submit" class="boton-crear">Guardar concepto</button>
                         </div>
@@ -209,6 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script>
+// Paso 9 del CU-17: Mostrar campo de periodicidad si se selecciona "Personalizado".
 document.addEventListener('DOMContentLoaded', function() {
     const radiosPeriodo = document.querySelectorAll('input[name="periodo"]');
     const campoPersonalizado = document.querySelector('.periodicidad-personalizada');
