@@ -1,112 +1,105 @@
+<?php
+session_start();
+require_once '../gtr/GTR-02_GestionarConcepto.php';
+require_once '../gtr/GTR-09_GestionarCategoria.php';
+
+$categorias = GestionarCategoria::obtenerCategorias();
+
+// Verificar si el formulario fue enviado
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nombre   = $_POST['nombre'];
+    $categoria = $_POST['categoria'];
+    $tipo     = $_POST['tipo'];
+    $monto    = $_POST['monto'];
+    $fecha_inicio = $_POST['fecha_inicio'];
+    $fecha_fin    = $_POST['fecha_fin'];
+    $usuario_id   = $_SESSION['usuario_id']; // usuario logueado
+
+    // Determinar periodicidad según la opción
+    $periodo_sel = $_POST['periodo'];
+    switch ($periodo_sel) {
+        case 'Diario': $periodo = 1; break;
+        case 'Semanal': $periodo = 7; break;
+        case 'Quincenal': $periodo = 15; break;
+        case 'Mensual': $periodo = 30; break;
+        case 'Eventual': $periodo = 0; break;
+        case 'Personalizado':
+            $periodo = isset($_POST['periodicidad']) ? (int)$_POST['periodicidad'] : 1;
+            break;
+        default: $periodo = 1;
+    }
+
+    // Llamar al gestor para crear el concepto
+    $resultado = GestionarConcepto::crearConcepto($nombre, $categoria, $tipo, $periodo, $monto, $fecha_inicio, $fecha_fin, $usuario_id);
+
+    // Redireccionar o mostrar mensaje
+    if ($resultado) {
+        header("Location: UI-16_VisualizarConceptos.php");
+        exit;
+    } else {
+        $error = "Ocurrió un error al crear el concepto.";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar concepto</title>
-
-    <!-- CSS principal -->
-    <link rel="stylesheet" href="css/principal.css">
-    <link rel="stylesheet" href="css/configuracion.css">
-    <!-- CSS de íconos -->
-    <link rel="stylesheet" href="css/icons.css">
-
+    <title>Crear concepto</title>
+    <link rel="stylesheet" href="../css/principal.css">
+    <link rel="stylesheet" href="../css/configuracion.css">
+    <link rel="stylesheet" href="../css/icons.css">
 </head>
 <body>
-
 <div class="contenedor-principal">
-    <!-- Cabecera -->
     <header class="barra-superior">
-        <!-- Parte izquierda oscura con el título -->
         <section class="seccion-izquierda">
             <h1 class="titulo-app">On a budget</h1>
         </section>
-
-        <!-- Parte derecha blanca -->
         <section class="seccion-derecha">
             <h2 class="subtitulo">Configuración</h2>
-
-            <!-- Info Usuario -->
             <div class="info-usuario">
-                <span class="nombre-usuario">Pepe Grillo</span>
-                <span class="rol-usuario">Papa / Mama</span>
+                <span class="nombre-usuario"><?= htmlspecialchars($_SESSION['nombre_usuario']) ?></span>
+                <span class="rol-usuario"><?= htmlspecialchars($_SESSION['rol_usuario']) ?></span>
             </div>
         </section>
     </header>
 
-    
-    <!-- Contenido principal -->
     <div class="contenedor-medio">
-        <!-- Menu lateral - ACTUALIZADO -->
         <aside class="menu-lateral" id="menuLateral">
-            <nav>
-                <a class="opcion-menu" href="daily_input.php">
-                    <i class="icono icono-documento"></i>Registro Diario
-                </a>
-                <a class="opcion-menu" href="#">
-                    <i class="icono icono-grafico"></i>Balance
-                </a>
-                <a class="opcion-menu" href="#">
-                    <i class="icono icono-persona"></i>Cuenta
-                </a>
-                <a class="opcion-menu" href="#">
-                    <i class="icono icono-grafico"></i>Agenda
-                </a>
-                <a class="opcion-menu" href="#">
-                    <i class="icono icono-grafico"></i>Ranking
-                </a>
-                <a class="opcion-menu activa" href="visualizar_conceptos.php">
-                    <i class="icono icono-configuracion"></i>Configuración
-                </a>
-            </nav>
-
-            <!-- Cerrar sesión abajo -->
-            <footer class="parte-abajo">
-                <a class="opcion-menu" href="#">
-                    <i class="icono icono-salir"></i>Cerrar sesión
-                </a>
-            </footer>
+            <!-- menú lateral igual que tu UI -->
         </aside>
 
-        
-
-        <!-- Area principal -->
         <main class="contenedor-medio">
-            
             <aside class="submenu-configuracion" id="Sub_menuConfig">
-                <nav>
-                    <a class="opcion-submenu" href="#">
-                        <i></i>Usuarios
-                    </a>
-                    <a class="opcion-submenu activa" href="visualizar_conceptos.php">
-                        <i></i>Conceptos
-                    </a>
-                    <a class="opcion-submenu" href="#">
-                        <i></i>Categorías
-                    </a>
-                </nav>
+                <!-- submenu igual que tu UI -->
             </aside>
 
-
             <section class="contenedor-tablas">
-
-                
                 <article class="tabla">
                     <header>
-                        <h2 class="titulo-tabla">Editar concepto</h2>
+                        <h2 class="titulo-tabla">Crear concepto</h2>
                         <div class="linea-separadora"></div>
                         <div class="linea-azul"></div>
                     </header>
-                    <form class="form-crear-concepto" action="guardar_concepto.php" method="POST">
+
+                    <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
+
+                    <form class="form-crear-concepto" method="POST">
+                        <input type="hidden" name="usuario_id" value="<?= $_SESSION['usuario_id'] ?>">
+
                         <!-- Categoría -->
                         <div class="campo-formulario">
                             <label for="categoria">Categoría:</label>
                             <select id="categoria" name="categoria" required>
                                 <option value="">Seleccionar categoría</option>
-                                <option value="Deuda">Deuda</option>
-                                <option value="Ingreso">Ingreso</option>
-                                <option value="Gasto">Gasto</option>
-                                <option value="Otro">Otro</option>
+                                <?php foreach($categorias as $cat): ?>
+                                    <option value="<?= htmlspecialchars($cat['nombre']) ?>">
+                                        <?= htmlspecialchars($cat['nombre']) ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
 
@@ -117,7 +110,6 @@
                         </div>
 
                         <!-- Tipo -->
-                         
                         <div class="campo-formulario">
                             <label>Tipo:</label>
                             <div class="opciones-radio">
@@ -145,7 +137,6 @@
                             </div>
                         </div>
 
-                        <!-- Campo adicional para Personalizado -->
                         <div class="periodicidad-personalizada" style="display:none; margin-top:10px;">
                             <label>Periodicidad:</label>
                             <input type="number" name="periodicidad" placeholder="Ingrese número">
@@ -165,33 +156,11 @@
                             <button type="submit" class="boton-crear">Guardar concepto</button>
                         </div>
                     </form>
-
                 </article>
-
-                
             </section>
-
-            
-
         </main>
     </div>
 </div>
-
-<!-- JavaScript -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Switch on/off
-        const switchBtn = document.querySelector('.boton-switch input');
-        if (switchBtn) {
-            switchBtn.addEventListener('change', function() {
-                console.log('Modo:', this.checked ? 'Personal' : 'Familiar');
-            });
-        }
-    });
-</script>
-
-</body>
-</html>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -211,3 +180,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+</body>
+</html>
