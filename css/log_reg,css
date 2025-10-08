@@ -1,0 +1,116 @@
+.contenedor-form {
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    height: 100vh;           
+}
+
+
+.contenedor-tablas-reg {
+    display: flex;
+    justify-content: center;   /* Centra horizontalmente */
+    align-items: center;       /* Centra verticalmente */
+    gap: 30px;
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+
+.form-crear-l-r {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    background: rgb(121, 56, 56);
+    border-radius: 8px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.campo-formulario {
+    display: flex;
+    flex-direction: column;
+}
+
+.campo-formulario label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.campo-formulario input,
+.campo-formulario select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-crear {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.opciones-radio {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    align-items: flex-start;
+
+
+}
+
+.periodicidad-personalizada {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.periodicidad-personalizada label {
+    font-weight: 600;
+}
+.periodicidad-personalizada input {
+    width: 80px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
+.columna-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+
+}
+
+.fechas {
+    display: flex;
+    gap: 10px;
+}
+
+.fechas input[type="date"] {
+    flex: 1;
+}
+
+
+.weiweiwei {
+    background-color: #3862AA !important;  /* azul consistente con tu app */
+    color: white !important;
+    border: none !important;
+    padding: 8px 16px !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    font-weight: 600 !important;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    height: 100%; /* se ajusta al input */
+}
+
+.boton-generar:hover {
+    background-color: #2f4f88 !important;
+    transform: translateY(-1px);
+}
