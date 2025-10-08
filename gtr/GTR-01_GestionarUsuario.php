@@ -9,7 +9,8 @@ class GestionarUsuario {
         $query = "SELECT validarusuario($1)";
         $params = array($usuario);
         $result = pg_query_params($conn, $query, $params);
-        return pg_fetch_result($result, 0, 0); // Devuelve true/false
+        $val = pg_fetch_result($result, 0, 0);
+        return $val === 't';
     }
 
     // ✅ Validar credenciales de usuario
@@ -18,7 +19,8 @@ class GestionarUsuario {
         $query = "SELECT validarcredenciales($1,$2)";
         $params = array($usuario, $contrasena);
         $result = pg_query_params($conn, $query, $params);
-        return pg_fetch_result($result, 0, 0); // Devuelve true/false
+        $val = pg_fetch_result($result, 0, 0);
+        return $val === 't'; // Devuelve true si es 't', false si es 'f'
     }
 
     // ✅ Verificar si un nombre de usuario está disponible
@@ -27,7 +29,8 @@ class GestionarUsuario {
         $query = "SELECT usuariodisponible($1)";
         $params = array($usuario);
         $result = pg_query_params($conn, $query, $params);
-        return pg_fetch_result($result, 0, 0); // Devuelve true/false
+        $val = pg_fetch_result($result, 0, 0);
+        return $val === 't';
     }
 
     // ✅ Crear un nuevo usuario familiar

@@ -18,32 +18,49 @@ if (!$concepto) {
 
 // Procesar formulario POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombre   = $_POST['nombre'];
-    $categoria = $_POST['categoria'];
-    $tipo     = $_POST['tipo'];
-    $monto    = $_POST['monto'];
-    $fecha_inicio = $_POST['fecha_inicio'];
-    $fecha_fin    = $_POST['fecha_fin'];
+    $nombre        = $_POST['nombre'];
+    $tipo          = $_POST['tipo'];
+    $monto         = $_POST['monto'];
+    $fecha_inicio  = $_POST['fecha_inicio'];
+    $fecha_fin     = $_POST['fecha_fin'];
+    $categoriaId   = $_POST['categoria'];
+    $usuarioId = $_SESSION['id_usuario'];
+    $descripcion   = '';
 
-    // Determinar periodicidad según la opción
+    // Determinar periodo numérico
     $periodo_sel = $_POST['periodo'];
     switch ($periodo_sel) {
         case 'Diario': $periodo = 1; break;
         case 'Semanal': $periodo = 7; break;
         case 'Quincenal': $periodo = 15; break;
         case 'Mensual': $periodo = 30; break;
-        case 'Eventual': $periodo = 30; break;
+        case 'Eventual': $periodo = 0; break;
         case 'Personalizado':
             $periodo = isset($_POST['periodicidad']) ? (int)$_POST['periodicidad'] : 1;
             break;
         default: $periodo = 1;
     }
 
-    // Llamar al gestor para actualizar
-    $resultado = GestionarConcepto::editarConcepto($id_concepto, $nombre, $categoria, $tipo, $periodo, $monto, $fecha_inicio, $fecha_fin);
+    // Guardar la cadena seleccionada
+    $periodicidad = $periodo_sel;
+
+    // Llamar al gestor con **todos los parámetros y en el orden correcto**
+    $resultado = GestionarConcepto::editarConcepto(
+        $id_concepto,
+        $nombre,
+        $descripcion,
+        $tipo,
+        $monto,
+        $periodo,
+        $periodicidad,
+        $fecha_inicio,
+        $fecha_fin,
+        $categoriaId,
+        $usuarioId
+    );
 
     if ($resultado) {
-        header("Location: visualizar_conceptos.php");
+        header("Location: UI-16_VisualizarConceptos.php");
         exit;
     } else {
         $error = "Ocurrió un error al actualizar el concepto.";
@@ -63,97 +80,139 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 <div class="contenedor-principal">
-    <!-- Cabecera y menú lateral igual que UI de crear -->
+    <header class="barra-superior">
+        <section class="seccion-izquierda">
+            <h1 class="titulo-app">On a budget</h1>
+        </section>
 
-    <main class="contenedor-medio">
-        <aside class="submenu-configuracion" id="Sub_menuConfig">
-            <!-- submenu igual -->
+        <section class="seccion-derecha">
+            <h2 class="subtitulo">Configuración</h2>
+
+            <div class="info-usuario">
+                <span class="nombre-usuario"><?= htmlspecialchars($_SESSION['nombre']) ?></span>
+                <span class="rol-usuario"><?= htmlspecialchars($_SESSION['rol']) ?></span>
+            </div>
+        </section>
+    </header>
+
+    <div class="contenedor-medio">
+        <!-- Menú lateral -->
+        <aside class="menu-lateral" id="menuLateral">
+            <nav>
+                <a class="opcion-menu" href="daily_input.php">
+                    <i class="icono icono-documento"></i>Registro Diario
+                </a>
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-grafico"></i>Balance
+                </a>
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-persona"></i>Cuenta
+                </a>
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-grafico"></i>Agenda
+                </a>
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-grafico"></i>Ranking
+                </a>
+                <a class="opcion-menu activa" href="UI-16_VisualizarConceptos.php">
+                    <i class="icono icono-configuracion"></i>Configuración
+                </a>
+            </nav>
+
+            <footer class="parte-abajo">
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-salir"></i>Cerrar sesión
+                </a>
+            </footer>
         </aside>
 
-        <section class="contenedor-tablas">
-            <article class="tabla">
-                <header>
-                    <h2 class="titulo-tabla">Editar concepto</h2>
-                    <div class="linea-separadora"></div>
-                    <div class="linea-azul"></div>
-                </header>
+        <main class="contenedor-medio">
+            <aside class="submenu-configuracion" id="Sub_menuConfig">
+                <!-- submenu igual -->
+            </aside>
 
-                <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
+            <section class="contenedor-tablas">
+                <article class="tabla">
+                    <header>
+                        <h2 class="titulo-tabla">Editar concepto</h2>
+                        <div class="linea-separadora"></div>
+                        <div class="linea-azul"></div>
+                    </header>
 
-                <form class="form-crear-concepto" method="POST">
-                    <input type="hidden" name="id_concepto" value="<?= $concepto['id'] ?>">
+                    <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
 
-                    <!-- Categoría -->
-                    <div class="campo-formulario">
-                        <label for="categoria">Categoría:</label>
-                        <select id="categoria" name="categoria" required>
-                            <option value="">Seleccionar categoría</option>
-                            <?php foreach($categorias as $cat): ?>
-                                <option value="<?= htmlspecialchars($cat['nombre']) ?>" 
-                                    <?= $cat['nombre'] == $concepto['categoria'] ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($cat['nombre']) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
+                    <form class="form-crear-concepto" method="POST">
+                        <input type="hidden" name="id_concepto" value="<?= htmlspecialchars($concepto['id_concepto']) ?>">
 
-                    <!-- Nombre -->
-                    <div class="campo-formulario">
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" name="nombre" value="<?= htmlspecialchars($concepto['nombre']) ?>" required>
-                    </div>
-
-                    <!-- Tipo -->
-                    <div class="campo-formulario">
-                        <label>Tipo:</label>
-                        <div class="opciones-radio">
-                            <label><input type="radio" name="tipo" value="Ingreso" <?= $concepto['tipo'] == 'Ingreso' ? 'checked' : '' ?> required> Ingreso</label>
-                            <label><input type="radio" name="tipo" value="Egreso" <?= $concepto['tipo'] == 'Egreso' ? 'checked' : '' ?> required> Egreso</label>
+                        <!-- Categoría -->
+                        <div class="campo-formulario">
+                            <label for="categoria">Categoría:</label>
+                            <select id="categoria" name="categoria" required>
+                                <option value="">Seleccionar categoría</option>
+                                <?php foreach($categorias as $cat): ?>
+                                    <option value="<?= $cat['id_categoria'] ?>" <?= $cat['id_categoria'] == $concepto['categoria_id'] ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($cat['nombre']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
-                    </div>
 
-                    <!-- Monto -->
-                    <div class="campo-formulario">
-                        <label for="monto">Monto:</label>
-                        <input type="number" id="monto" name="monto" step="0.01" value="<?= $concepto['monto'] ?>" required>
-                    </div>
-
-                    <!-- Periodo -->
-                    <div class="campo-formulario">
-                        <label>Periodo:</label>
-                        <div class="opciones-radio columna-vertical">
-                            <?php
-                            $periodos = ['Diario','Semanal','Quincenal','Mensual','Personalizado','Eventual'];
-                            foreach($periodos as $p){
-                                $checked = $concepto['periodo_texto'] == $p ? 'checked' : '';
-                                echo "<label><input type='radio' name='periodo' value='$p' $checked> $p</label><br>";
-                            }
-                            ?>
+                        <!-- Nombre -->
+                        <div class="campo-formulario">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" id="nombre" name="nombre" value="<?= htmlspecialchars($concepto['nombre']) ?>" required>
                         </div>
-                    </div>
 
-                    <div class="periodicidad-personalizada" style="display:<?= $concepto['periodo_texto'] == 'Personalizado' ? 'flex' : 'none' ?>; margin-top:10px;">
-                        <label>Periodicidad:</label>
-                        <input type="number" name="periodicidad" value="<?= $concepto['periodo'] ?>" placeholder="Ingrese número">
-                    </div>
-
-                    <!-- Fechas -->
-                    <div class="campo-formulario">
-                        <label>Día de inicio / Día de fin:</label>
-                        <div class="fechas">
-                            <input type="date" name="fecha_inicio" value="<?= $concepto['fecha_inicio'] ?>" required>
-                            <input type="date" name="fecha_fin" value="<?= $concepto['fecha_fin'] ?>">
+                        <!-- Tipo -->
+                        <div class="campo-formulario">
+                            <label>Tipo:</label>
+                            <div class="opciones-radio">
+                                <label><input type="radio" name="tipo" value="Ingreso" <?= $concepto['tipo'] == 'Ingreso' ? 'checked' : '' ?> required> Ingreso</label>
+                                <label><input type="radio" name="tipo" value="Egreso" <?= $concepto['tipo'] == 'Egreso' ? 'checked' : '' ?> required> Egreso</label>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Botón -->
-                    <div class="campo-formulario">
-                        <button type="submit" class="boton-crear">Guardar concepto</button>
-                    </div>
-                </form>
-            </article>
-        </section>
-    </main>
+                        <!-- Monto -->
+                        <div class="campo-formulario">
+                            <label for="monto">Monto:</label>
+                            <input type="number" id="monto" name="monto" step="0.01" value="<?= $concepto['monto'] ?>" required>
+                        </div>
+
+                        <!-- Periodo -->
+                        <div class="campo-formulario"><label>Periodo:</label>
+                            <div class="opciones-radio columna-vertical">
+                                <?php 
+                                $periodos = ['Diario','Semanal','Quincenal','Mensual','Personalizado','Eventual'];
+                                foreach($periodos as $p){
+                                    $checked = $concepto['periodicidad'] == $p ? 'checked' : '';
+                                    echo "<label><input type='radio' name='periodo' value='$p' $checked> $p</label><br>";
+                                } ?> 
+                            </div>
+                        </div>
+
+                        <div class="periodicidad-personalizada" style="display:<?= $concepto['periodicidad'] == 'Personalizado' ? 'flex' : 'none' ?>; margin-top:10px;">
+                            <label>Periodicidad:</label>
+                            <input type="number" name="periodicidad" value="<?= $concepto['periodo'] ?>" placeholder="Ingrese número">
+                        </div>
+
+                        <!-- Fechas -->
+                        <div class="campo-formulario">
+                            <label>Día de inicio / Día de fin:</label>
+                            <div class="fechas">
+                                <input type="date" name="fecha_inicio" value="<?= $concepto['fecha_inicio'] ?>" required>
+                                <input type="date" name="fecha_fin" value="<?= $concepto['fecha_fin'] ?>">
+                            </div>
+                        </div>
+
+                        <!-- Botón -->
+                        <div class="campo-formulario">
+                            <button type="submit" class="boton-crear">Guardar concepto</button>
+                        </div>
+                    </form>
+                </article>
+            </section>
+        </main>
+    </div>
 </div>
 
 <script>

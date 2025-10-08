@@ -8,12 +8,13 @@ $categorias = GestionarCategoria::obtenerCategorias();
 // Verificar si el formulario fue enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre   = $_POST['nombre'];
-    $categoria = $_POST['categoria'];
     $tipo     = $_POST['tipo'];
     $monto    = $_POST['monto'];
     $fecha_inicio = $_POST['fecha_inicio'];
     $fecha_fin    = $_POST['fecha_fin'];
-    $usuario_id   = $_SESSION['usuario_id']; // usuario logueado
+    $categoriaId = $_POST['categoria'];
+    $usuarioId   = $_SESSION['id_usuario'];
+    $descripcion = '';
 
     // Determinar periodicidad según la opción
     $periodo_sel = $_POST['periodo'];
@@ -30,7 +31,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Llamar al gestor para crear el concepto
-    $resultado = GestionarConcepto::crearConcepto($nombre, $categoria, $tipo, $periodo, $monto, $fecha_inicio, $fecha_fin, $usuario_id);
+    $resultado = GestionarConcepto::crearConcepto(
+        $nombre,
+        $descripcion,
+        $tipo,
+        $monto,
+        $periodo,
+        $periodo_sel,
+        $fecha_inicio,
+        $fecha_fin,
+        $categoriaId,
+        $usuarioId
+    );
 
     // Redireccionar o mostrar mensaje
     if ($resultado) {
@@ -61,20 +73,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <section class="seccion-derecha">
             <h2 class="subtitulo">Configuración</h2>
             <div class="info-usuario">
-                <span class="nombre-usuario"><?= htmlspecialchars($_SESSION['nombre_usuario']) ?></span>
-                <span class="rol-usuario"><?= htmlspecialchars($_SESSION['rol_usuario']) ?></span>
+                <span class="nombre-usuario"><?= htmlspecialchars($_SESSION['nombre']) ?></span>
+                <span class="rol-usuario"><?= htmlspecialchars($_SESSION['rol']) ?></span>
             </div>
         </section>
     </header>
 
     <div class="contenedor-medio">
         <aside class="menu-lateral" id="menuLateral">
-            <!-- menú lateral igual que tu UI -->
+            <nav>
+                <a class="opcion-menu" href="daily_input.php">
+                    <i class="icono icono-documento"></i>Registro Diario
+                </a>
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-grafico"></i>Balance
+                </a>
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-persona"></i>Cuenta
+                </a>
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-grafico"></i>Agenda
+                </a>
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-grafico"></i>Ranking
+                </a>
+                <a class="opcion-menu activa" href="UI-16_VisualizarConceptos.php">
+                    <i class="icono icono-configuracion"></i>Configuración
+                </a>
+            </nav>
+
+            <footer class="parte-abajo">
+                <a class="opcion-menu" href="#">
+                    <i class="icono icono-salir"></i>Cerrar sesión
+                </a>
+            </footer>
         </aside>
 
         <main class="contenedor-medio">
             <aside class="submenu-configuracion" id="Sub_menuConfig">
-                <!-- submenu igual que tu UI -->
+                <nav>
+                    <a class="opcion-submenu" href="#">
+                        <i></i>Usuarios
+                    </a>
+                    <a class="opcion-submenu activa" href="UI-16_VisualizarConceptos.php">
+                        <i></i>Conceptos
+                    </a>
+                    <a class="opcion-submenu" href="#">
+                        <i></i>Categorías
+                    </a>
+                </nav>
             </aside>
 
             <section class="contenedor-tablas">
@@ -88,7 +135,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
 
                     <form class="form-crear-concepto" method="POST">
-                        <input type="hidden" name="usuario_id" value="<?= $_SESSION['usuario_id'] ?>">
 
                         <!-- Categoría -->
                         <div class="campo-formulario">
@@ -96,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <select id="categoria" name="categoria" required>
                                 <option value="">Seleccionar categoría</option>
                                 <?php foreach($categorias as $cat): ?>
-                                    <option value="<?= htmlspecialchars($cat['nombre']) ?>">
+                                    <option value="<?= $cat['id_categoria'] ?>">
                                         <?= htmlspecialchars($cat['nombre']) ?>
                                     </option>
                                 <?php endforeach; ?>
