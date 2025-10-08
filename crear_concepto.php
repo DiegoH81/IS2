@@ -138,6 +138,7 @@
                                 <label><input type="radio" name="periodo" value="Diario" required> Diario</label><br>
                                 <label><input type="radio" name="periodo" value="Semanal"> Semanal</label><br>
                                 <label><input type="radio" name="periodo" value="Quincenal"> Quincenal</label><br>
+                                <label><input type="radio" name="periodo" value="Mensual"> Mensual</label><br>
                                 <label><input type="radio" name="periodo" value="Personalizado"> Personalizado</label><br>
                                 <label><input type="radio" name="periodo" value="Eventual"> Eventual</label>
                             </div>
