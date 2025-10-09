@@ -1,17 +1,24 @@
 <?php
 session_start();
-require_once '../gtr/GTR-01_GestionarUsuario.php';
+require_once '../gtr/GTR-04_Validar.php';
 
 $error = '';
+
+// ------------------------------------------------------------
+// UI-01: Inicio de sesion
+// Caso de uso asociado: CU-01 Iniciar sesion en la aplicacion
+// ------------------------------------------------------------
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario = trim($_POST['nombre']);
     $contrasena = trim($_POST['password']);
 
-    // Validar credenciales
-    if (GestionarUsuario::validarCredenciales($usuario, $contrasena)) {
+    // Paso 8-12 del CU-01: Validar credenciales a través del gestor
+
+    if (Validar::validarCredenciales($usuario, $contrasena)) {
         // Obtener datos completos del usuario
-        $usuarioData = GestionarUsuario::obtenerUsuario($usuario);
+        $usuarioData = Validar::obtenerUsuario($usuario);
         var_dump($usuarioData);
         // Guardar datos en sesión
         $_SESSION['id_usuario'] = $usuarioData['id_usuario'];
@@ -21,7 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['id_familia'] = $usuarioData['familia_id'];
         $_SESSION['nombre_familia'] = $usuarioData['nombre_familia'];
 
-        // Redirigir a la página principal
+        
+        // Paso 13 del CU-01: Redirigir al usuario
         header("Location: UI-16_VisualizarConceptos.php");
         exit;
     } else {
@@ -30,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+<!-- Paso 1-2 del CU-01: Cargar interfaces -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -47,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
+<!-- Paso 1-2 del CU-01: Cargar interfaces -->
 <div class="contenedor-principal" style="height: 100%">
     <!-- Cabecera -->
     <header class="barra-superior" style="background-color: #3862AA;">
@@ -61,6 +71,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <article class="tabla" style="width: 100%; height:100%">
                 <form class="form-crear-concepto" action="" method="POST">
                     <h2 style="font-size: 3em; text-align: center;">Log in</h2>
+
+
 
                     <?php if ($error !== ''): ?>
                         <p style="color: red; text-align: center; font-weight: bold;"><?= htmlspecialchars($error) ?></p>
@@ -79,6 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="campo-formulario" style="display: flex; justify-content: center; gap: 20px;">
                         <button type="submit" class="boton-crear-usuario">Ingresar</button>
                     </div>
+                    <!-- Paso 6 del CU-01: Verificar que los campos no esten vacios -->
+
+
 
                     <p style="text-align: center;">
                         ¿No tienes cuenta? 
