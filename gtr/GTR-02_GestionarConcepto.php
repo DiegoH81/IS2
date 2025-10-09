@@ -5,7 +5,7 @@ require_once 'GTR-09_GestionarCategoria.php';
 
 class GestionarConcepto {
 
-    // FUN- obtenerConceptos
+    // FUN-07 obtenerConceptos
     public static function obtenerrConceptos() {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerrconceptos();";
@@ -13,17 +13,17 @@ class GestionarConcepto {
         return pg_fetch_all($result);
     }
 
-    // FUN- obtenerUsuarios
+    // FUN-08 obtenerUsuarios
     public static function obtenerrUsuarios() {
         return GestionarUsuario::obtenerrUsuarios();
     }
 
-    // FUN- obtenerCategorias
+    // FUN-09 obtenerCategorias
     public static function obtenerCategorias() {
         return GestionarCategoria::obtenerCategorias();
     }
 
-    // FUN- relacionarDatos
+    // FUN-10 relacionarDatos
     public static function relacionarDatos($usuarioId) {
         $conn = Database::connect();
 
@@ -66,7 +66,7 @@ class GestionarConcepto {
     }
 
 
-    // FUN-06 crearConcepto
+    // FUN-11 crearConcepto
     public static function crearConcepto($nombre, $descripcion, $tipo, $monto, $periodo, $periodicidad, $diaInicio, $diaFin, $categoriaId, $usuarioId) {
         $conn = Database::connect();
         $query = "SELECT crearconcepto($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)";
@@ -74,7 +74,7 @@ class GestionarConcepto {
         return pg_query_params($conn, $query, $params);
     }
 
-    // FUN-07 obtenerConceptos
+    // FUN-12 obtenerConceptos
     public static function obtenerConceptos($usuarioId) {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerconceptos($1);";
@@ -83,7 +83,7 @@ class GestionarConcepto {
         return pg_fetch_all($result);
     }
 
-    // FUN-08 obtenerConcepto
+    // FUN-13 obtenerConcepto
     public static function obtenerConcepto($idConcepto) {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerconcepto($1)";
@@ -92,7 +92,7 @@ class GestionarConcepto {
         return pg_fetch_assoc($result);
     }
 
-    // FUN-09 editarConcepto
+    // FUN-14 editarConcepto
     public static function editarConcepto($idConcepto, $nombre, $descripcion, $tipo, $monto, $periodo, $periodicidad, $diaInicio, $diaFin, $categoriaId, $usuarioId) {
         $conn = Database::connect();
         $query = "SELECT editarconcepto($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)";
@@ -100,7 +100,7 @@ class GestionarConcepto {
         return pg_query_params($conn, $query, $params);
     }
 
-    // FUN-10 editarEstadoConcepto
+    // FUN-15 editarEstadoConcepto
     public static function editarEstadoConcepto($idConcepto, $estado) {
         $conn = Database::connect();
         $query = "SELECT editarestadoconcepto($1::int, $2::boolean)";
