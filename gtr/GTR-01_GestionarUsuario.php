@@ -3,7 +3,7 @@ require_once '../DatabaseConnection.php';
 
 class GestionarUsuario {
 
-    // FUN- obtenerUsuarios
+    // FUN-01 obtenerUsuarios
     public static function obtenerrUsuarios() {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerrusuarios();";
@@ -11,7 +11,7 @@ class GestionarUsuario {
         return pg_fetch_all($result);
     }
 
-    // FUN-01 validarUsuario
+    // FUN-02 validarUsuario
     public static function validarUsuario($usuario) {
         $conn = Database::connect();
         $query = "SELECT validarusuario($1)";
@@ -21,7 +21,7 @@ class GestionarUsuario {
         return $val === 't';
     }
 
-    // FUN-02 validarCredenciales
+    // FUN-03 validarCredenciales
     public static function validarCredenciales($usuario, $contrasena) {
         $conn = Database::connect();
         $query = "SELECT validarcredenciales($1,$2)";
@@ -31,7 +31,7 @@ class GestionarUsuario {
         return $val === 't'; // Devuelve true si es 't', false si es 'f'
     }
 
-    // FUN-03 usuarioDisponible
+    // FUN-04 usuarioDisponible
     public static function usuarioDisponible($usuario) {
         $conn = Database::connect();
         $query = "SELECT usuariodisponible($1)";
@@ -41,7 +41,7 @@ class GestionarUsuario {
         return $val === 't';
     }
 
-    // FUN-04 crearUsuario
+    // FUN-05 crearUsuario
     public static function crearUsuario($usuario, $nombre, $contrasena, $contrasena_familiar) {
         $conn = Database::connect();
         $query = "SELECT crearusuario($1,$2,$3,$4)";
@@ -50,7 +50,7 @@ class GestionarUsuario {
         return pg_fetch_result($result, 0, 0); // Devuelve ID nuevo o -1 si falla
     }
 
-    // FUN-05 obtenerUsuario
+    // FUN-06 obtenerUsuario
     public static function obtenerUsuario($usuario) {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerusuario($1)";
