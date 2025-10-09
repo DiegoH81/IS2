@@ -3,7 +3,7 @@ require_once '../DatabaseConnection.php';
 
 class GestionarCategoria {
 
-    // FUN-11 obtenerCategorias
+    // FUN-20 obtenerCategorias
     public static function obtenerCategorias() {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenercategorias();";
