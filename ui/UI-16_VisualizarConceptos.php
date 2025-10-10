@@ -33,12 +33,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_concepto'], $_POST
 
 // Si hay texto en la barra, filtrar (esto puedes implementarlo en tu función SQL más adelante)
 if ($cadena !== '') {
-    $conceptos = array_filter(GestionarConcepto::obtenerConceptos(), function ($c) use ($cadena) {
+    $usuarioId = $_SESSION['id_usuario'];
+    $conceptos = array_filter(GestionarConcepto::relacionarDatos($usuarioId), function ($c) use ($cadena) {
         return stripos($c['nombre'], $cadena) !== false ||
                stripos($c['categoria'], $cadena) !== false;
     });
 } else {
-    $usuarioId = $_SESSION['usuario_id'];
+    $usuarioId = $_SESSION['id_usuario'];
     $conceptos = GestionarConcepto::relacionarDatos($usuarioId);
 }
 ?>
@@ -57,6 +58,7 @@ if ($cadena !== '') {
     <link rel="stylesheet" href="../css/icons.css">
 
     <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/busqueda.css">
 </head>
 <body>
 
@@ -129,6 +131,19 @@ if ($cadena !== '') {
                     <!-- Paso 8 del CU-15: Mostrar opción de Crear concepto. -->
                     <header>
                         <div class="encabezado-tabla-superior">
+                            <form method="GET" action="UI-16_VisualizarConceptos.php" class="form-busqueda">
+                                <input 
+                                    type="text" 
+                                    name="cadena" 
+                                    placeholder="Buscar..." 
+                                    value="<?= htmlspecialchars($cadena) ?>"
+                                    class="input-busqueda">
+                                <button type="submit" class="boton-buscar">Buscar</button>
+                                <?php if ($cadena !== ''): ?>
+                                    <a href="UI-16_VisualizarConceptos.php" class="boton-limpiar">Limpiar</a>
+                                <?php endif; ?>
+                            </form>
+
                             <a href="UI-17_CrearConcepto.php" class="boton-crear">Crear concepto</a>
                         </div>
                         <h2 class="titulo-tabla">Configuración conceptos</h2>
@@ -219,7 +234,7 @@ if ($cadena !== '') {
         }
     });
 </script>
-<!-- Modal de confirmación -->
+<!-- UI-19 Modificar Estado del Concepto -->
 <div id="modalConfirmar" class="modal" style="display:none;">
     <div class="modal-contenido">
         <p>¿Seguro que desea cambiar el estado del concepto?</p>
