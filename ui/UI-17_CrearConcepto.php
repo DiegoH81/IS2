@@ -9,7 +9,8 @@ session_start();
 require_once '../gtr/GTR-02_GestionarConcepto.php';
 require_once '../gtr/GTR-09_GestionarCategoria.php';
 
-// Paso 1 del CU-16: El gestor GTR-02 consulta a TAB-05 Categoría para obtener las categorías disponibles.
+/*  Invoca la funcion obtenerCategorias del GTR-09 Gestionar categoria para obtener
+     las categorías disponibles. */
 $categorias = GestionarCategoria::obtenerCategorias();
 
 // Verificar si el formulario fue enviado
@@ -37,8 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         default: $periodo = 1;
     }
 
-    // Paso 13-17 del CU-16: La interfaz valida los datos.
-
+    /*  Invoca la funcion crearConcepto del GTR-02 Gestionar concepto para crear un nuevo
+        concepto con los datos del formulario */
     $resultado = GestionarConcepto::crearConcepto(
         $nombre,
         $descripcion,

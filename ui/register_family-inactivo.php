@@ -1,3 +1,4 @@
+<!-- UI inactiva -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
