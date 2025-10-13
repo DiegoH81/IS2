@@ -9,15 +9,17 @@ $error = '';
 // Caso de uso asociado: CU-01 Iniciar sesion en la aplicacion
 // ------------------------------------------------------------
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario = trim($_POST['nombre']);
     $contrasena = trim($_POST['password']);
 
     // Paso 8-12 del CU-01: Validar credenciales a través del gestor
 
+    /*  Invoca la funcion validarCredenciales del GTR-04 Validar para verificar 
+        las credenciales ingresadas */
     if (Validar::validarCredenciales($usuario, $contrasena)) {
-        // Obtener datos completos del usuario
+        /*  Invoca la funcion obtenerUsuario del GTR-04 Validar para extraer la informacion del 
+            usuario ingresado */
         $usuarioData = Validar::obtenerUsuario($usuario);
         var_dump($usuarioData);
         // Guardar datos en sesión
@@ -27,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['rol'] = $usuarioData['rol'];
         $_SESSION['id_familia'] = $usuarioData['familia_id'];
         $_SESSION['nombre_familia'] = $usuarioData['nombre_familia'];
-
         
         // Paso 13 del CU-01: Redirigir al usuario
         header("Location: UI-16_VisualizarConceptos.php");
@@ -72,8 +73,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form class="form-crear-concepto" action="" method="POST">
                     <h2 style="font-size: 3em; text-align: center;">Log in</h2>
 
-
-
                     <?php if ($error !== ''): ?>
                         <p style="color: red; text-align: center; font-weight: bold;"><?= htmlspecialchars($error) ?></p>
                     <?php endif; ?>
@@ -92,8 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <button type="submit" class="boton-crear-usuario">Ingresar</button>
                     </div>
                     <!-- Paso 6 del CU-01: Verificar que los campos no esten vacios -->
-
-
 
                     <p style="text-align: center;">
                         ¿No tienes cuenta? 

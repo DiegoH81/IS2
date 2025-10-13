@@ -17,7 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_concepto'], $_POST
     $idConcepto = intval($_POST['id_concepto']);
     // Asegurar conversión correcta: cualquier valor > 0 es true
     $estado = (intval($_POST['estado']) === 1);
-    
+    /*  Invoca la funcion editarEstadoConcepto del GTR-02 Gestionar concepto para actualizar
+        el estado de un concepto segun su id */
     $resultado = GestionarConcepto::editarEstadoConcepto($idConcepto, $estado);
     
     if(isset($_POST['ajax'])) {
@@ -34,12 +35,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_concepto'], $_POST
 // Si hay texto en la barra, filtrar (esto puedes implementarlo en tu función SQL más adelante)
 if ($cadena !== '') {
     $usuarioId = $_SESSION['id_usuario'];
+    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos filtrados 
+        a mostrar segun la cadena ingresada en el buscador */
     $conceptos = array_filter(GestionarConcepto::relacionarDatos($usuarioId), function ($c) use ($cadena) {
         return stripos($c['nombre'], $cadena) !== false ||
                stripos($c['categoria'], $cadena) !== false;
     });
 } else {
     $usuarioId = $_SESSION['id_usuario'];
+    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos
+        a mostrar en la tabla de la interfaz */
     $conceptos = GestionarConcepto::relacionarDatos($usuarioId);
 }
 ?>

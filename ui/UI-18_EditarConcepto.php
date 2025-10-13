@@ -15,9 +15,11 @@ if (!isset($_GET['id'])) {
 }
 $id_concepto = (int)$_GET['id'];
 
-
-// Paso 1 del CU-17: La interfaz Editar concepto (UI-18) solicita al GTR-09 Gestionar categoría las categorías.
+/*  Invoca la funcion obtenerCategorias del GTR-09 Gestionar categoria para obtener
+     las categorías disponibles. */
 $categorias = GestionarCategoria::obtenerCategorias();
+/*  Invoca la funcion obtenerConcepto del GTR-02 Gestionar concepto para extraer los datos
+        de un concepto existente y mostrarlo en el formulario */
 $concepto = GestionarConcepto::obtenerConcepto($id_concepto);
 if (!$concepto) {
     die("Concepto no encontrado");
@@ -51,7 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Guardar la cadena seleccionada
     $periodicidad = $periodo_sel;
 
-    // Paso 17 del CU-17: El GTR-02 Gestionar concepto actualiza la información del concepto en TAB-02 Concepto.
+    /*  Invoca la funcion editarConcepto del GTR-02 Gestionar concepto para actualizar los datos
+        de un concepto existente con los datos del formulario */
     $resultado = GestionarConcepto::editarConcepto(
         $id_concepto,
         $nombre,

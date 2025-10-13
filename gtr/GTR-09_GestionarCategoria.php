@@ -1,9 +1,12 @@
 <?php
 require_once '../DatabaseConnection.php';
 
+// GTR-09 Gestionar categoria
+
 class GestionarCategoria {
 
-    // FUN-20 obtenerCategorias
+    /* FUN-19 obtenerCategorias
+        Extrae toda la informacion de todas las categorias de la base de datos */
     public static function obtenerCategorias() {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenercategorias();";
