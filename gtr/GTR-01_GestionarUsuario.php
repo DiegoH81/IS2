@@ -7,9 +7,9 @@ class GestionarUsuario {
 
     /* FUN-01 obtenerUsuarios
         Extrae la informacion de todos los usuarios de la base de datos */
-    public static function obtenerrUsuarios() {
+    public static function obtenerUsuarios() {
         $conn = Database::connect();
-        $query = "SELECT * FROM obtenerrusuarios();";
+        $query = "SELECT * FROM obtenerusuarios();";
         $result = pg_query($conn, $query);
         return pg_fetch_all($result);
     }
