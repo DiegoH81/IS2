@@ -1,8 +1,3 @@
-/**
- * ARCHIVO: charts.js
- * Funciones manuales para crear gráficos sin librerías externas
- */
-
 // Función principal que se ejecuta cuando el DOM está listo
 document.addEventListener('DOMContentLoaded', function() {
     // Inicializar menú móvil
