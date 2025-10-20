@@ -16,15 +16,15 @@ class GestionarConcepto {
         return pg_fetch_all($result);
     }
 
-    /* FUN-08 obtenerUsuarios
+    /* FUN-08 solicitarUsuarios
         Invoca al GTR-01 Gestionar usuario para obtener la informacion de todos los usuarios */
-    public static function obtenerUsuarios() {
+    public static function solicitarUsuarios() {
         return GestionarUsuario::obtenerUsuarios();
     }
 
-    /* FUN-09 obtenerCategorias
+    /* FUN-09 solicitarCategorias
         Invoca al GTR-09 Gestionar categoria para obtener la informacion de todas las categorias */
-    public static function obtenerCategorias() {
+    public static function solicitarCategorias() {
         return GestionarCategoria::obtenerCategorias();
     }
 
