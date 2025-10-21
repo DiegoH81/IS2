@@ -1,52 +1,12 @@
 <?php
 
 // ------------------------------------------------------------
-// UI-16: Visualizar conceptos
-// Caso de uso asociado: CU-15 Gestionar conceptos
+// UI-20: Visualizar categoria
+// Caso de uso asociado: CU-19 Gestionar categoría
 // ------------------------------------------------------------
 
-session_start();
-require_once '../gtr/GTR-02_GestionarConcepto.php';
 
-// Paso 7 del CU-15: La interfaz presenta el campo de búsqueda.
 
-// Capturar la búsqueda si existe
-$cadena = isset($_GET['cadena']) ? $_GET['cadena'] : '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_concepto'], $_POST['estado'])) {
-    $idConcepto = intval($_POST['id_concepto']);
-    // Asegurar conversión correcta: cualquier valor > 0 es true
-    $estado = (intval($_POST['estado']) === 1);
-    /*  Invoca la funcion editarEstadoConcepto del GTR-02 Gestionar concepto para actualizar
-        el estado de un concepto segun su id */
-    $resultado = GestionarConcepto::editarEstadoConceptoBD($idConcepto, $estado);
-    
-    if(isset($_POST['ajax'])) {
-        // Verificar si la consulta fue exitosa
-        if($resultado) {
-            echo json_encode(['success' => true]);
-        } else {
-            echo json_encode(['success' => false, 'error' => 'Error al actualizar']);
-        }
-        exit;
-    }
-}
-
-// Si hay texto en la barra, filtrar (esto puedes implementarlo en tu función SQL más adelante)
-if ($cadena !== '') {
-    $usuarioId = $_SESSION['id_usuario'];
-    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos filtrados 
-        a mostrar segun la cadena ingresada en el buscador */
-    $conceptos = array_filter(GestionarConcepto::relacionarDatos($usuarioId), function ($c) use ($cadena) {
-        return stripos($c['nombre'], $cadena) !== false ||
-               stripos($c['categoria'], $cadena) !== false;
-    });
-} else {
-    $usuarioId = $_SESSION['id_usuario'];
-    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos
-        a mostrar en la tabla de la interfaz */
-    $conceptos = GestionarConcepto::relacionarDatos($usuarioId);
-}
 ?>
 
 <!DOCTYPE html>
@@ -78,8 +38,8 @@ if ($cadena !== '') {
             <h2 class="subtitulo">Configuración</h2>
 
             <div class="info-usuario">
-                <span class="nombre-usuario"><?= htmlspecialchars($_SESSION['nombre']) ?></span>
-                <span class="rol-usuario"><?= htmlspecialchars($_SESSION['rol']) ?></span>
+                <span class="nombre-usuario">           LEPULWEI PLACEHOLDERRRR           </span>
+                <span class="rol-usuario">           LEPULROL PLACEHOLDERRRR           </span>
             </div>
         </section>
     </header>
@@ -119,10 +79,10 @@ if ($cadena !== '') {
         <main class="contenedor-medio">
             <aside class="submenu-configuracion" id="Sub_menuConfig">
                 <nav>
-                    <a class="opcion-submenu" href="UI-12_VisualizarUsuarios.php">
+                    <a class="opcion-submenu activa" href="UI-12_VisualizarUsuarios.php">
                         <i></i>Usuarios
                     </a>
-                    <a class="opcion-submenu activa" href="UI-16_VisualizarConceptos.php">
+                    <a class="opcion-submenu" href="UI-16_VisualizarConceptos.php">
                         <i></i>Conceptos
                     </a>
                     <a class="opcion-submenu" href="UI-20_VisualizarCategoria.php">
@@ -141,17 +101,23 @@ if ($cadena !== '') {
                                     type="text" 
                                     name="cadena" 
                                     placeholder="Buscar..." 
-                                    value="<?= htmlspecialchars($cadena) ?>"
+                                    value="A buscar"
                                     class="input-busqueda">
                                 <button type="submit" class="boton-buscar">Buscar</button>
-                                <?php if ($cadena !== ''): ?>
+
+
+                                <!--<?php if ($cadena !== ''): ?>
+
                                     <a href="UI-16_VisualizarConceptos.php" class="boton-limpiar">Limpiar</a>
                                 <?php endif; ?>
+                                -->
+
+
                             </form>
 
-                            <a href="UI-17_CrearConcepto.php" class="boton-crear">Crear concepto</a>
+                            <a href="UI-13_CrearUsuario.php" class="boton-crear">Crear usuario</a>
                         </div>
-                        <h2 class="titulo-tabla">Configuración conceptos</h2>
+                        <h2 class="titulo-tabla">Configuración categoria</h2>
                         <div class="linea-separadora"></div>
                         <div class="linea-azul"></div>
                     </header>
@@ -159,26 +125,20 @@ if ($cadena !== '') {
                     <table class="tabla-datos">
                         <thead>
                             <tr>
-                                <th class="encabezado-tabla">Concepto</th>
-                                <th class="encabezado-tabla">Categoría</th>
-                                <th class="encabezado-tabla">Tipo</th>
-                                <th class="encabezado-tabla">Subido por</th>
-                                <th class="encabezado-tabla">Costo</th>
-                                <th class="encabezado-tabla">Periodo</th>
+                                <th class="encabezado-tabla">Usuario</th>
+                                <th class="encabezado-tabla">Nombre</th>
+                                <th class="encabezado-tabla">Rol</th>
                                 <th class="encabezado-tabla">Estado</th>
                                 <th class="encabezado-tabla">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
-                        <?php if ($conceptos && count($conceptos) > 0): ?>
-                            <?php foreach ($conceptos as $c): ?>
+                        <!--<?php if ($conceptos && count($conceptos) > 0): ?>-->
+                            <!--<?php foreach ($conceptos as $c): ?>-->
                                 <tr class="fila-tabla" id="fila-<?= $c['id_concepto'] ?>">
-                                    <td class="celda"><?= htmlspecialchars($c['nombre']) ?></td>
-                                    <td class="celda"><?= htmlspecialchars($c['categoria']) ?></td>
-                                    <td class="celda"><?= htmlspecialchars($c['tipo']) ?></td>
-                                    <td class="celda"><?= htmlspecialchars($c['subido_por']) ?></td>
-                                    <td class="celda">S/. <?= number_format($c['monto'], 2) ?></td>
-                                    <td class="celda"><?= htmlspecialchars($c['periodicidad']) ?></td>
+                                    <td class="celda"><?= htmlspecialchars($c['usuario']) ?></td>
+                                    <td class="celda"><?= htmlspecialchars(string: $c['nombre']) ?></td>
+                                    <td class="celda"><?= htmlspecialchars($c['rol']) ?></td>
 
                                     <td class="celda celda-estado">
                                         <?php
@@ -216,11 +176,16 @@ if ($cadena !== '') {
                                             </button>
                                         </form>
                                     </td>
+
                                 </tr>
+                     <!--           
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr><td colspan="8" class="celda">No hay conceptos registrados.</td></tr>
                         <?php endif; ?>
+                        -->
+
+
                         </tbody>
                     </table>
                 </article>

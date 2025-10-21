@@ -142,13 +142,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <main class="contenedor-medio">
             <aside class="submenu-configuracion" id="Sub_menuConfig">
                 <nav>
-                    <a class="opcion-submenu" href="#">
+                    <a class="opcion-submenu" href="UI-12_VisualizarUsuarios.php">
                         <i></i>Usuarios
                     </a>
                     <a class="opcion-submenu activa" href="UI-16_VisualizarConceptos.php">
                         <i></i>Conceptos
                     </a>
-                    <a class="opcion-submenu" href="#">
+                    <a class="opcion-submenu" href="UI-20_VisualizarCategoria.php">
                         <i></i>Categorías
                     </a>
                 </nav>

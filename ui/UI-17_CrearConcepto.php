@@ -11,7 +11,7 @@ require_once '../gtr/GTR-09_GestionarCategoria.php';
 
 /*  Invoca la funcion obtenerCategorias del GTR-09 Gestionar categoria para obtener
      las categorías disponibles. */
-$categorias = GestionarCategoria::obtenerCategorias();
+$categorias = GestionarCategoria::obtenerCategoriasBD();
 
 // Verificar si el formulario fue enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     /*  Invoca la funcion crearConcepto del GTR-02 Gestionar concepto para crear un nuevo
         concepto con los datos del formulario */
-    $resultado = GestionarConcepto::crearConcepto(
+    $resultado = GestionarConcepto::crearConceptoBD(
         $nombre,
         $descripcion,
         $tipo,
@@ -122,13 +122,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <main class="contenedor-medio">
             <aside class="submenu-configuracion" id="Sub_menuConfig">
                 <nav>
-                    <a class="opcion-submenu" href="#">
+                    <a class="opcion-submenu" href="UI-12_VisualizarUsuarios.php">
                         <i></i>Usuarios
                     </a>
                     <a class="opcion-submenu activa" href="UI-16_VisualizarConceptos.php">
                         <i></i>Conceptos
                     </a>
-                    <a class="opcion-submenu" href="#">
+                    <a class="opcion-submenu" href="UI-20_VisualizarCategoria.php">
                         <i></i>Categorías
                     </a>
                 </nav>
