@@ -35,8 +35,8 @@ class GestionarConcepto {
         $conn = Database::connect();
 
         $conceptos = self::obtenerConceptos();
-        $usuarios = self::obtenerUsuarios();
-        $categorias = self::obtenerCategorias();
+        $usuarios = self::solicitarUsuarios();
+        $categorias = self::solicitarCategorias();
 
         $categoriasIndex = [];
         foreach ($categorias as $cat) {

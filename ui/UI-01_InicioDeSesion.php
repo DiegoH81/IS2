@@ -17,10 +17,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     /*  Invoca la funcion validarCredenciales del GTR-04 Validar para verificar 
         las credenciales ingresadas */
-    if (Validar::validarCredenciales($usuario, $contrasena)) {
+    if (Validar::solicitarValidacionCredenciales($usuario, $contrasena)) {
         /*  Invoca la funcion obtenerUsuario del GTR-04 Validar para extraer la informacion del 
             usuario ingresado */
-        $usuarioData = Validar::obtenerUsuario($usuario);
+        $usuarioData = Validar::solicitarUsuario($usuario);
         var_dump($usuarioData);
         // Guardar datos en sesión
         $_SESSION['id_usuario'] = $usuarioData['id_usuario'];
