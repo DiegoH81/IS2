@@ -7,9 +7,9 @@ require_once 'GTR-09_GestionarCategoria.php';
 
 class GestionarConcepto {
 
-    /* FUN-07 obtenerConceptos 
+    /* FUN-07 obtenerConceptosBD 
         Extrae la información de todos los conceptos de la base de datos */
-    public static function obtenerConceptos() {
+    public static function obtenerConceptosBD() {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerconceptos();";
         $result = pg_query($conn, $query);
@@ -19,13 +19,13 @@ class GestionarConcepto {
     /* FUN-08 solicitarUsuarios
         Invoca al GTR-01 Gestionar usuario para obtener la informacion de todos los usuarios */
     public static function solicitarUsuarios() {
-        return GestionarUsuario::obtenerUsuarios();
+        return GestionarUsuario::obtenerUsuariosBD();
     }
 
     /* FUN-09 solicitarCategorias
         Invoca al GTR-09 Gestionar categoria para obtener la informacion de todas las categorias */
     public static function solicitarCategorias() {
-        return GestionarCategoria::obtenerCategorias();
+        return GestionarCategoria::obtenerCategoriasBD();
     }
 
     /* FUN-10 relacionarDatos
@@ -34,7 +34,7 @@ class GestionarConcepto {
     public static function relacionarDatos($usuarioId) {
         $conn = Database::connect();
 
-        $conceptos = self::obtenerConceptos();
+        $conceptos = self::obtenerConceptosBD();
         $usuarios = self::solicitarUsuarios();
         $categorias = self::solicitarCategorias();
 
@@ -72,18 +72,18 @@ class GestionarConcepto {
         return $resultado;
     }
 
-    /* FUN-11 crearConcepto 
+    /* FUN-11 crearConceptoBD 
         Inserta un nuevo concepto en la base de datos */
-    public static function crearConcepto($nombre, $descripcion, $tipo, $monto, $periodo, $periodicidad, $diaInicio, $diaFin, $categoriaId, $usuarioId) {
+    public static function crearConceptoBD($nombre, $descripcion, $tipo, $monto, $periodo, $periodicidad, $diaInicio, $diaFin, $categoriaId, $usuarioId) {
         $conn = Database::connect();
         $query = "SELECT crearconcepto($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)";
         $params = array($nombre, $descripcion, $tipo, $monto, $periodo, $periodicidad, $diaInicio, $diaFin, $categoriaId, $usuarioId);
         return pg_query_params($conn, $query, $params);
     }
 
-    /* FUN-12 obtenerConcepto
+    /* FUN-12 obtenerConceptoBD
         Extra la informacion de un concepto en especifico segun su id */
-    public static function obtenerConcepto($idConcepto) {
+    public static function obtenerConceptoBD($idConcepto) {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerconcepto($1)";
         $params = array($idConcepto);
@@ -91,9 +91,9 @@ class GestionarConcepto {
         return pg_fetch_assoc($result);
     }
 
-    /* FUN-13 editarConcepto
+    /* FUN-13 editarConceptoBD
         Actualiza la informacion de un concepto en la base de datos segun su id */
-    public static function editarConcepto($idConcepto, $nombre, $descripcion, $tipo, $monto, $periodo, $periodicidad, $diaInicio, $diaFin, $categoriaId, $usuarioId) {
+    public static function editarConceptoBD($idConcepto, $nombre, $descripcion, $tipo, $monto, $periodo, $periodicidad, $diaInicio, $diaFin, $categoriaId, $usuarioId) {
         $conn = Database::connect();
         $query = "SELECT editarconcepto($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)";
         $params = array($idConcepto, $nombre, $descripcion, $tipo, $monto, $periodo, $periodicidad, $diaInicio, $diaFin, $categoriaId, $usuarioId);
@@ -102,7 +102,7 @@ class GestionarConcepto {
 
     /* FUN-14 editarEstadoConcepto
         Actualiza el estado de un concepto en la base de datos segun su id */
-    public static function editarEstadoConcepto($idConcepto, $estado) {
+    public static function editarEstadoConceptoBD($idConcepto, $estado) {
         $conn = Database::connect();
         $query = "SELECT editarestadoconcepto($1::int, $2::boolean)";
         $estadoBool = $estado ? 't' : 'f';

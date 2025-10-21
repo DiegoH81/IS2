@@ -5,18 +5,18 @@ require_once '../DatabaseConnection.php';
 
 class GestionarUsuario {
 
-    /* FUN-01 obtenerUsuarios
+    /* FUN-01 obtenerUsuariosBd
         Extrae la informacion de todos los usuarios de la base de datos */
-    public static function obtenerUsuarios() {
+    public static function obtenerUsuariosBD() {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerusuarios();";
         $result = pg_query($conn, $query);
         return pg_fetch_all($result);
     }
 
-    /* FUN-02 validarUsuario
+    /* FUN-02 validarUsuarioBD
         Verifica si el usuario ingresado existe en la base de datos */
-    public static function validarUsuario($usuario) {
+    public static function validarUsuarioBD($usuario) {
         $conn = Database::connect();
         $query = "SELECT validarusuario($1)";
         $params = array($usuario);
@@ -25,9 +25,9 @@ class GestionarUsuario {
         return $val === 't';
     }
 
-    /* FUN-03 validarCredenciales
+    /* FUN-03 validarCredencialesBD
         Verifica si la contraseña ingresada coincide con la del usuario ingresado */
-    public static function validarCredenciales($usuario, $contrasena) {
+    public static function validarCredencialesBD($usuario, $contrasena) {
         $conn = Database::connect();
         $query = "SELECT validarcredenciales($1,$2)";
         $params = array($usuario, $contrasena);
@@ -36,9 +36,9 @@ class GestionarUsuario {
         return $val === 't';
     }
 
-    /* FUN-04 usuarioDisponible
+    /* FUN-04 usuarioDisponibleBD
         Verifica si el usuario(nombre de usuario) no esta en uso */
-    public static function usuarioDisponible($usuario) {
+    public static function usuarioDisponibleBD($usuario) {
         $conn = Database::connect();
         $query = "SELECT usuariodisponible($1)";
         $params = array($usuario);
@@ -47,9 +47,9 @@ class GestionarUsuario {
         return $val === 't';
     }
 
-    /* FUN-05 crearUsuario
+    /* FUN-05 crearUsuarioBD
         Inserta un nuevo usuario en la base de datos */
-    public static function crearUsuario($usuario, $nombre, $contrasena, $contrasena_familiar) {
+    public static function crearUsuarioBD($usuario, $nombre, $contrasena, $contrasena_familiar) {
         $conn = Database::connect();
         $query = "SELECT crearusuario($1,$2,$3,$4)";
         $params = array($usuario, $nombre, $contrasena, $contrasena_familiar);
@@ -57,9 +57,9 @@ class GestionarUsuario {
         return pg_fetch_result($result, 0, 0);
     }
 
-    /* FUN-06 obtenerUsuario
+    /* FUN-06 obtenerUsuarioBD
         Extrae los datos de un usuario especifico segun su id */
-    public static function obtenerUsuario($usuario) {
+    public static function obtenerUsuarioBD($usuario) {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerusuario($1)";
         $params = array($usuario);

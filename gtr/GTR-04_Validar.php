@@ -9,28 +9,28 @@ class Validar {
     /* FUN-15 solicitarValidacionUsuario
         Invoca al GTR-01 Gestionar usuario para verificar si el usaurio ingresado existe */
     public static function solicitarValidacionUsuario($usuario) {
-        return GestionarUsuario::validarUsuario($usuario);
+        return GestionarUsuario::validarUsuarioBD($usuario);
     }
 
     /* FUN-16 solicitarValidacionCredenciales 
         Invoca al GTR-01 Gestionar usuario para verificar si la contraseña ingresada coincide
         con la del usuario ingresado */
     public static function solicitarValidacionCredenciales($usuario, $contrasena) {
-        return GestionarUsuario::validarCredenciales($usuario, $contrasena);
+        return GestionarUsuario::validarCredencialesBD($usuario, $contrasena);
     }
 
     /* FUN-17 solicitarUsuarioDisponible 
         Invoca al GTR-01 Gestionar usuario para verificar si el usuario(nombre de usuario)
         esta en uso */
     public static function solicitarUsuarioDisponible($usuario) {
-        return GestionarUsuario::usuarioDisponible($usuario);
+        return GestionarUsuario::usuarioDisponibleBD($usuario);
     }
 
     /* FUN-18 solicitarUsuario 
         Invoca al GTR-01 Gestionar usuario para extraer los datos de un usuario especifico 
         segun su id */
     public static function solicitarUsuario($usuario) {
-        return GestionarUsuario::obtenerUsuario($usuario);
+        return GestionarUsuario::obtenerUsuarioBD($usuario);
     }
 }
 ?>

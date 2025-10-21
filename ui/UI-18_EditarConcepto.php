@@ -17,10 +17,10 @@ $id_concepto = (int)$_GET['id'];
 
 /*  Invoca la funcion obtenerCategorias del GTR-09 Gestionar categoria para obtener
      las categorías disponibles. */
-$categorias = GestionarCategoria::obtenerCategorias();
+$categorias = GestionarCategoria::obtenerCategoriasBD();
 /*  Invoca la funcion obtenerConcepto del GTR-02 Gestionar concepto para extraer los datos
         de un concepto existente y mostrarlo en el formulario */
-$concepto = GestionarConcepto::obtenerConcepto($id_concepto);
+$concepto = GestionarConcepto::obtenerConceptosBD($id_concepto);
 if (!$concepto) {
     die("Concepto no encontrado");
 }
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     /*  Invoca la funcion editarConcepto del GTR-02 Gestionar concepto para actualizar los datos
         de un concepto existente con los datos del formulario */
-    $resultado = GestionarConcepto::editarConcepto(
+    $resultado = GestionarConcepto::editarConceptoBD(
         $id_concepto,
         $nombre,
         $descripcion,
