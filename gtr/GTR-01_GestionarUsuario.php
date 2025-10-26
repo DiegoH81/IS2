@@ -72,7 +72,8 @@ class GestionarUsuario {
     }
 
 
-    //nuevass
+    /* FUN-22 actualizarDatosUsuarioBD 
+        Editar los datos de un usuario existente */
 
     public static function actualizarDatosUsuarioBD($usuario, $nombre, $contrasena, $rol) {
         $conn = Database::connect();
@@ -81,6 +82,8 @@ class GestionarUsuario {
         $result = pg_query_params($conn, $query, $params);
     }
 
+    /* FUN-23 cambiarEstadoUsuarioBD 
+        Permite modificar el estado de un usario, para habilitarlo/deshabilitarlo */
     public static function cambiarEstadoUsuarioBD($id, $nuevo_estado) {
         $conn = Database::connect();
         $query = "SELECT cambiarEstadoUsuario($1, $2);";
@@ -88,6 +91,11 @@ class GestionarUsuario {
         pg_query_params($conn, $query, $params);
     }
 
+
+
+
+
+    // EN DUDA
     public static function solicitarUsuariosEspecificos($ids) {
     $conn = Database::connect();
         // Convertir el array PHP a formato PostgreSQL: {1,2,3}

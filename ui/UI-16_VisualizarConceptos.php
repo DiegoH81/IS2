@@ -13,16 +13,22 @@ require_once '../gtr/GTR-02_GestionarConcepto.php';
 // Capturar la búsqueda si existe
 $cadena = isset($_GET['cadena']) ? $_GET['cadena'] : '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_concepto'], $_POST['estado'])) {
-    $idConcepto = intval($_POST['id_concepto']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['concepto_id'], $_POST['estado'])) {
+    $idConcepto = intval($_POST['concepto_id']);
     // Asegurar conversión correcta: cualquier valor > 0 es true
     $estado = (intval($_POST['estado']) === 1);
     /*  Invoca la funcion editarEstadoConcepto del GTR-02 Gestionar concepto para actualizar
         el estado de un concepto segun su id */
-    $resultado = GestionarConcepto::editarEstadoConceptoBD($idConcepto, $estado);
     
+    //var_dump($idConcepto);
+
+    $resultado = GestionarConcepto::editarEstadoConceptoBD($idConcepto, $estado);
+
+    //var_dump($idConcepto);
+
     if(isset($_POST['ajax'])) {
         // Verificar si la consulta fue exitosa
+        header('Content-Type: application/json');
         if($resultado) {
             echo json_encode(['success' => true]);
         } else {
@@ -46,8 +52,11 @@ if ($cadena !== '') {
     $usuarioId = $_SESSION['id_usuario'];
     /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos
         a mostrar en la tabla de la interfaz */
+
+    $conceptos_test = GestionarConcepto::obtenerConceptosBD($familiaId);
+    //var_dump($conceptos_test);
+
     $conceptos = GestionarConcepto::relacionarDatos($familiaId);
-    //var_dump($conceptos);
 }
 ?>
 
@@ -197,7 +206,7 @@ if ($cadena !== '') {
                                             class="link-editar" 
                                             data-estado="<?= $estadoBool ? '1' : '0' ?>" 
                                             <?= !$puedeCambiarEstado ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?> 
-                                            onclick="abrirModal(<?= $c['concepto_id'] ?>, '<?= $estadoBool ? '1' : '0' ?>', 'concepto')">
+                                            onclick="abrirModal(<?= $c['concepto_id'] ?>, '<?= $estadoBool ? '1' : '0' , 'concepto'?>', 'concepto')">
                                             <?= $estadoTexto ?>
                                         </button>
                                     </td>

@@ -9,13 +9,6 @@ class GestionarConcepto {
 
     /* FUN-07 obtenerConceptosBD 
     Extrae la información de todos los conceptos de la base de datos */
-    /*
-    public static function obtenerConceptosBD() {
-        $conn = Database::connect();
-        $query = "SELECT * FROM obtenerconceptos();";
-        $result = pg_query($conn, $query);
-        return pg_fetch_all($result);
-    }*/
     public static function obtenerConceptosBD($familia_id) {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerConceptos($1);";
@@ -77,7 +70,7 @@ class GestionarConcepto {
                     'costo'       => $c['monto'],
                     'periodo'     => $c['periodo'],
                     'periodicidad'=> $c['periodicidad'],
-                    'estado'      => $c['estado'] ? 'Habilitado' : 'Deshabilitado'
+                    'estado'      => ($c['estado'] === 't') ? 'Habilitado' : 'Deshabilitado'
                 ];
             }
         }
@@ -88,13 +81,6 @@ class GestionarConcepto {
 
     /* FUN-11 crearConceptoBD 
         Inserta un nuevo concepto en la base de datos */
-        /*
-    public static function crearConceptoBD($nombre, $descripcion, $tipo, $monto, $periodo, $periodicidad, $diaInicio, $diaFin, $categoriaId, $usuarioId) {
-        $conn = Database::connect();
-        $query = "SELECT crearconcepto($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)";
-        $params = array($nombre, $descripcion, $tipo, $monto, $periodo, $periodicidad, $diaInicio, $diaFin, $categoriaId, $usuarioId);
-        return pg_query_params($conn, $query, $params);
-    }*/
 
     public static function crearConceptoBD(
     $nombre, 
@@ -148,14 +134,6 @@ class GestionarConcepto {
 
     /* FUN-13 editarConceptoBD
         Actualiza la informacion de un concepto en la base de datos segun su id */
-        /*
-    public static function editarConceptoBD($idConcepto, $nombre, $descripcion, $tipo, $monto, $periodo, $periodicidad, $diaInicio, $diaFin, $categoriaId, $usuarioId) {
-        $conn = Database::connect();
-        $query = "SELECT editarconcepto($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)";
-        $params = array($idConcepto, $nombre, $descripcion, $tipo, $monto, $periodo, $periodicidad, $diaInicio, $diaFin, $categoriaId, $usuarioId);
-        return pg_query_params($conn, $query, $params);
-    }*/
-
     public static function editarConceptoBD($id_concepto, $nombre, $tipo, $monto, $periodo, $periodicidad, $fecha_inicio, $fecha_fin, $p_id_categoria ) {
         $conn = Database::connect();
         $query = "SELECT editarConcepto($1, $2, $3, $4, $5, $6, $7, $8, $9);";
@@ -166,20 +144,12 @@ class GestionarConcepto {
 
     /* FUN-14 editarEstadoConcepto
         Actualiza el estado de un concepto en la base de datos segun su id */
-        /*
-    public static function editarEstadoConceptoBD($idConcepto, $estado) {
-        $conn = Database::connect();
-        $query = "SELECT editarestadoconcepto($1::int, $2::boolean)";
-        $estadoBool = $estado ? 't' : 'f';
-        $params = array($idConcepto, $estadoBool);
-        return pg_query_params($conn, $query, $params);
-    }
-*/
     public static function editarEstadoConceptoBD($id_concepto, $estado) {
         $conn = Database::connect();
         $query = "SELECT editarEstadoConcepto($1, $2);";
         $params = array($id_concepto, $estado);
-        pg_query_params($conn, $query, $params);
+
+        return pg_query_params($conn, $query, $params);
     }
 }
 ?>
