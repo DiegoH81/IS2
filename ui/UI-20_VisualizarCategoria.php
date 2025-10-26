@@ -8,6 +8,25 @@
 session_start();
 require_once '../gtr/GTR-09_GestionarCategoria.php';
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idcategoria'], $_POST['estado'])) {
+    $idCategoria = intval($_POST['idcategoria']);
+    $estado = (intval($_POST['estado']) === 1); // Convertir a booleano
+    
+    // Llamar a la función para cambiar el estado
+    $resultado = GestionarCategoria::editarEstadoCategoriaBD($idCategoria, $estado);
+    
+    // Si es petición AJAX, devolver JSON
+    if(isset($_POST['ajax'])) {
+        header('Content-Type: application/json');
+        if($resultado) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Error al actualizar']);
+        }
+        exit;
+    }
+}
+
 $categorias = GestionarCategoria::obtenerCategoriasBD($_SESSION['familia_id']);
 //var_dump($categorias);
 ?>

@@ -7,6 +7,25 @@
 session_start();
 require_once '../gtr/GTR-01_GestionarUsuario.php';
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_usuario'], $_POST['estado'])) {
+    $idUsuario = intval($_POST['id_usuario']);
+    $estado = (intval($_POST['estado']) === 1); // Convertir a booleano
+    
+    // Llamar a la función para cambiar el estado
+    $resultado = GestionarUsuario::cambiarEstadoUsuarioBD($idUsuario, $estado);
+    
+    // Si es petición AJAX, devolver JSON
+    if(isset($_POST['ajax'])) {
+        header('Content-Type: application/json');
+        if($resultado) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Error al actualizar']);
+        }
+        exit;
+    }
+}
+
 $usuarios = GestionarUsuario::obtenerUsuariosBD($_SESSION['familia_id']);
 //var_dump($usuarios);
 
@@ -155,12 +174,18 @@ $usuarios = GestionarUsuario::obtenerUsuariosBD($_SESSION['familia_id']);
                                     </td>
 
                                     <td class="celda celda-estado">
+                                        <?php
+                                            // Convertimos el estado a booleano
+                                            $estadoBool = ($u['estado'] === 'Habilitado'); 
+                                            $estadoTexto = $estadoBool ? 'Habilitado' : 'Deshabilitado';
+                                            $estadoValor = $estadoBool ? '1' : '0';
+                                        ?>
                                         <button 
                                             type="button" 
                                             class="link-editar" 
-                                            data-estado="<?= $u['estado'] === 'Habilitado' ? '1' : '0' ?>" 
-                                            onclick="abrirModal(<?= $u['id_usuario'] ?>, '<?= $u['estado'] === 'Habilitado' ? '1' : '0' ?>', 'usuario')">
-                                            <?= htmlspecialchars($u['estado']) ?>
+                                            data-estado="<?= $estadoValor ?>" 
+                                            onclick="abrirModal(<?= $u['id_usuario'] ?>, '<?= $estadoValor ?>', 'usuario')">
+                                            <?= $estadoTexto ?>
                                         </button>
                                     </td>
 
