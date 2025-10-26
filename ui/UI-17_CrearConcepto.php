@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $monto    = $_POST['monto'];
     $fecha_inicio    = $_POST['fecha_inicio'];
     $fecha_fin       = $_POST['fecha_fin'];
-    $periodicidad    = $_POST['periodicidad'];
+    $periodicidad    = $_POST['periodo'];
     $categoria_id    = $_POST['categoria'];
 
     // Paso 9 del CU-16: Determinar la periodicidad seleccionada por el usuario.
@@ -34,9 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'Mensual': $periodo = 30; break;
         case 'Eventual': $periodo = 0; break;
         case 'Personalizado':
-            $periodo = isset($_POST['periodicidad']) ? (int)$_POST['periodicidad'] : 1;
+            $periodo = $_POST['periodoPersonalizado'];
             break;
-        default: $periodo = 1;
     }
 
     /*  Invoca la funcion crearConcepto del GTR-02 Gestionar concepto para crear un nuevo
@@ -45,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nombre,
         $tipo,
         $monto,
-        $periodo_sel,
+        $periodo,
         $periodicidad,
         $fecha_inicio,
         $fecha_fin,
@@ -164,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <!-- Paso 7 del CU-16: El AC-02 selecciona el tipo de concepto (Ingreso o Egreso). -->
                         <div class="campo-formulario">
                             <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre" required>
+                            <input type="text" id="nombre" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Ingrese solo letras" name="nombre" placeholder="Ingrese nombre" required>
                         </div>
 
                         <!-- Tipo -->
@@ -179,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <!-- Paso 8 del CU-16: El AC-02 ingresa el monto. -->
                         <div class="campo-formulario">
                             <label for="monto">Monto:</label>
-                            <input type="number" id="monto" name="monto" step="0.01" placeholder="S/. 0.00" required>
+                            <input type="number" id="monto" name="monto" step="0.01" min="0" placeholder="S/. 0.00" required>
                         </div>
 
                         <!-- Paso 9 del CU-16: El AC-02 selecciona el período. -->
@@ -187,17 +186,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label>Periodo:</label>
                             <div class="opciones-radio columna-vertical">
                                 <label><input type="radio" name="periodo" value="Diario" required> Diario</label><br>
-                                <label><input type="radio" name="periodo" value="Semanal"> Semanal</label><br>
-                                <label><input type="radio" name="periodo" value="Quincenal"> Quincenal</label><br>
-                                <label><input type="radio" name="periodo" value="Mensual"> Mensual</label><br>
-                                <label><input type="radio" name="periodo" value="Personalizado"> Personalizado</label><br>
-                                <label><input type="radio" name="periodo" value="Eventual"> Eventual</label>
+                                <label><input type="radio" name="periodo" value="Semanal" required> Semanal</label><br>
+                                <label><input type="radio" name="periodo" value="Quincenal" required> Quincenal</label><br>
+                                <label><input type="radio" name="periodo" value="Mensual" required> Mensual</label><br>
+                                <label><input type="radio" name="periodo" value="Personalizado" required> Personalizado</label><br>
+                                <label><input type="radio" name="periodo" value="Eventual" required> Eventual</label>
                             </div>
                         </div>
 
                         <div class="periodicidad-personalizada" style="display:none; margin-top:10px;">
                             <label>Periodicidad:</label>
-                            <input type="number" name="periodicidad" placeholder="Ingrese número">
+                            <input type="number" name="periodoPersonalizado" step="1" min="2" placeholder="Ingrese número">
                         </div>
 
                         <!-- Paso 10 y 11 del CU-16: El AC-02 selecciona las fechas de inicio y fin. -->
@@ -205,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label>Día de inicio / Día de fin:</label>
                             <div class="fechas">
                                 <input type="date" name="fecha_inicio" required>
-                                <input type="date" name="fecha_fin">
+                                <input type="date" name="fecha_fin" required>
                             </div>
                         </div>
 

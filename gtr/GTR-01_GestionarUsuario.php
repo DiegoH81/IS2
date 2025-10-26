@@ -84,11 +84,12 @@ class GestionarUsuario {
 
     /* FUN-23 cambiarEstadoUsuarioBD 
         Permite modificar el estado de un usario, para habilitarlo/deshabilitarlo */
-    public static function cambiarEstadoUsuarioBD($id, $nuevo_estado) {
+    public static function cambiarEstadoUsuarioBD($id, $estado) {
         $conn = Database::connect();
-        $query = "SELECT cambiarEstadoUsuario($1, $2);";
-        $params = array($id, $nuevo_estado);
-        pg_query_params($conn, $query, $params);
+        $estadoBool = $estado ? 't' : 'f';
+        $query = "SELECT editarEstadoUsuario($1, $2);";
+        $params = array($id, $estadoBool);
+        return pg_query_params($conn, $query, $params);
     }
 
 

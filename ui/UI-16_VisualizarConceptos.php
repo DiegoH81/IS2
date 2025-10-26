@@ -45,7 +45,7 @@ if ($cadena !== '') {
     /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos filtrados 
         a mostrar segun la cadena ingresada en el buscador */
     $conceptos = array_filter(GestionarConcepto::relacionarDatos($usuarioId), function ($c) use ($cadena) {
-        return stripos($c['nombre'], $cadena) !== false ||
+        return stripos($c['concepto'], $cadena) !== false ||
                stripos($c['categoria'], $cadena) !== false;
     });
 } else {
@@ -196,6 +196,7 @@ if ($cadena !== '') {
                                             // Convertimos el estado a booleano
                                             $estadoBool = ($c['estado'] === 'Habilitado'); 
                                             $estadoTexto = $estadoBool ? 'Habilitado' : 'Deshabilitado';
+                                            $estadoValor = $estadoBool ? '1' : '0';
 
                                             // Permiso: admin familiar o creador
                                             $puedeCambiarEstado = ($_SESSION['rol'] === 'Administrador familiar') 
@@ -203,10 +204,10 @@ if ($cadena !== '') {
                                         ?>
                                         <button 
                                             type="button" 
-                                            class="link-editar" 
-                                            data-estado="<?= $estadoBool ? '1' : '0' ?>" 
+                                            class="link-editar"
+                                            data-estado="<?= $estadoValor ?>" 
                                             <?= !$puedeCambiarEstado ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?> 
-                                            onclick="abrirModal(<?= $c['concepto_id'] ?>, '<?= $estadoBool ? '1' : '0' , 'concepto'?>', 'concepto')">
+                                            onclick="abrirModal(<?= $c['concepto_id'] ?>, '<?= $estadoValor ?>', 'concepto')">
                                             <?= $estadoTexto ?>
                                         </button>
                                     </td>

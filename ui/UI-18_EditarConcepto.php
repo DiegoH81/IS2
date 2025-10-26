@@ -35,9 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $monto         = $_POST['monto'];
     $fecha_inicio  = $_POST['fechaInicio'];
     $fecha_fin     = $_POST['fechaFin'];
+    $periodicidad    = $_POST['periodo'];
     $categoriaId   = $_POST['categoria'];
     $usuarioId = $_SESSION['id_usuario'];
-    $descripcion   = '';
 
     // Paso 10 del CU-17: El AC-02-Familiar modifica el período (Diario, Semanal, Quincenal, Mensual, Personalizado, Eventual).
     $periodo_sel = $_POST['periodo'];
@@ -48,13 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'Mensual': $periodo = 30; break;
         case 'Eventual': $periodo = 0; break;
         case 'Personalizado':
-            $periodo = isset($_POST['periodicidad']) ? (int)$_POST['periodicidad'] : 1;
+            $periodo = $_POST['periodoPersonalizado'];
             break;
-        default: $periodo = 1;
     }
-
-    // Guardar la cadena seleccionada
-    $periodicidad = $periodo_sel;
 
     /*  Invoca la funcion editarConcepto del GTR-02 Gestionar concepto para actualizar los datos
         de un concepto existente con los datos del formulario */
@@ -68,9 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fecha_inicio,
         $fecha_fin,
         $categoriaId,
-        $usuarioId
     );
-
     
     header("Location: UI-16_VisualizarConceptos.php");
     exit;
@@ -181,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <!-- Paso 5 y 7 del CU-17: El AC-02-Familiar modifica el nombre del concepto si es necesario. -->
                         <div class="campo-formulario">
                             <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" value="<?= htmlspecialchars($concepto['nombre']) ?>" required>
+                            <input type="text" id="nombre" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Ingrese solo letras" name="nombre" value="<?= htmlspecialchars($concepto['nombre']) ?>" required>
                         </div>
 
                         <!-- Paso 8 del CU-17: El AC-02-Familiar modifica el tipo (Ingreso o Egreso). -->
@@ -196,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <!-- Paso 9 del CU-17: El AC-02-Familiar modifica el monto si es necesario. -->
                         <div class="campo-formulario">
                             <label for="monto">Monto:</label>
-                            <input type="number" id="monto" name="monto" step="0.01" value="<?= $concepto['monto'] ?>" required>
+                            <input type="number" id="monto" name="monto" step="0.01" min="0" value="<?= $concepto['monto'] ?>" required>
                         </div>
 
                         <!-- Paso 10 del CU-17: El AC-02-Familiar modifica el período. -->
@@ -206,14 +200,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $periodos = ['Diario','Semanal','Quincenal','Mensual','Personalizado','Eventual'];
                                 foreach($periodos as $p){
                                     $checked = $concepto['periodicidad'] == $p ? 'checked' : '';
-                                    echo "<label><input type='radio' name='periodo' value='$p' $checked> $p</label><br>";
+                                    echo "<label><input type='radio' name='periodo' value='$p' $checked required> $p</label><br>";
                                 } ?> 
                             </div>
                         </div>
 
                         <div class="periodicidad-personalizada" style="display:<?= $concepto['periodicidad'] == 'Personalizado' ? 'flex' : 'none' ?>; margin-top:10px;">
                             <label>Periodicidad:</label>
-                            <input type="number" name="periodicidad" value="<?= $concepto['periodo'] ?>" placeholder="Ingrese número">
+                            <input type="number" name="periodoPersonalizado" step="1" min="2" value="<?= $concepto['periodo'] ?>" placeholder="Ingrese número">
                         </div>
 
                         <!-- Paso 11 y 12 del CU-17: El AC-02-Familiar modifica las fechas si es necesario. -->
@@ -221,7 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label>Día de inicio / Día de fin:</label>
                             <div class="fechas">
                                 <input type="date" name="fechaInicio" value="<?= $concepto['fechainicio'] ?>" required>
-                                <input type="date" name="fechaFin" value="<?= $concepto['fechafin'] ?>">
+                                <input type="date" name="fechaFin" value="<?= $concepto['fechafin'] ?>" required>
                             </div>
                         </div>
 

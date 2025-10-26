@@ -39,10 +39,10 @@ class GestionarCategoria {
         Permite eitar una categoría ya existente*/
     public static function editarEstadoCategoriaBD($id, $estado) {
         $conn = Database::connect();
+        $estadoBool = $estado ? 't' : 'f';
         $query = "SELECT editarEstadoCategoria($1, $2);";
-        $params = array($id, $estado);
-        $result = pg_query_params($conn, $query, $params);
-        return $result !== false;
+        $params = array($id, $estadoBool);
+        return pg_query_params($conn, $query, $params);
     }
 
     /* FUN-25 obtenerCategoriaIdBD 
@@ -51,10 +51,7 @@ class GestionarCategoria {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerCategoriaPorId($1);";
         $params = array($id_categoria);
-        $result = pg_query_params($conn, $query, $params);
-
-        // Si la categoría existe, devuelve un array asociativo; si no, null
-        return $result ? pg_fetch_assoc($result) : null;
+        return pg_query_params($conn, $query, $params);
     }
 
 }
