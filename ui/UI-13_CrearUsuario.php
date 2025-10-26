@@ -1,16 +1,32 @@
 <?php
 
 // ------------------------------------------------------------
-// UI-21: Crear categoría
+// UI-13: Crear Usuario
 // Caso de uso asociado: CU-19 Crear categoría
 // ------------------------------------------------------------
 
-/*
-session_start();
-require_once '../gtr/GTR-02_GestionarConcepto.php';
-require_once '../gtr/GTR-09_GestionarCategoria.php';
-*/
 
+session_start();
+require_once '../gtr/GTR-01_GestionarUsuario.php';
+require_once '../gtr/GTR-04_Validar.php';
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $usuario_val   = $_POST['usuario'];
+    $nombre_val     = $_POST['nombre'];
+    $rol_val    = $_POST['rol'];
+    $password_val = $_POST['password'];
+    
+    $repetido = Validar::solicitarValidacionUsuario($usuario_val);
+
+    if ($repetido) {
+        $error = "Usuario existente.";
+    } else {
+        GestionarUsuario::crearUsuarioBD($usuario_val, $nombre_val, $password_val, $rol_val, $_SESSION['familia_id']);
+        header("Location: UI-12_VisualizarUsuarios.php");
+        exit;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -32,8 +48,12 @@ require_once '../gtr/GTR-09_GestionarCategoria.php';
         <section class="seccion-derecha">
             <h2 class="subtitulo">Configuración</h2>
             <div class="info-usuario">
-                <span class="nombre-usuario">           LEPULWEI PLACEHOLDERRRR           </span>
-                <span class="rol-usuario">              LEPULROL PLACEHOLDERRRR           </span>
+                <span class="nombre-usuario">
+                        <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+                </span>
+                <span class="rol-usuario">
+                        <?php echo htmlspecialchars($_SESSION['rol']); ?>
+                </span>
             </div>
         </section>
     </header>
@@ -94,7 +114,6 @@ require_once '../gtr/GTR-09_GestionarCategoria.php';
                     <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
 
                     
-
                     <form class="form-crear-concepto" method="POST">
 
                     <h1 style="text-align: center;">Crear usuario</h1>
@@ -111,8 +130,8 @@ require_once '../gtr/GTR-09_GestionarCategoria.php';
                         </div>
 
                         <div class="campo-formulario">
-                            <label for="categoria">Categoría:</label>
-                            <select id="categoria" name="categoria" required>
+                            <label for="rol">Rol:</label>
+                            <select id="rol" name="rol" required>
                                 <option value="">Seleccionar categoría</option>
                                 <option value="admin_familiar">Administrador familiar</option>
                                 <option value="familiar">Familiar</option>
@@ -122,10 +141,6 @@ require_once '../gtr/GTR-09_GestionarCategoria.php';
                         <div class="campo-formulario">
                             <label for="password">Contraseña:</label>
                             <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required>
-                        </div>
-                        <div class="campo-formulario">
-                            <label for="password_confirmar">Confirmar contraseña:</label>
-                            <input type="password" id="password_confirmar" name="password_confirmar" placeholder="Confirma tu contraseña" required>
                         </div>
                         
 
@@ -146,24 +161,6 @@ require_once '../gtr/GTR-09_GestionarCategoria.php';
     </div>
 </div>
 
-<script>
-// Paso 9 del CU-17: Mostrar campo de periodicidad si se selecciona "Personalizado".
-document.addEventListener('DOMContentLoaded', function() {
-    const radiosPeriodo = document.querySelectorAll('input[name="periodo"]');
-    const campoPersonalizado = document.querySelector('.periodicidad-personalizada');
 
-    radiosPeriodo.forEach(radio => {
-        radio.addEventListener('change', function() {
-            if (this.value === "Personalizado") {
-                campoPersonalizado.style.display = "flex";
-                campoPersonalizado.style.alignItems = "center";
-                campoPersonalizado.style.gap = "10px";
-            } else {
-                campoPersonalizado.style.display = "none";
-            }
-        });
-    });
-});
-</script>
 </body>
 </html>

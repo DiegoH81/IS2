@@ -5,8 +5,11 @@
 // Caso de uso asociado: CU-19 Gestionar categoría
 // ------------------------------------------------------------
 
+session_start();
+require_once '../gtr/GTR-09_GestionarCategoria.php';
 
-
+$categorias = GestionarCategoria::obtenerCategoriasBD($_SESSION['familia_id']);
+//var_dump($categorias);
 ?>
 
 <!DOCTYPE html>
@@ -38,8 +41,12 @@
             <h2 class="subtitulo">Configuración</h2>
 
             <div class="info-usuario">
-                <span class="nombre-usuario">           LEPULWEI PLACEHOLDERRRR           </span>
-                <span class="rol-usuario">           LEPULROL PLACEHOLDERRRR           </span>
+                <span class="nombre-usuario">
+                        <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+                </span>
+                <span class="rol-usuario">
+                        <?php echo htmlspecialchars($_SESSION['rol']); ?>
+                </span>
             </div>
         </section>
     </header>
@@ -133,27 +140,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                        <!--<?php if ($conceptos && count($conceptos) > 0): ?>-->
-                            <!--<?php foreach ($conceptos as $c): ?>-->
-                                <tr class="fila-tabla" id="fila-<?= $c['id_concepto'] ?>">
+                        <!--<?php if ($categorias && count($categorias) > 0): ?>-->
+                            <?php foreach ($categorias as $c): ?>
+                                <tr class="fila-tabla" id="fila-<?= $c['idcategoria'] ?>">
                                     <td class="celda"><?= htmlspecialchars($c['nombre']) ?></td>
                                     <td class="celda"><?= htmlspecialchars(string: $c['descripcion']) ?></td>
-                                    <td class="celda"><?= htmlspecialchars($c['creado_por']) ?></td>
+                                    <td class="celda"><?= htmlspecialchars($c['idusuario']) ?></td>
 
                                     <td class="celda celda-estado">
-                                        <?php
-                                            $estadoBool = ($c['estado'] === 't');
-                                            $estadoTexto = $estadoBool ? 'Habilitado' : 'Deshabilitado';
-                                            $puedeCambiarEstado = ($_SESSION['rol'] === 'Administrador familiar') 
-                                                || ($_SESSION['rol'] === 'Familiar' && $_SESSION['id_usuario'] == $c['usuario_id']);
-                                        ?>
                                         <button 
                                             type="button" 
                                             class="link-editar" 
-                                            data-estado="<?= $estadoBool ? '1' : '0' ?>" 
-                                            <?= !$puedeCambiarEstado ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?> 
-                                            onclick="abrirModal(<?= $c['id_concepto'] ?>, '<?= $estadoBool ? '1' : '0' ?>')">
-                                            <?= $estadoTexto ?>
+                                            data-estado="<?= $c['estado'] === 'Habilitado' ? '1' : '0' ?>" 
+                                            onclick="abrirModal(<?= $c['idcategoria'] ?>, '<?= $c['estado'] === 'Habilitado' ? '1' : '0' ?>', 'categoria')">
+                                            <?= htmlspecialchars($c['estado']) ?>
                                         </button>
                                     </td>
 
@@ -162,15 +162,11 @@
 
                                     <td class="celda">
                                         <?php
-                                            $puedeEditar = false;
-                                            if ($_SESSION['rol'] === 'Administrador familiar') {
-                                                $puedeEditar = true;
-                                            } elseif ($_SESSION['rol'] === 'Familiar' && $_SESSION['id_usuario'] == $c['usuario_id']) {
-                                                $puedeEditar = true;
-                                            }
+                                            // Permite editar si es Admin Familiar o si el concepto lo subió el mismo usuario
+                                            $puedeEditar = ($_SESSION['rol'] === 'Administrador familiar') || ($_SESSION['id_usuario'] == $c['idusuario']);
                                         ?>
-                                        <form action="UI-18_EditarConcepto.php" method="GET">
-                                            <input type="hidden" name="id" value="<?= $c['id_concepto'] ?>">
+                                        <form action="UI-22_EditarCategoria.php" method="GET">
+                                            <input type="hidden" name="idcategoria" value="<?= $c['idcategoria'] ?>">
                                             <button type="submit" class="link-editar" <?= !$puedeEditar ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?>>
                                                 Editar
                                             </button>
@@ -178,10 +174,10 @@
                                     </td>
 
                                 </tr>
-                     <!--           
                             <?php endforeach; ?>
+                     <!--           
                         <?php else: ?>
-                            <tr><td colspan="8" class="celda">No hay conceptos registrados.</td></tr>
+                            <tr><td colspan="8" class="celda">No hay categorías registradas.</td></tr>
                         <?php endif; ?>
                         -->
 
@@ -207,7 +203,7 @@
 <!-- UI-19 Modificar Estado del Concepto -->
 <div id="modalConfirmar" class="modal" style="display:none;">
     <div class="modal-contenido">
-        <p>¿Seguro que desea cambiar el estado del concepto?</p>
+        <p>¿Seguro que desea cambiar el estado de la categoria?</p>
         <div class="modal-botones">
             <button id="btnSi">Sí</button>
             <button id="btnNo">No</button>

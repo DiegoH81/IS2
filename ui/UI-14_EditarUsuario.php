@@ -5,7 +5,32 @@
 // Caso de uso asociado: CU-21 Editar categoría
 // ------------------------------------------------------------
 
+session_start();
+require_once '../gtr/GTR-01_GestionarUsuario.php';
 
+if (!isset($_GET['usuario']))
+{
+    die("No se especificó el usuario");
+}
+$usuario_v = $_GET['usuario'];
+
+$usuario = GestionarUsuario::obtenerUsuarioBD($usuario_v);
+//var_dump($usuario);
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $usuario_val = $_POST['usuario'];
+    $nombre_val = $_POST['nombre'];
+    $contrasena_val = $_POST['password'];
+    $rol_val = $_POST['rol'];
+
+    // Llamar a la función del gestor para actualizar
+    GestionarUsuario::actualizarDatosUsuarioBD($usuario_val, $nombre_val, $contrasena_val, $rol_val);
+    
+    header("Location: UI-12_VisualizarUsuarios.php");
+    exit;
+    
+}
 
 ?>
 
@@ -30,8 +55,12 @@
             <h2 class="subtitulo">Configuración</h2>
 
             <div class="info-usuario">
-                <span class="nombre-usuario">           LEPULWEI PLACEHOLDERRRR           </span>
-                <span class="rol-usuario">              LEPULROL PLACEHOLDERRRR           </span>
+                <span class="nombre-usuario">
+                        <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+                </span>
+                <span class="rol-usuario">
+                        <?php echo htmlspecialchars($_SESSION['rol']); ?>
+                </span>
             </div>
         </section>
     </header>
@@ -92,7 +121,6 @@
                     </header>
 
                     <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
-
                     
 
                     <form class="form-crear-concepto" method="POST">
@@ -103,17 +131,20 @@
                         
                         <div class="campo-formulario">
                             <label for="usuario">Usuario:</label>
-                            <input type="text" id="usuario" name="usuario" placeholder="Ingrese usuario" required>
+
+                            <input type="text" id="usuario" name="usuario" value="<?= htmlspecialchars($usuario['usuario']) ?>" readonly>
+
                         </div>
+                        
                         <div class="campo-formulario">
                             <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre" required>
+                            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" value="<?= htmlspecialchars($usuario['nombre']) ?>" required>
                         </div>
 
                         <div class="campo-formulario">
-                            <label for="categoria">Categoría:</label>
-                            <select id="categoria" name="categoria" required>
-                                <option value="">Seleccionar categoría</option>
+                            <label for="rol">Rol:</label>
+                            <select id="rol" name="rol" required>
+                                <option value="">Seleccionar rol</option>
                                 <option value="admin_familiar">Administrador familiar</option>
                                 <option value="familiar">Familiar</option>
                             </select>
@@ -121,7 +152,7 @@
 
                         <div class="campo-formulario">
                             <label for="password">Contraseña:</label>
-                            <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required>
+                            <input type="password" id="password" name="password" placeholder = "Ingrese su contraseña" value="<?= htmlspecialchars($usuario['contrasena']) ?>" required>
                         </div>
 
                         <!-- Paso 12 del CU-16: El AC-02 selecciona la opción Crear. -->
@@ -129,7 +160,7 @@
 
                             <div class="grupo-botones">
                                 <button type="button" class="boton-crear boton-cancelar" onclick="window.location.href='UI-12_VisualizarUsuarios.php'">Cancelar</button>
-                                <button type="submit" class="boton-crear">Crear</button>
+                                <button type="submit" class="boton-crear">Guardar</button>
                             </div>
 
                         </div>

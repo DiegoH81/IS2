@@ -1,10 +1,14 @@
 <?php
 
 // ------------------------------------------------------------
-// UI-20: Visualizar categoria
+// UI-12: Visualizar usuarios
 // Caso de uso asociado: CU-19 Gestionar categoría
 // ------------------------------------------------------------
+session_start();
+require_once '../gtr/GTR-01_GestionarUsuario.php';
 
+$usuarios = GestionarUsuario::obtenerUsuariosBD($_SESSION['familia_id']);
+//var_dump($usuarios);
 
 
 ?>
@@ -38,8 +42,12 @@
             <h2 class="subtitulo">Configuración</h2>
 
             <div class="info-usuario">
-                <span class="nombre-usuario">           LEPULWEI PLACEHOLDERRRR           </span>
-                <span class="rol-usuario">           LEPULROL PLACEHOLDERRRR           </span>
+                <span class="nombre-usuario">
+                        <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+                </span>
+                <span class="rol-usuario">
+                        <?php echo htmlspecialchars($_SESSION['rol']); ?>
+                </span>
             </div>
         </section>
     </header>
@@ -117,7 +125,7 @@
 
                             <a href="UI-13_CrearUsuario.php" class="boton-crear">Crear usuario</a>
                         </div>
-                        <h2 class="titulo-tabla">Configuración categoria</h2>
+                        <h2 class="titulo-tabla">Configuración usuarios</h2>
                         <div class="linea-separadora"></div>
                         <div class="linea-azul"></div>
                     </header>
@@ -133,55 +141,47 @@
                             </tr>
                         </thead>
                         <tbody>
-                        <!--<?php if ($conceptos && count($conceptos) > 0): ?>-->
-                            <!--<?php foreach ($conceptos as $c): ?>-->
-                                <tr class="fila-tabla" id="fila-<?= $c['id_concepto'] ?>">
-                                    <td class="celda"><?= htmlspecialchars($c['usuario']) ?></td>
-                                    <td class="celda"><?= htmlspecialchars(string: $c['nombre']) ?></td>
-                                    <td class="celda"><?= htmlspecialchars($c['rol']) ?></td>
+                        <!--<?php if ($usuarios && count($usuarios) > 0): ?>-->
+                            <?php foreach ($usuarios as $u): ?>
+                                <tr class="fila-tabla" id="fila-<?= $u['id_usuario'] ?>">
+                                    <td class="celda">
+                                        <?= htmlspecialchars($u['usuario']) ?>
+                                    </td>
+                                    <td class="celda">
+                                        <?= htmlspecialchars(string: $u['nombre']) ?>
+                                    </td>
+                                    <td class="celda">
+                                        <?= htmlspecialchars($u['rol']) ?>
+                                    </td>
 
                                     <td class="celda celda-estado">
-                                        <?php
-                                            $estadoBool = ($c['estado'] === 't');
-                                            $estadoTexto = $estadoBool ? 'Habilitado' : 'Deshabilitado';
-                                            $puedeCambiarEstado = ($_SESSION['rol'] === 'Administrador familiar') 
-                                                || ($_SESSION['rol'] === 'Familiar' && $_SESSION['id_usuario'] == $c['usuario_id']);
-                                        ?>
                                         <button 
                                             type="button" 
                                             class="link-editar" 
-                                            data-estado="<?= $estadoBool ? '1' : '0' ?>" 
-                                            <?= !$puedeCambiarEstado ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?> 
-                                            onclick="abrirModal(<?= $c['id_concepto'] ?>, '<?= $estadoBool ? '1' : '0' ?>')">
-                                            <?= $estadoTexto ?>
+                                            data-estado="<?= $u['estado'] === 'Habilitado' ? '1' : '0' ?>" 
+                                            onclick="abrirModal(<?= $u['id_usuario'] ?>, '<?= $u['estado'] === 'Habilitado' ? '1' : '0' ?>', 'usuario')">
+                                            <?= htmlspecialchars($u['estado']) ?>
                                         </button>
                                     </td>
+
+
 
                                     <!-- Paso 9 del CU-15: Mostrar opciones de gestión según el rol. -->
                                     <!-- Paso 9.1/9.2: Si es familiar, solo puede editar los suyos. -->
 
                                     <td class="celda">
-                                        <?php
-                                            $puedeEditar = false;
-                                            if ($_SESSION['rol'] === 'Administrador familiar') {
-                                                $puedeEditar = true;
-                                            } elseif ($_SESSION['rol'] === 'Familiar' && $_SESSION['id_usuario'] == $c['usuario_id']) {
-                                                $puedeEditar = true;
-                                            }
-                                        ?>
-                                        <form action="UI-18_EditarConcepto.php" method="GET">
-                                            <input type="hidden" name="id" value="<?= $c['id_concepto'] ?>">
-                                            <button type="submit" class="link-editar" <?= !$puedeEditar ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?>>
+                                        <form action="UI-14_EditarUsuario.php" method="GET">
+                                            <input type="hidden" name="usuario" value="<?= htmlspecialchars($u['usuario']) ?>">
+                                            <button type="submit" class="link-editar">
                                                 Editar
                                             </button>
                                         </form>
                                     </td>
-
                                 </tr>
-                     <!--           
                             <?php endforeach; ?>
+                                <!--           
                         <?php else: ?>
-                            <tr><td colspan="8" class="celda">No hay conceptos registrados.</td></tr>
+                            <tr><td colspan="8" class="celda">No hay usuarios registrados.</td></tr>
                         <?php endif; ?>
                         -->
 
@@ -207,7 +207,7 @@
 <!-- UI-19 Modificar Estado del Concepto -->
 <div id="modalConfirmar" class="modal" style="display:none;">
     <div class="modal-contenido">
-        <p>¿Seguro que desea cambiar el estado del concepto?</p>
+        <p>¿Seguro que desea cambiar el estado del usuario?</p>
         <div class="modal-botones">
             <button id="btnSi">Sí</button>
             <button id="btnNo">No</button>

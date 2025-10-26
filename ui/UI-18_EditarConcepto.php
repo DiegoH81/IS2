@@ -17,10 +17,13 @@ $id_concepto = (int)$_GET['id'];
 
 /*  Invoca la funcion obtenerCategorias del GTR-09 Gestionar categoria para obtener
      las categorías disponibles. */
-$categorias = GestionarCategoria::obtenerCategoriasBD();
+$categorias = GestionarCategoria::obtenerCategoriasBD($_SESSION['familia_id']);
 /*  Invoca la funcion obtenerConcepto del GTR-02 Gestionar concepto para extraer los datos
-        de un concepto existente y mostrarlo en el formulario */
-$concepto = GestionarConcepto::obtenerConceptosBD($id_concepto);
+de un concepto existente y mostrarlo en el formulario */
+$concepto = GestionarConcepto::obtenerConceptoBD($id_concepto);
+
+//var_dump($concepto);
+
 if (!$concepto) {
     die("Concepto no encontrado");
 }
@@ -30,8 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre        = $_POST['nombre'];
     $tipo          = $_POST['tipo'];
     $monto         = $_POST['monto'];
-    $fecha_inicio  = $_POST['fecha_inicio'];
-    $fecha_fin     = $_POST['fecha_fin'];
+    $fecha_inicio  = $_POST['fechaInicio'];
+    $fecha_fin     = $_POST['fechaFin'];
     $categoriaId   = $_POST['categoria'];
     $usuarioId = $_SESSION['id_usuario'];
     $descripcion   = '';
@@ -58,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $resultado = GestionarConcepto::editarConceptoBD(
         $id_concepto,
         $nombre,
-        $descripcion,
         $tipo,
         $monto,
         $periodo,
@@ -69,14 +71,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $usuarioId
     );
 
-    if ($resultado) {
-        // Paso 18 del CU-17: La interfaz muestra un mensaje de confirmación de cambios guardados.
-        // Paso 19 del CU-17: La interfaz redirige al AC-02-Familiar a la interfaz Visualizar conceptos (UI-16).
-        header("Location: UI-16_VisualizarConceptos.php");
-        exit;
-    } else {
-        $error = "Ocurrió un error al actualizar el concepto.";
-    }
+    
+    header("Location: UI-16_VisualizarConceptos.php");
+    exit;
+    
 }
 ?>
 
@@ -173,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <select id="categoria" name="categoria" required>
                                 <option value="">Seleccionar categoría</option>
                                 <?php foreach($categorias as $cat): ?>
-                                    <option value="<?= $cat['id_categoria'] ?>" <?= $cat['id_categoria'] == $concepto['categoria_id'] ? 'selected' : '' ?>>
+                                    <option value="<?= $cat['idcategoria'] ?>" <?= $cat['idcategoria'] == $concepto['categoria_id'] ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($cat['nombre']) ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -222,8 +220,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="campo-formulario">
                             <label>Día de inicio / Día de fin:</label>
                             <div class="fechas">
-                                <input type="date" name="fecha_inicio" value="<?= $concepto['fecha_inicio'] ?>" required>
-                                <input type="date" name="fecha_fin" value="<?= $concepto['fecha_fin'] ?>">
+                                <input type="date" name="fechaInicio" value="<?= $concepto['fechainicio'] ?>" required>
+                                <input type="date" name="fechaFin" value="<?= $concepto['fechafin'] ?>">
                             </div>
                         </div>
 

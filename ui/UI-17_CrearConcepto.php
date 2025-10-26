@@ -11,18 +11,19 @@ require_once '../gtr/GTR-09_GestionarCategoria.php';
 
 /*  Invoca la funcion obtenerCategorias del GTR-09 Gestionar categoria para obtener
      las categorías disponibles. */
-$categorias = GestionarCategoria::obtenerCategoriasBD();
+$categorias = GestionarCategoria::obtenerCategoriasBD($_SESSION['familia_id']);
+//var_dump($categorias);
+
 
 // Verificar si el formulario fue enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre   = $_POST['nombre'];
     $tipo     = $_POST['tipo'];
     $monto    = $_POST['monto'];
-    $fecha_inicio = $_POST['fecha_inicio'];
-    $fecha_fin    = $_POST['fecha_fin'];
-    $categoriaId = $_POST['categoria'];
-    $usuarioId   = $_SESSION['id_usuario'];
-    $descripcion = '';
+    $fecha_inicio    = $_POST['fecha_inicio'];
+    $fecha_fin       = $_POST['fecha_fin'];
+    $periodicidad    = $_POST['periodicidad'];
+    $categoria_id    = $_POST['categoria'];
 
     // Paso 9 del CU-16: Determinar la periodicidad seleccionada por el usuario.
     $periodo_sel = $_POST['periodo'];
@@ -40,27 +41,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     /*  Invoca la funcion crearConcepto del GTR-02 Gestionar concepto para crear un nuevo
         concepto con los datos del formulario */
-    $resultado = GestionarConcepto::crearConceptoBD(
+    GestionarConcepto::crearConceptoBD(
         $nombre,
-        $descripcion,
         $tipo,
         $monto,
-        $periodo,
         $periodo_sel,
+        $periodicidad,
         $fecha_inicio,
         $fecha_fin,
-        $categoriaId,
-        $usuarioId
+        $_SESSION['familia_id'],
+        $_SESSION['id_usuario'],
+        $categoria_id
     );
 
     // Paso 18 del CU-16: Mostrar mensaje de confirmación.
     // Paso 19 del CU-16: Redirigir a la interfaz de Visualizar conceptos (UI-16).
-    if ($resultado) {
-        header("Location: UI-16_VisualizarConceptos.php");
-        exit;
-    } else {
-        $error = "Ocurrió un error al crear el concepto.";
-    }
+    header("Location: UI-16_VisualizarConceptos.php");
+    exit;
 }
 ?>
 
@@ -157,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <select id="categoria" name="categoria" required>
                                 <option value="">Seleccionar categoría</option>
                                 <?php foreach($categorias as $cat): ?>
-                                    <option value="<?= $cat['id_categoria'] ?>">
+                                    <option value="<?= $cat['idcategoria'] ?>">
                                         <?= htmlspecialchars($cat['nombre']) ?>
                                     </option>
                                 <?php endforeach; ?>

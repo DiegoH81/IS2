@@ -5,8 +5,30 @@
 // Caso de uso asociado: CU-21 Editar categoría
 // ------------------------------------------------------------
 
+session_start();
+require_once '../gtr/GTR-09_GestionarCategoria.php';
+
+if (!isset($_GET['idcategoria']))
+{
+    die("No se especificó la categoria");
+}
+$id_categoria = $_GET['idcategoria'];
+
+$categoria = GestionarCategoria::obtenerCategoriaIdBD($id_categoria);
+//var_dump($categoria);
 
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nombre_val = $_POST['nombre'];
+    $descripcion_val = $_POST['descripcion'];
+
+    // Llamar a la función del gestor para actualizar
+    GestionarCategoria::actualizarCategoriaBD($id_categoria, $nombre_val, $descripcion_val);
+    
+    header("Location: UI-20_VisualizarCategoria.php");
+    exit;
+    
+}
 ?>
 
 <!DOCTYPE html>
@@ -30,8 +52,12 @@
             <h2 class="subtitulo">Configuración</h2>
 
             <div class="info-usuario">
-                <span class="nombre-usuario">           LEPULWEI PLACEHOLDERRRR           </span>
-                <span class="rol-usuario">              LEPULROL PLACEHOLDERRRR           </span>
+                <span class="nombre-usuario">
+                        <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+                </span>
+                <span class="rol-usuario">
+                        <?php echo htmlspecialchars($_SESSION['rol']); ?>
+                </span>
             </div>
         </section>
     </header>
@@ -99,12 +125,19 @@
                         
                         <div class="campo-formulario">
                             <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre" required>
+                            <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre" value="<?= htmlspecialchars($categoria['nombre']) ?>" required>
                         </div>
 
                         <div class="campo-formulario">
-                            <label for="nombre">Descripcion:</label>
-                            <textarea rows="5" cols="40" name="descripcion" id="descripcion" placeholder="Ingrese la descripcion"   spellcheck="false"></textarea>
+                            <label for="descripcion">Descripción:</label>
+                            <textarea 
+                                rows="5" 
+                                cols="40" 
+                                name="descripcion" 
+                                id="descripcion" 
+                                placeholder="Ingrese la descripción" 
+                                spellcheck="false"
+                            ><?= htmlspecialchars($categoria['descripcion']) ?></textarea>
                         </div>
 
                         <!-- Paso 12 del CU-16: El AC-02 selecciona la opción Crear. -->

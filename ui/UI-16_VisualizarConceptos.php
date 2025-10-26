@@ -32,9 +32,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_concepto'], $_POST
     }
 }
 
+$usuarioId = $_SESSION['id_usuario'];
+$familiaId = $_SESSION['familia_id'];
 // Si hay texto en la barra, filtrar (esto puedes implementarlo en tu función SQL más adelante)
 if ($cadena !== '') {
-    $usuarioId = $_SESSION['id_usuario'];
     /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos filtrados 
         a mostrar segun la cadena ingresada en el buscador */
     $conceptos = array_filter(GestionarConcepto::relacionarDatos($usuarioId), function ($c) use ($cadena) {
@@ -45,7 +46,8 @@ if ($cadena !== '') {
     $usuarioId = $_SESSION['id_usuario'];
     /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos
         a mostrar en la tabla de la interfaz */
-    $conceptos = GestionarConcepto::relacionarDatos($usuarioId);
+    $conceptos = GestionarConcepto::relacionarDatos($familiaId);
+    //var_dump($conceptos);
 }
 ?>
 
@@ -172,30 +174,34 @@ if ($cadena !== '') {
                         <tbody>
                         <?php if ($conceptos && count($conceptos) > 0): ?>
                             <?php foreach ($conceptos as $c): ?>
-                                <tr class="fila-tabla" id="fila-<?= $c['id_concepto'] ?>">
-                                    <td class="celda"><?= htmlspecialchars($c['nombre']) ?></td>
+                                <tr class="fila-tabla" id="fila-<?= $c['concepto_id'] ?>">
+                                    <td class="celda"><?= htmlspecialchars($c['concepto']) ?></td>
                                     <td class="celda"><?= htmlspecialchars($c['categoria']) ?></td>
                                     <td class="celda"><?= htmlspecialchars($c['tipo']) ?></td>
                                     <td class="celda"><?= htmlspecialchars($c['subido_por']) ?></td>
-                                    <td class="celda">S/. <?= number_format($c['monto'], 2) ?></td>
+                                    <td class="celda">S/. <?= number_format($c['costo'], 2) ?></td>
                                     <td class="celda"><?= htmlspecialchars($c['periodicidad']) ?></td>
 
                                     <td class="celda celda-estado">
                                         <?php
-                                            $estadoBool = ($c['estado'] === 't');
+                                            // Convertimos el estado a booleano
+                                            $estadoBool = ($c['estado'] === 'Habilitado'); 
                                             $estadoTexto = $estadoBool ? 'Habilitado' : 'Deshabilitado';
+
+                                            // Permiso: admin familiar o creador
                                             $puedeCambiarEstado = ($_SESSION['rol'] === 'Administrador familiar') 
-                                                || ($_SESSION['rol'] === 'Familiar' && $_SESSION['id_usuario'] == $c['usuario_id']);
+                                                || ($_SESSION['id_usuario'] == $c['usuario_id']);
                                         ?>
                                         <button 
                                             type="button" 
                                             class="link-editar" 
                                             data-estado="<?= $estadoBool ? '1' : '0' ?>" 
                                             <?= !$puedeCambiarEstado ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?> 
-                                            onclick="abrirModal(<?= $c['id_concepto'] ?>, '<?= $estadoBool ? '1' : '0' ?>')">
+                                            onclick="abrirModal(<?= $c['concepto_id'] ?>, '<?= $estadoBool ? '1' : '0' ?>', 'concepto')">
                                             <?= $estadoTexto ?>
                                         </button>
                                     </td>
+
 
                                     <!-- Paso 9 del CU-15: Mostrar opciones de gestión según el rol. -->
                                     <!-- Paso 9.1/9.2: Si es familiar, solo puede editar los suyos. -->
@@ -203,14 +209,12 @@ if ($cadena !== '') {
                                     <td class="celda">
                                         <?php
                                             $puedeEditar = false;
-                                            if ($_SESSION['rol'] === 'Administrador familiar') {
-                                                $puedeEditar = true;
-                                            } elseif ($_SESSION['rol'] === 'Familiar' && $_SESSION['id_usuario'] == $c['usuario_id']) {
+                                            if ($_SESSION['rol'] === 'Administrador familiar' || $_SESSION['id_usuario'] == $c['usuario_id']) {
                                                 $puedeEditar = true;
                                             }
                                         ?>
                                         <form action="UI-18_EditarConcepto.php" method="GET">
-                                            <input type="hidden" name="id" value="<?= $c['id_concepto'] ?>">
+                                            <input type="hidden" name="id" value="<?= $c['concepto_id'] ?>">
                                             <button type="submit" class="link-editar" <?= !$puedeEditar ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?>>
                                                 Editar
                                             </button>
@@ -239,6 +243,7 @@ if ($cadena !== '') {
         }
     });
 </script>
+
 <!-- UI-19 Modificar Estado del Concepto -->
 <div id="modalConfirmar" class="modal" style="display:none;">
     <div class="modal-contenido">

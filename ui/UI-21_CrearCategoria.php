@@ -5,11 +5,19 @@
 // Caso de uso asociado: CU-19 Crear categoría
 // ------------------------------------------------------------
 
-/*
+
 session_start();
-require_once '../gtr/GTR-02_GestionarConcepto.php';
 require_once '../gtr/GTR-09_GestionarCategoria.php';
-*/
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nombre_val          = $_POST['nombre'];
+    $descripcion_val     = $_POST['descripcion'];
+    
+    GestionarCategoria::crearCategoriaBD($nombre_val, $descripcion_val, $_SESSION['familia_id'], $_SESSION['id_usuario']);
+    header("Location: UI-20_VisualizarCategoria.php");
+    exit;
+}
 
 ?>
 
@@ -32,8 +40,12 @@ require_once '../gtr/GTR-09_GestionarCategoria.php';
         <section class="seccion-derecha">
             <h2 class="subtitulo">Configuración</h2>
             <div class="info-usuario">
-                <span class="nombre-usuario">           LEPULWEI PLACEHOLDERRRR           </span>
-                <span class="rol-usuario">              LEPULROL PLACEHOLDERRRR           </span>
+                <span class="nombre-usuario">
+                        <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+                </span>
+                <span class="rol-usuario">
+                        <?php echo htmlspecialchars($_SESSION['rol']); ?>
+                </span>
             </div>
         </section>
     </header>
@@ -105,7 +117,7 @@ require_once '../gtr/GTR-09_GestionarCategoria.php';
                         </div>
 
                         <div class="campo-formulario">
-                            <label for="nombre">Descripcion:</label>
+                            <label for="descripcion">Descripcion:</label>
                             <textarea rows="5" cols="40" name="descripcion" id="descripcion" placeholder="Ingrese la descripcion"   spellcheck="false"></textarea>
                         </div>
 
