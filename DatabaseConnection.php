@@ -2,7 +2,7 @@
 class Database {
     private static $host = "localhost";
     private static $port = "5432";
-    private static $dbname = "oab_test2";
+    private static $dbname = "OAB_DB";
     private static $user = "postgres";
     private static $password = "ucsp123";
     private static $connection = null;

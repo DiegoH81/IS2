@@ -1,54 +1,15 @@
 <?php
 
 // ------------------------------------------------------------
-// UI-16: Visualizar conceptos
-// Caso de uso asociado: CU-15 Gestionar conceptos
+// UI-20: Visualizar categoria
+// Caso de uso asociado: CU-19 Gestionar categoría
 // ------------------------------------------------------------
 
 session_start();
-require_once '../gtr/GTR-02_GestionarConcepto.php';
+require_once '../gtr/GTR-09_GestionarCategoria.php';
 
-// Paso 7 del CU-15: La interfaz presenta el campo de búsqueda.
-
-// Capturar la búsqueda si existe
-$cadena = isset($_GET['cadena']) ? $_GET['cadena'] : '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_concepto'], $_POST['estado'])) {
-    $idConcepto = intval($_POST['id_concepto']);
-    // Asegurar conversión correcta: cualquier valor > 0 es true
-    $estado = (intval($_POST['estado']) === 1);
-    /*  Invoca la funcion editarEstadoConcepto del GTR-02 Gestionar concepto para actualizar
-        el estado de un concepto segun su id */
-    $resultado = GestionarConcepto::editarEstadoConceptoBD($idConcepto, $estado);
-    
-    if(isset($_POST['ajax'])) {
-        // Verificar si la consulta fue exitosa
-        if($resultado) {
-            echo json_encode(['success' => true]);
-        } else {
-            echo json_encode(['success' => false, 'error' => 'Error al actualizar']);
-        }
-        exit;
-    }
-}
-
-$usuarioId = $_SESSION['id_usuario'];
-$familiaId = $_SESSION['familia_id'];
-// Si hay texto en la barra, filtrar (esto puedes implementarlo en tu función SQL más adelante)
-if ($cadena !== '') {
-    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos filtrados 
-        a mostrar segun la cadena ingresada en el buscador */
-    $conceptos = array_filter(GestionarConcepto::relacionarDatos($usuarioId), function ($c) use ($cadena) {
-        return stripos($c['nombre'], $cadena) !== false ||
-               stripos($c['categoria'], $cadena) !== false;
-    });
-} else {
-    $usuarioId = $_SESSION['id_usuario'];
-    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos
-        a mostrar en la tabla de la interfaz */
-    $conceptos = GestionarConcepto::relacionarDatos($familiaId);
-    //var_dump($conceptos);
-}
+$categorias = GestionarCategoria::obtenerCategoriasBD($_SESSION['familia_id']);
+//var_dump($categorias);
 ?>
 
 <!DOCTYPE html>
@@ -80,8 +41,12 @@ if ($cadena !== '') {
             <h2 class="subtitulo">Configuración</h2>
 
             <div class="info-usuario">
-                <span class="nombre-usuario"><?= htmlspecialchars($_SESSION['nombre']) ?></span>
-                <span class="rol-usuario"><?= htmlspecialchars($_SESSION['rol']) ?></span>
+                <span class="nombre-usuario">
+                        <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+                </span>
+                <span class="rol-usuario">
+                        <?php echo htmlspecialchars($_SESSION['rol']); ?>
+                </span>
             </div>
         </section>
     </header>
@@ -124,10 +89,10 @@ if ($cadena !== '') {
                     <a class="opcion-submenu" href="UI-12_VisualizarUsuarios.php">
                         <i></i>Usuarios
                     </a>
-                    <a class="opcion-submenu activa" href="UI-16_VisualizarConceptos.php">
+                    <a class="opcion-submenu" href="UI-16_VisualizarConceptos.php">
                         <i></i>Conceptos
                     </a>
-                    <a class="opcion-submenu" href="UI-20_VisualizarCategoria.php">
+                    <a class="opcion-submenu activa" href="UI-20_VisualizarCategoria.php">
                         <i></i>Categorías
                     </a>
                 </nav>
@@ -143,17 +108,23 @@ if ($cadena !== '') {
                                     type="text" 
                                     name="cadena" 
                                     placeholder="Buscar..." 
-                                    value="<?= htmlspecialchars($cadena) ?>"
+                                    value="A buscar"
                                     class="input-busqueda">
                                 <button type="submit" class="boton-buscar">Buscar</button>
-                                <?php if ($cadena !== ''): ?>
+
+
+                                <!--<?php if ($cadena !== ''): ?>
+
                                     <a href="UI-16_VisualizarConceptos.php" class="boton-limpiar">Limpiar</a>
                                 <?php endif; ?>
+                                -->
+
+
                             </form>
 
-                            <a href="UI-17_CrearConcepto.php" class="boton-crear">Crear concepto</a>
+                            <a href="UI-21_CrearCategoria.php" class="boton-crear">Crear categoría</a>
                         </div>
-                        <h2 class="titulo-tabla">Configuración conceptos</h2>
+                        <h2 class="titulo-tabla">Configuración categoria</h2>
                         <div class="linea-separadora"></div>
                         <div class="linea-azul"></div>
                     </header>
@@ -161,70 +132,56 @@ if ($cadena !== '') {
                     <table class="tabla-datos">
                         <thead>
                             <tr>
-                                <th class="encabezado-tabla">Concepto</th>
-                                <th class="encabezado-tabla">Categoría</th>
-                                <th class="encabezado-tabla">Tipo</th>
-                                <th class="encabezado-tabla">Subido por</th>
-                                <th class="encabezado-tabla">Costo</th>
-                                <th class="encabezado-tabla">Periodo</th>
+                                <th class="encabezado-tabla">Nombre</th>
+                                <th class="encabezado-tabla">Descripción</th>
+                                <th class="encabezado-tabla">Creado por</th>
                                 <th class="encabezado-tabla">Estado</th>
                                 <th class="encabezado-tabla">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
-                        <?php if ($conceptos && count($conceptos) > 0): ?>
-                            <?php foreach ($conceptos as $c): ?>
-                                <tr class="fila-tabla" id="fila-<?= $c['concepto_id'] ?>">
-                                    <td class="celda"><?= htmlspecialchars($c['concepto']) ?></td>
-                                    <td class="celda"><?= htmlspecialchars($c['categoria']) ?></td>
-                                    <td class="celda"><?= htmlspecialchars($c['tipo']) ?></td>
-                                    <td class="celda"><?= htmlspecialchars($c['subido_por']) ?></td>
-                                    <td class="celda">S/. <?= number_format($c['costo'], 2) ?></td>
-                                    <td class="celda"><?= htmlspecialchars($c['periodicidad']) ?></td>
+                        <!--<?php if ($categorias && count($categorias) > 0): ?>-->
+                            <?php foreach ($categorias as $c): ?>
+                                <tr class="fila-tabla" id="fila-<?= $c['idcategoria'] ?>">
+                                    <td class="celda"><?= htmlspecialchars($c['nombre']) ?></td>
+                                    <td class="celda"><?= htmlspecialchars(string: $c['descripcion']) ?></td>
+                                    <td class="celda"><?= htmlspecialchars($c['idusuario']) ?></td>
 
                                     <td class="celda celda-estado">
-                                        <?php
-                                            // Convertimos el estado a booleano
-                                            $estadoBool = ($c['estado'] === 'Habilitado'); 
-                                            $estadoTexto = $estadoBool ? 'Habilitado' : 'Deshabilitado';
-
-                                            // Permiso: admin familiar o creador
-                                            $puedeCambiarEstado = ($_SESSION['rol'] === 'Administrador familiar') 
-                                                || ($_SESSION['id_usuario'] == $c['usuario_id']);
-                                        ?>
                                         <button 
                                             type="button" 
                                             class="link-editar" 
-                                            data-estado="<?= $estadoBool ? '1' : '0' ?>" 
-                                            <?= !$puedeCambiarEstado ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?> 
-                                            onclick="abrirModal(<?= $c['concepto_id'] ?>, '<?= $estadoBool ? '1' : '0' ?>', 'concepto')">
-                                            <?= $estadoTexto ?>
+                                            data-estado="<?= $c['estado'] === 'Habilitado' ? '1' : '0' ?>" 
+                                            onclick="abrirModal(<?= $c['idcategoria'] ?>, '<?= $c['estado'] === 'Habilitado' ? '1' : '0' ?>', 'categoria')">
+                                            <?= htmlspecialchars($c['estado']) ?>
                                         </button>
                                     </td>
-
 
                                     <!-- Paso 9 del CU-15: Mostrar opciones de gestión según el rol. -->
                                     <!-- Paso 9.1/9.2: Si es familiar, solo puede editar los suyos. -->
 
                                     <td class="celda">
                                         <?php
-                                            $puedeEditar = false;
-                                            if ($_SESSION['rol'] === 'Administrador familiar' || $_SESSION['id_usuario'] == $c['usuario_id']) {
-                                                $puedeEditar = true;
-                                            }
+                                            // Permite editar si es Admin Familiar o si el concepto lo subió el mismo usuario
+                                            $puedeEditar = ($_SESSION['rol'] === 'Administrador familiar') || ($_SESSION['id_usuario'] == $c['idusuario']);
                                         ?>
-                                        <form action="UI-18_EditarConcepto.php" method="GET">
-                                            <input type="hidden" name="id" value="<?= $c['concepto_id'] ?>">
+                                        <form action="UI-22_EditarCategoria.php" method="GET">
+                                            <input type="hidden" name="idcategoria" value="<?= $c['idcategoria'] ?>">
                                             <button type="submit" class="link-editar" <?= !$puedeEditar ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?>>
                                                 Editar
                                             </button>
                                         </form>
                                     </td>
+
                                 </tr>
                             <?php endforeach; ?>
+                     <!--           
                         <?php else: ?>
-                            <tr><td colspan="8" class="celda">No hay conceptos registrados.</td></tr>
+                            <tr><td colspan="8" class="celda">No hay categorías registradas.</td></tr>
                         <?php endif; ?>
+                        -->
+
+
                         </tbody>
                     </table>
                 </article>
@@ -243,11 +200,10 @@ if ($cadena !== '') {
         }
     });
 </script>
-
 <!-- UI-19 Modificar Estado del Concepto -->
 <div id="modalConfirmar" class="modal" style="display:none;">
     <div class="modal-contenido">
-        <p>¿Seguro que desea cambiar el estado del concepto?</p>
+        <p>¿Seguro que desea cambiar el estado de la categoria?</p>
         <div class="modal-botones">
             <button id="btnSi">Sí</button>
             <button id="btnNo">No</button>
