@@ -355,7 +355,8 @@
 }
 
 .campo-formulario input,
-.campo-formulario select {
+.campo-formulario select,
+.campo-formulario textarea {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -402,3 +403,35 @@
     flex: 1;
 }
 
+
+h1 {
+    text-align: center;
+}
+
+.grupo-botones {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center;     /* Centra verticalmente si cambia la altura */
+  gap: 10px;               /* Espacio entre botones */
+  width: 100%;             /* Asegura que ocupe todo el ancho */
+  margin-top: 20px;        /* (opcional) separación hacia arriba */
+}
+
+.boton-cancelar {
+    background-color: #9ca3af; /* gris suave */
+}
+
+.boton-cancelar:hover {
+    background-color: #6b7280; /* gris más oscuro */
+}
+
+.grupo-campos {
+    display: flex;
+    gap: 20px; /* espacio entre los campos */
+}
+
+.campo-formulario {
+    flex: 1; /* para que ambos tengan el mismo ancho */
+    display: flex;
+    flex-direction: column;
+}
