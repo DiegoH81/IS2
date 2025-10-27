@@ -51,7 +51,8 @@ class GestionarCategoria {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerCategoriaPorId($1);";
         $params = array($id_categoria);
-        return pg_query_params($conn, $query, $params);
+        $result = pg_query_params($conn, $query, $params);
+        return pg_fetch_all($result)[0];
     }
 
 }

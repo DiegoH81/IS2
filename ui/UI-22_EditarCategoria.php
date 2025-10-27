@@ -2,7 +2,7 @@
 
 // ------------------------------------------------------------
 // UI-22: Editar categoria
-// Caso de uso asociado: CU-21 Editar categoría
+// Caso de uso asociado: CU-10-2 Editar categoría
 // ------------------------------------------------------------
 
 session_start();
@@ -97,9 +97,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <main class="contenedor-medio">
             <aside class="submenu-configuracion" id="Sub_menuConfig">
                 <nav>
-                    <a class="opcion-submenu" href="UI-12_VisualizarUsuarios.php">
-                        <i></i>Usuarios
-                    </a>
+                    <?php if ($_SESSION['rol'] === 'Administrador familiar'): ?>
+                        <a class="opcion-submenu" href="UI-12_VisualizarUsuarios.php">
+                            <i></i>Usuarios
+                        </a>
+                    <?php endif; ?>
                     <a class="opcion-submenu" href="UI-16_VisualizarConceptos.php">
                         <i></i>Conceptos
                     </a>

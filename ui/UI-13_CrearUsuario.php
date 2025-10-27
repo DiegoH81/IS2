@@ -2,7 +2,7 @@
 
 // ------------------------------------------------------------
 // UI-13: Crear Usuario
-// Caso de uso asociado: CU-19 Crear categoría
+// Caso de uso asociado: CU-08-1 Crear usuario
 // ------------------------------------------------------------
 
 
@@ -91,9 +91,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <main class="contenedor-medio">
             <aside class="submenu-configuracion" id="Sub_menuConfig">
                 <nav>
-                    <a class="opcion-submenu activa" href="UI-12_VisualizarUsuarios.php">
-                        <i></i>Usuarios
-                    </a>
+                    <?php if ($_SESSION['rol'] === 'Administrador familiar'): ?>
+                        <a class="opcion-submenu activa" href="UI-12_VisualizarUsuarios.php">
+                            <i></i>Usuarios
+                        </a>
+                    <?php endif; ?>
                     <a class="opcion-submenu" href="UI-16_VisualizarConceptos.php">
                         <i></i>Conceptos
                     </a>

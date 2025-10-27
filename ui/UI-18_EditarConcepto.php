@@ -22,6 +22,7 @@ $categorias = GestionarCategoria::obtenerCategoriasBD($_SESSION['familia_id']);
 de un concepto existente y mostrarlo en el formulario */
 $concepto = GestionarConcepto::obtenerConceptoBD($id_concepto);
 
+
 //var_dump($concepto);
 
 if (!$concepto) {
@@ -46,9 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         case 'Semanal': $periodo = 7; break;
         case 'Quincenal': $periodo = 15; break;
         case 'Mensual': $periodo = 30; break;
-        case 'Eventual': $periodo = 0; break;
+        case 'Eventual': $periodo = 2; break;
         case 'Personalizado':
-            $periodo = $_POST['periodoPersonalizado'];
+            $periodo = isset($_POST['periodoPersonalizado']) ? (int)$_POST['periodoPersonalizado'] : 1;
             break;
     }
 
@@ -63,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $periodicidad,
         $fecha_inicio,
         $fecha_fin,
-        $categoriaId,
+        $categoriaId
     );
     
     header("Location: UI-16_VisualizarConceptos.php");
@@ -134,9 +135,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <main class="contenedor-medio">
             <aside class="submenu-configuracion" id="Sub_menuConfig">
                 <nav>
-                    <a class="opcion-submenu" href="UI-12_VisualizarUsuarios.php">
-                        <i></i>Usuarios
-                    </a>
+                    <?php if ($_SESSION['rol'] === 'Administrador familiar'): ?>
+                        <a class="opcion-submenu" href="UI-12_VisualizarUsuarios.php">
+                            <i></i>Usuarios
+                        </a>
+                    <?php endif; ?>
                     <a class="opcion-submenu activa" href="UI-16_VisualizarConceptos.php">
                         <i></i>Conceptos
                     </a>
@@ -175,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <!-- Paso 5 y 7 del CU-17: El AC-02-Familiar modifica el nombre del concepto si es necesario. -->
                         <div class="campo-formulario">
                             <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Ingrese solo letras" name="nombre" value="<?= htmlspecialchars($concepto['nombre']) ?>" required>
+                            <input type="text" id="nombre" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Ingrese solo letras" name="nombre" value="<?= htmlspecialchars($concepto['nombre']) ?>" required>
                         </div>
 
                         <!-- Paso 8 del CU-17: El AC-02-Familiar modifica el tipo (Ingreso o Egreso). -->
@@ -200,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $periodos = ['Diario','Semanal','Quincenal','Mensual','Personalizado','Eventual'];
                                 foreach($periodos as $p){
                                     $checked = $concepto['periodicidad'] == $p ? 'checked' : '';
-                                    echo "<label><input type='radio' name='periodo' value='$p' $checked required> $p</label><br>";
+                                    echo "<label><input type='radio' name='periodo' value='$p' $checked> $p</label><br>";
                                 } ?> 
                             </div>
                         </div>

@@ -2,11 +2,13 @@
 
 // ------------------------------------------------------------
 // UI-20: Visualizar categoria
-// Caso de uso asociado: CU-19 Gestionar categoría
+// Caso de uso asociado: CU-10 Gestionar categoría
 // ------------------------------------------------------------
 
 session_start();
 require_once '../gtr/GTR-09_GestionarCategoria.php';
+require_once '../gtr/GTR-01_GestionarUsuario.php';
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idcategoria'], $_POST['estado'])) {
     $idCategoria = intval($_POST['idcategoria']);
@@ -28,6 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idcategoria'], $_POST
 }
 
 $categorias = GestionarCategoria::obtenerCategoriasBD($_SESSION['familia_id']);
+$usuarios = GestionarUsuario::obtenerUsuariosBD(($_SESSION['familia_id']));
+
+//var_dump( $usuarios );
 //var_dump($categorias);
 ?>
 
@@ -105,9 +110,11 @@ $categorias = GestionarCategoria::obtenerCategoriasBD($_SESSION['familia_id']);
         <main class="contenedor-medio">
             <aside class="submenu-configuracion" id="Sub_menuConfig">
                 <nav>
-                    <a class="opcion-submenu" href="UI-12_VisualizarUsuarios.php">
-                        <i></i>Usuarios
-                    </a>
+                    <?php if ($_SESSION['rol'] === 'Administrador familiar'): ?>
+                        <a class="opcion-submenu" href="UI-12_VisualizarUsuarios.php">
+                            <i></i>Usuarios
+                        </a>
+                    <?php endif; ?>
                     <a class="opcion-submenu" href="UI-16_VisualizarConceptos.php">
                         <i></i>Conceptos
                     </a>
@@ -160,22 +167,40 @@ $categorias = GestionarCategoria::obtenerCategoriasBD($_SESSION['familia_id']);
                         </thead>
                         <tbody>
                         <!--<?php if ($categorias && count($categorias) > 0): ?>-->
+                            <?php
+                                // Crear un mapa id_usuario → nombre para buscar rápido
+                                $mapaUsuarios = [];
+                                foreach ($usuarios as $u) {
+                                    $mapaUsuarios[$u['id_usuario']] = $u['nombre'];
+                                }
+                            ?>
                             <?php foreach ($categorias as $c): ?>
                                 <tr class="fila-tabla" id="fila-<?= $c['idcategoria'] ?>">
                                     <td class="celda"><?= htmlspecialchars($c['nombre']) ?></td>
                                     <td class="celda"><?= htmlspecialchars(string: $c['descripcion']) ?></td>
-                                    <td class="celda"><?= htmlspecialchars($c['idusuario']) ?></td>
 
+                                    <td class="celda">
+                                        <?= htmlspecialchars($mapaUsuarios[$c['idusuario']] ?? 'Desconocido') ?>
+                                    </td>
+
+
+                                    <?php
+                                        // Permite editar si es Admin Familiar o si el concepto lo subió el mismo usuario
+                                        $puedeEditar = ($_SESSION['rol'] === 'Administrador familiar') || ($_SESSION['id_usuario'] == $c['idusuario']);
+                                        $estadoValor = $c['estado'] === 'Habilitado' ? '1' : '0';
+                                        $onclick = $puedeEditar ? "abrirModal({$c['idcategoria']}, '{$estadoValor}', 'categoria')" : '';
+                                    ?>
                                     <td class="celda celda-estado">
-                                        <button 
-                                            type="button" 
-                                            class="link-editar" 
-                                            data-estado="<?= $c['estado'] === 'Habilitado' ? '1' : '0' ?>" 
-                                            onclick="abrirModal(<?= $c['idcategoria'] ?>, '<?= $c['estado'] === 'Habilitado' ? '1' : '0' ?>', 'categoria')">
+                                        <button
+                                            type="button"
+                                            class="link-editar"
+                                            data-estado="<?= $c['estado'] ?>"
+                                            onclick="<?= $onclick ?>"
+                                            <?= !$puedeEditar ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : '' ?>
+                                        >
                                             <?= htmlspecialchars($c['estado']) ?>
                                         </button>
                                     </td>
-
                                     <!-- Paso 9 del CU-15: Mostrar opciones de gestión según el rol. -->
                                     <!-- Paso 9.1/9.2: Si es familiar, solo puede editar los suyos. -->
 

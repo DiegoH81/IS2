@@ -2,7 +2,7 @@
 
 // ------------------------------------------------------------
 // UI-12: Visualizar usuarios
-// Caso de uso asociado: CU-19 Gestionar categoría
+// Caso de uso asociado: CU-08 Gestionar usuarios
 // ------------------------------------------------------------
 session_start();
 require_once '../gtr/GTR-01_GestionarUsuario.php';
@@ -106,9 +106,11 @@ $usuarios = GestionarUsuario::obtenerUsuariosBD($_SESSION['familia_id']);
         <main class="contenedor-medio">
             <aside class="submenu-configuracion" id="Sub_menuConfig">
                 <nav>
-                    <a class="opcion-submenu activa" href="UI-12_VisualizarUsuarios.php">
-                        <i></i>Usuarios
-                    </a>
+                    <?php if ($_SESSION['rol'] === 'Administrador familiar'): ?>
+                        <a class="opcion-submenu activa" href="UI-12_VisualizarUsuarios.php">
+                            <i></i>Usuarios
+                        </a>
+                    <?php endif; ?>
                     <a class="opcion-submenu" href="UI-16_VisualizarConceptos.php">
                         <i></i>Conceptos
                     </a>
