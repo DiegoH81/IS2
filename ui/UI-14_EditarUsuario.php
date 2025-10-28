@@ -134,13 +134,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="campo-formulario">
                             <label for="usuario">Usuario:</label>
 
-                            <input type="text" id="usuario" name="usuario" value="<?= htmlspecialchars($usuario['usuario']) ?>" readonly>
+                            <input type="text" id="usuario" name="usuario" value="<?= htmlspecialchars($usuario->usuario) ?>" readonly>
 
                         </div>
                         
                         <div class="campo-formulario">
                             <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" value="<?= htmlspecialchars($usuario['nombre']) ?>" required>
+                            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" value="<?= htmlspecialchars($usuario->nombre) ?>" required>
                         </div>
 
                         <div class="campo-formulario">
@@ -154,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <div class="campo-formulario">
                             <label for="password">Contraseña:</label>
-                            <input type="password" id="password" name="password" placeholder = "Ingrese su contraseña" value="<?= htmlspecialchars($usuario['contrasena']) ?>" required>
+                            <input type="password" id="password" name="password" placeholder = "Ingrese su contraseña" value="<?= htmlspecialchars($usuario->contrasena) ?>" required>
                         </div>
 
                         <!-- Paso 12 del CU-16: El AC-02 selecciona la opción Crear. -->

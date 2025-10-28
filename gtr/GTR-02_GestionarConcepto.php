@@ -2,6 +2,7 @@
 require_once '../DatabaseConnection.php';
 require_once 'GTR-01_GestionarUsuario.php';
 require_once 'GTR-09_GestionarCategoria.php';
+require_once '../entity/concepto.php';
 
 // GTR-02 Gestionar concepto
 
@@ -10,11 +11,8 @@ class GestionarConcepto {
     /* FUN-07 obtenerConceptosBD 
     Extrae la información de todos los conceptos de la base de datos */
     public static function obtenerConceptosBD($familia_id) {
-        $conn = Database::connect();
-        $query = "SELECT * FROM obtenerConceptos($1);";
-        $params = array($familia_id);
-        $result = pg_query_params($conn, $query, $params);
-        return pg_fetch_all($result);
+        
+        return concepto::obtenerConceptos($familia_id);
     }
 
     /* FUN-08 solicitarUsuarios
@@ -44,33 +42,33 @@ class GestionarConcepto {
             $categorias = self::solicitarCategorias($familia_id);
             
             //var_dump($conceptos);
-            //var_dump($usuarios[0]);
-            //var_dump($categorias[0]);
+            //var_dump($usuarios);
+            //var_dump($categorias);
     
              // Crear índices para búsquedas rápidas
             $usuariosIndex = [];
             foreach ($usuarios as $u) {
-                $usuariosIndex[$u['id_usuario']] = $u['nombre'];
+                $usuariosIndex[$u->idUsuario] = $u->nombre;
             }
     
             $categoriasIndex = [];
             foreach ($categorias as $cat) {
-                $categoriasIndex[$cat['idcategoria']] = $cat['nombre'];
+                $categoriasIndex[$cat->idCategoria] = $cat->nombre;
             }
             
             // Construir array resultado
             foreach ($conceptos as $c) {
                 $resultado[] = [
-                    'concepto_id' => $c['id_concepto'],
-                    'concepto'    => $c['nombre'],
-                    'categoria'   => $categoriasIndex[$c['categoria_id']] ?? '',
-                    'tipo'        => $c['tipo'],
-                    'subido_por'  => $usuariosIndex[$c['usuario_id']] ?? '',
-                    'usuario_id'  => $c['usuario_id'],
-                    'costo'       => $c['monto'],
-                    'periodo'     => $c['periodo'],
-                    'periodicidad'=> $c['periodicidad'],
-                    'estado'      => ($c['estado'] === 't') ? 'Habilitado' : 'Deshabilitado'
+                    'concepto_id' => $c->idConcepto,
+                    'concepto'    => $c->nombre,
+                    'categoria'   => $categoriasIndex[$c->idCategoria] ?? '',
+                    'tipo'        => $c->tipo,
+                    'subido_por'  => $usuariosIndex[$c->idUsuario] ?? '',
+                    'usuario_id'  => $c->idUsuario,
+                    'costo'       => $c->monto,
+                    'periodo'     => $c->periodo,
+                    'periodicidad'=> $c->periodicidad,
+                    'estado'      => ($c->estado === 't') ? 'Habilitado' : 'Deshabilitado'
                 ];
             }
         }
@@ -94,30 +92,7 @@ class GestionarConcepto {
     $usuario_id, 
     $categoria_id
     ) {
-        // Conectar a la base de datos
-        $conn = Database::connect();
-
-        // Formatear fechas como YYYY-MM-DD
-        $fecha_inicio = date('Y-m-d', strtotime($fecha_inicio));
-        $fecha_fin    = date('Y-m-d', strtotime($fecha_fin));
-
-        // Preparar la consulta
-        $query = "SELECT crearConcepto($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);";
-        $params = [
-            $nombre,
-            $tipo,
-            (float)$monto,
-            (int)$periodo,
-            $periodicidad,
-            $fecha_inicio,
-            $fecha_fin,
-            (int)$familia_id,
-            (int)$usuario_id,
-            (int)$categoria_id
-        ];
-
-        // Ejecutar la consulta
-        $result = pg_query_params($conn, $query, $params);
+        Concepto::crearConcepto($nombre, $tipo, $monto, $periodo, $periodicidad, $fecha_inicio, $fecha_fin, $familia_id, $usuario_id, $categoria_id);
     }
 
 
@@ -125,41 +100,22 @@ class GestionarConcepto {
     /* FUN-12 obtenerConceptoBD
         Extra la informacion de un concepto en especifico segun su id */
     public static function obtenerConceptoBD($idConcepto) {
-        $conn = Database::connect();
-        $query = "SELECT * FROM obtenerConceptoPorId($1)";
-        $params = array($idConcepto);
-        $result = pg_query_params($conn, $query, $params);
-        return pg_fetch_assoc($result);
+        return Concepto::obtenerConcepto($idConcepto);
     }
 
     /* FUN-13 editarConceptoBD
         Actualiza la informacion de un concepto en la base de datos segun su id */
     public static function editarConceptoBD($id_concepto, $nombre, $tipo, $monto, $periodo, $periodicidad, $fecha_inicio, $fecha_fin, $p_id_categoria ) {
-        $conn = Database::connect();
-        $fecha_inicio = date('Y-m-d', strtotime($fecha_inicio));
-        $fecha_fin    = date('Y-m-d', strtotime($fecha_fin));
-
-        $query = "SELECT editarConcepto($1, $2, $3, $4, $5, $6, $7, $8, $9);";
-        $params = array($id_concepto, $nombre, $tipo, $monto, $periodo, $periodicidad, $fecha_inicio, $fecha_fin, $p_id_categoria);
-        $result = pg_query_params($conn, $query, $params);
-    
-        if (!$result) {
-            error_log("Error al editar concepto: " . pg_last_error($conn));
-            return false;
-        }
-        return $result;
+        return $result = Concepto::editarConcepto($id_concepto, $nombre, $tipo, $monto, $periodo, $periodicidad, $fecha_inicio, $fecha_fin, $p_id_categoria );
     }
 
 
     /* FUN-14 editarEstadoConcepto
         Actualiza el estado de un concepto en la base de datos segun su id */
     public static function editarEstadoConceptoBD($id_concepto, $estado) {
-        $conn = Database::connect();
-        $estadoBool = $estado ? 't' : 'f';
-        $query = "SELECT editarEstadoConcepto($1, $2);";
-        $params = array($id_concepto, $estadoBool);
-
-        return pg_query_params($conn, $query, $params);
+        return Concepto::editarEstadoConcepto($id_concepto, $estado);
     }
+    
+
 }
 ?>

@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 // ------------------------------------------------------------
 // UI-20: Visualizar categoria
@@ -31,6 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idcategoria'], $_POST
 
 $categorias = GestionarCategoria::obtenerCategoriasBD($_SESSION['familia_id']);
 $usuarios = GestionarUsuario::obtenerUsuariosBD(($_SESSION['familia_id']));
+
+
 
 //var_dump( $usuarios );
 //var_dump($categorias);
@@ -171,34 +173,34 @@ $usuarios = GestionarUsuario::obtenerUsuariosBD(($_SESSION['familia_id']));
                                 // Crear un mapa id_usuario → nombre para buscar rápido
                                 $mapaUsuarios = [];
                                 foreach ($usuarios as $u) {
-                                    $mapaUsuarios[$u['id_usuario']] = $u['nombre'];
+                                    $mapaUsuarios[$u->idUsuario] = $u->nombre;
                                 }
                             ?>
                             <?php foreach ($categorias as $c): ?>
-                                <tr class="fila-tabla" id="fila-<?= $c['idcategoria'] ?>">
-                                    <td class="celda"><?= htmlspecialchars($c['nombre']) ?></td>
-                                    <td class="celda"><?= htmlspecialchars(string: $c['descripcion']) ?></td>
+                                <tr class="fila-tabla" id="fila-<?= $c->idCategoria ?>">
+                                    <td class="celda"><?= htmlspecialchars($c->nombre) ?></td>
+                                    <td class="celda"><?= htmlspecialchars(string: $c->descripcion) ?></td>
 
                                     <td class="celda">
-                                        <?= htmlspecialchars($mapaUsuarios[$c['idusuario']] ?? 'Desconocido') ?>
+                                        <?= htmlspecialchars($mapaUsuarios[$c->idUsuario] ?? 'Desconocido') ?>
                                     </td>
 
 
                                     <?php
                                         // Permite editar si es Admin Familiar o si el concepto lo subió el mismo usuario
-                                        $puedeEditar = ($_SESSION['rol'] === 'Administrador familiar') || ($_SESSION['id_usuario'] == $c['idusuario']);
-                                        $estadoValor = $c['estado'] === 'Habilitado' ? '1' : '0';
-                                        $onclick = $puedeEditar ? "abrirModal({$c['idcategoria']}, '{$estadoValor}', 'categoria')" : '';
+                                        $puedeEditar = ($_SESSION['rol'] === 'Administrador familiar') || ($_SESSION['id_usuario'] == $c->idUsuario);
+                                        $estadoValor = $c->estado === 'Habilitado' ? '1' : '0';
+                                        $onclick = $puedeEditar ? "abrirModal({$c->idCategoria}, '{$estadoValor}', 'categoria')" : '';
                                     ?>
                                     <td class="celda celda-estado">
                                         <button
                                             type="button"
                                             class="link-editar"
-                                            data-estado="<?= $c['estado'] ?>"
+                                            data-estado="<?= $c->estado ?>"
                                             onclick="<?= $onclick ?>"
                                             <?= !$puedeEditar ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : '' ?>
                                         >
-                                            <?= htmlspecialchars($c['estado']) ?>
+                                            <?= htmlspecialchars($c->estado) ?>
                                         </button>
                                     </td>
                                     <!-- Paso 9 del CU-15: Mostrar opciones de gestión según el rol. -->
@@ -207,10 +209,10 @@ $usuarios = GestionarUsuario::obtenerUsuariosBD(($_SESSION['familia_id']));
                                     <td class="celda">
                                         <?php
                                             // Permite editar si es Admin Familiar o si el concepto lo subió el mismo usuario
-                                            $puedeEditar = ($_SESSION['rol'] === 'Administrador familiar') || ($_SESSION['id_usuario'] == $c['idusuario']);
+                                            $puedeEditar = ($_SESSION['rol'] === 'Administrador familiar') || ($_SESSION['id_usuario'] == $c->idUsuario);
                                         ?>
                                         <form action="UI-22_EditarCategoria.php" method="GET">
-                                            <input type="hidden" name="idcategoria" value="<?= $c['idcategoria'] ?>">
+                                            <input type="hidden" name="idcategoria" value="<?= $c->idCategoria ?>">
                                             <button type="submit" class="link-editar" <?= !$puedeEditar ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?>>
                                                 Editar
                                             </button>

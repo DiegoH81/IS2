@@ -1,5 +1,6 @@
 <?php
 require_once '../DatabaseConnection.php';
+require_once '../entity/usuario.php';
 
 // GTR-01 Gestionar usuario
 
@@ -9,66 +10,40 @@ class GestionarUsuario {
         Extrae la informacion de todos los usuarios de la base de datos */
    
     public static function obtenerUsuariosBD($familia_id) {
-        $conn = Database::connect();
-        $query = "SELECT * FROM obtenerUsuarios($1);";
-        $params = array($familia_id);
-        $result = pg_query_params($conn, $query, $params);
-        return pg_fetch_all($result);
+        return Usuario::obtenerUsuarios($familia_id);
     }
 
 
     /* FUN-02 validarUsuarioBD
         Verifica si el usuario ingresado existe en la base de datos */
     public static function validarUsuarioBD($usuario) {
-        $conn = Database::connect();
-        $query = "SELECT consultarExistenciaUsuario($1)";
-        $params = array($usuario);
-        $result = pg_query_params($conn, $query, $params);
-        $val = pg_fetch_result($result, 0, 0);
-        return $val === 't';
+        return Usuario::validarUsuario($usuario);
     }
 
 
     /* FUN-03 validarCredencialesBD
         Verifica si la contraseña ingresada coincide con la del usuario ingresado */
     public static function validarCredencialesBD($usuario, $contrasena) {
-        $conn = Database::connect();
-        $query = "SELECT validarCredenciales($1,$2)";
-        $params = array($usuario, $contrasena);
-        $result = pg_query_params($conn, $query, $params);
-        $val = pg_fetch_result($result, 0, 0);
-        return $val === 't';
+        return Usuario::validarCredenciales($usuario, $contrasena);
     }
 
     /* FUN-04 usuarioDisponibleBD
         Verifica si el usuario(nombre de usuario) no esta en uso */
     public static function usuarioDisponibleBD($usuario) {
-        $conn = Database::connect();
-        $query = "SELECT usuariodisponible($1)";
-        $params = array($usuario);
-        $result = pg_query_params($conn, $query, $params);
-        $val = pg_fetch_result($result, 0, 0);
-        return $val === 't';
+        return Usuario::usuarioDisponible($usuario);
     }
 
     /* FUN-05 crearUsuarioBD
         Inserta un nuevo usuario en la base de datos */
-        public static function crearUsuarioBD($usuario, $nombre, $contrasena, $rol, $familia_id) {
-        $conn = Database::connect();
-        $query = "SELECT crearUsuario($1, $2, $3, $4, $5);";
-        $params = array($usuario, $nombre, $contrasena, $rol, $familia_id);
-        pg_query_params($conn, $query, $params);
+    public static function crearUsuarioBD($usuario, $nombre, $contrasena, $rol, $familia_id) {
+        Usuario::crearUsuario($usuario, $nombre, $contrasena, $rol, $familia_id);
     }
 
 
     /* FUN-06 obtenerUsuarioBD
         Extrae los datos de un usuario especifico segun su id */
     public static function obtenerUsuarioBD($usuario) {
-        $conn = Database::connect();
-        $query = "SELECT * FROM obtenerUsuario($1)";
-        $params = array($usuario);
-        $result = pg_query_params($conn, $query, $params);
-        return pg_fetch_assoc($result);
+        return Usuario::obtenerUsuario($usuario);
     }
 
 
@@ -76,20 +51,13 @@ class GestionarUsuario {
         Editar los datos de un usuario existente */
 
     public static function actualizarDatosUsuarioBD($usuario, $nombre, $contrasena, $rol) {
-        $conn = Database::connect();
-        $query = "SELECT actualizarDatosUsuario($1, $2, $3, $4);";
-        $params = array($usuario, $nombre, $contrasena, $rol);
-        $result = pg_query_params($conn, $query, $params);
+        Usuario::actualizarDatosUsuario($usuario, $nombre, $contrasena, $rol);
     }
 
     /* FUN-23 cambiarEstadoUsuarioBD 
         Permite modificar el estado de un usario, para habilitarlo/deshabilitarlo */
     public static function cambiarEstadoUsuarioBD($id, $estado) {
-        $conn = Database::connect();
-        $estadoBool = $estado ? 't' : 'f';
-        $query = "SELECT editarEstadoUsuario($1, $2);";
-        $params = array($id, $estadoBool);
-        return pg_query_params($conn, $query, $params);
+        return Usuario::cambiarEstadoUsuario($id, $estado);
     }
 
 

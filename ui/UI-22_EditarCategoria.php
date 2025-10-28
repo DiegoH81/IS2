@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         
                         <div class="campo-formulario">
                             <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre" value="<?= htmlspecialchars($categoria['nombre']) ?>" required>
+                            <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre" value="<?= htmlspecialchars($categoria->nombre) ?>" required>
                         </div>
 
                         <div class="campo-formulario">
@@ -139,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 id="descripcion" 
                                 placeholder="Ingrese la descripción" 
                                 spellcheck="false"
-                            ><?= htmlspecialchars($categoria['descripcion']) ?></textarea>
+                            ><?= htmlspecialchars($categoria->descripcion) ?></textarea>
                         </div>
 
                         <!-- Paso 12 del CU-16: El AC-02 selecciona la opción Crear. -->

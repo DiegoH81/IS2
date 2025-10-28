@@ -164,21 +164,21 @@ $usuarios = GestionarUsuario::obtenerUsuariosBD($_SESSION['familia_id']);
                         <tbody>
                         <!--<?php if ($usuarios && count($usuarios) > 0): ?>-->
                             <?php foreach ($usuarios as $u): ?>
-                                <tr class="fila-tabla" id="fila-<?= $u['id_usuario'] ?>">
+                                <tr class="fila-tabla" id="fila-<?= $u->idUsuario ?>">
                                     <td class="celda">
-                                        <?= htmlspecialchars($u['usuario']) ?>
+                                        <?= htmlspecialchars($u->usuario) ?>
                                     </td>
                                     <td class="celda">
-                                        <?= htmlspecialchars(string: $u['nombre']) ?>
+                                        <?= htmlspecialchars(string: $u->nombre) ?>
                                     </td>
                                     <td class="celda">
-                                        <?= htmlspecialchars($u['rol']) ?>
+                                        <?= htmlspecialchars($u->rol) ?>
                                     </td>
 
                                     <td class="celda celda-estado">
                                         <?php
                                             // Convertimos el estado a booleano
-                                            $estadoBool = ($u['estado'] === 'Habilitado'); 
+                                            $estadoBool = ($u->estado === 'Habilitado'); 
                                             $estadoTexto = $estadoBool ? 'Habilitado' : 'Deshabilitado';
                                             $estadoValor = $estadoBool ? '1' : '0';
                                         ?>
@@ -186,7 +186,7 @@ $usuarios = GestionarUsuario::obtenerUsuariosBD($_SESSION['familia_id']);
                                             type="button" 
                                             class="link-editar" 
                                             data-estado="<?= $estadoValor ?>" 
-                                            onclick="abrirModal(<?= $u['id_usuario'] ?>, '<?= $estadoValor ?>', 'usuario')">
+                                            onclick="abrirModal(<?= $u->idUsuario ?>, '<?= $estadoValor ?>', 'usuario')">
                                             <?= $estadoTexto ?>
                                         </button>
                                     </td>
@@ -198,7 +198,7 @@ $usuarios = GestionarUsuario::obtenerUsuariosBD($_SESSION['familia_id']);
 
                                     <td class="celda">
                                         <form action="UI-14_EditarUsuario.php" method="GET">
-                                            <input type="hidden" name="usuario" value="<?= htmlspecialchars($u['usuario']) ?>">
+                                            <input type="hidden" name="usuario" value="<?= htmlspecialchars($u->usuario) ?>">
                                             <button type="submit" class="link-editar">
                                                 Editar
                                             </button>

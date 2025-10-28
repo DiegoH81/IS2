@@ -24,6 +24,7 @@ $concepto = GestionarConcepto::obtenerConceptoBD($id_concepto);
 
 
 //var_dump($concepto);
+//var_dump($categorias);
 
 if (!$concepto) {
     die("Concepto no encontrado");
@@ -160,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
 
                     <form class="form-crear-concepto" method="POST">
-                        <input type="hidden" name="id_concepto" value="<?= htmlspecialchars($concepto['id_concepto']) ?>">
+                        <input type="hidden" name="id_concepto" value="<?= htmlspecialchars($concepto->idConcepto) ?>">
 
                         <!-- Categoría -->
                         <div class="campo-formulario">
@@ -168,8 +169,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <select id="categoria" name="categoria" required>
                                 <option value="">Seleccionar categoría</option>
                                 <?php foreach($categorias as $cat): ?>
-                                    <option value="<?= $cat['idcategoria'] ?>" <?= $cat['idcategoria'] == $concepto['categoria_id'] ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($cat['nombre']) ?>
+                                    <option value="<?= $cat->idCategoria ?>" <?= $cat->idCategoria == $concepto->idCategoria ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($cat->nombre) ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
@@ -178,22 +179,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <!-- Paso 5 y 7 del CU-17: El AC-02-Familiar modifica el nombre del concepto si es necesario. -->
                         <div class="campo-formulario">
                             <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Ingrese solo letras" name="nombre" value="<?= htmlspecialchars($concepto['nombre']) ?>" required>
+                            <input type="text" id="nombre" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Ingrese solo letras" name="nombre" value="<?= htmlspecialchars($concepto->nombre) ?>" required>
                         </div>
 
                         <!-- Paso 8 del CU-17: El AC-02-Familiar modifica el tipo (Ingreso o Egreso). -->
                         <div class="campo-formulario">
                             <label>Tipo:</label>
                             <div class="opciones-radio">
-                                <label><input type="radio" name="tipo" value="Ingreso" <?= $concepto['tipo'] == 'Ingreso' ? 'checked' : '' ?> required> Ingreso</label>
-                                <label><input type="radio" name="tipo" value="Egreso" <?= $concepto['tipo'] == 'Egreso' ? 'checked' : '' ?> required> Egreso</label>
+                                <label><input type="radio" name="tipo" value="Ingreso" <?= $concepto->tipo == 'Ingreso' ? 'checked' : '' ?> required> Ingreso</label>
+                                <label><input type="radio" name="tipo" value="Egreso" <?= $concepto->tipo == 'Egreso' ? 'checked' : '' ?> required> Egreso</label>
                             </div>
                         </div>
 
                         <!-- Paso 9 del CU-17: El AC-02-Familiar modifica el monto si es necesario. -->
                         <div class="campo-formulario">
                             <label for="monto">Monto:</label>
-                            <input type="number" id="monto" name="monto" step="0.01" min="0" value="<?= $concepto['monto'] ?>" required>
+                            <input type="number" id="monto" name="monto" step="0.01" min="0" value="<?= $concepto->monto ?>" required>
                         </div>
 
                         <!-- Paso 10 del CU-17: El AC-02-Familiar modifica el período. -->
@@ -202,23 +203,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php 
                                 $periodos = ['Diario','Semanal','Quincenal','Mensual','Personalizado','Eventual'];
                                 foreach($periodos as $p){
-                                    $checked = $concepto['periodicidad'] == $p ? 'checked' : '';
+                                    $checked = $concepto->periodicidad == $p ? 'checked' : '';
                                     echo "<label><input type='radio' name='periodo' value='$p' $checked> $p</label><br>";
                                 } ?> 
                             </div>
                         </div>
 
-                        <div class="periodicidad-personalizada" style="display:<?= $concepto['periodicidad'] == 'Personalizado' ? 'flex' : 'none' ?>; margin-top:10px;">
+                        <div class="periodicidad-personalizada" style="display:<?= $concepto->periodicidad == 'Personalizado' ? 'flex' : 'none' ?>; margin-top:10px;">
                             <label>Periodicidad:</label>
-                            <input type="number" name="periodoPersonalizado" step="1" min="2" value="<?= $concepto['periodo'] ?>" placeholder="Ingrese número">
+                            <input type="number" name="periodoPersonalizado" step="1" min="2" value="<?= $concepto->periodo ?>" placeholder="Ingrese número">
                         </div>
 
                         <!-- Paso 11 y 12 del CU-17: El AC-02-Familiar modifica las fechas si es necesario. -->
                         <div class="campo-formulario">
                             <label>Día de inicio / Día de fin:</label>
                             <div class="fechas">
-                                <input type="date" name="fechaInicio" value="<?= $concepto['fechainicio'] ?>" required>
-                                <input type="date" name="fechaFin" value="<?= $concepto['fechafin'] ?>" required>
+                                <input type="date" name="fechaInicio" value="<?= $concepto->fechaInicio ?>" required>
+                                <input type="date" name="fechaFin" value="<?= $concepto->fechaFin ?>" required>
                             </div>
                         </div>
 

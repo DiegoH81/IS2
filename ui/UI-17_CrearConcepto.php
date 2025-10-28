@@ -155,8 +155,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <select id="categoria" name="categoria" required>
                                 <option value="">Seleccionar categoría</option>
                                 <?php foreach($categorias as $cat): ?>
-                                    <option value="<?= $cat['idcategoria'] ?>">
-                                        <?= htmlspecialchars($cat['nombre']) ?>
+                                    <option value="<?= $cat->idCategoria ?>">
+                                        <?= htmlspecialchars($cat->nombre) ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
