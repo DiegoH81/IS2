@@ -2,7 +2,7 @@
 
 // ------------------------------------------------------------
 // UI-22: Editar categoria
-// Caso de uso asociado: CU-21 Editar categoría
+// Caso de uso asociado: CU-08-2 Editar usuario
 // ------------------------------------------------------------
 
 session_start();
@@ -100,9 +100,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <main class="contenedor-medio">
             <aside class="submenu-configuracion" id="Sub_menuConfig">
                 <nav>
-                    <a class="opcion-submenu activa" href="UI-12_VisualizarUsuarios.php">
-                        <i></i>Usuarios
-                    </a>
+                    <?php if ($_SESSION['rol'] === 'Administrador familiar'): ?>
+                        <a class="opcion-submenu activa" href="UI-12_VisualizarUsuarios.php">
+                            <i></i>Usuarios
+                        </a>
+                    <?php endif; ?>
                     <a class="opcion-submenu" href="UI-16_VisualizarConceptos.php">
                         <i></i>Conceptos
                     </a>
@@ -132,27 +134,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="campo-formulario">
                             <label for="usuario">Usuario:</label>
 
-                            <input type="text" id="usuario" name="usuario" value="<?= htmlspecialchars($usuario['usuario']) ?>" readonly>
+                            <input type="text" id="usuario" name="usuario" value="<?= htmlspecialchars($usuario->usuario) ?>" readonly>
 
                         </div>
                         
                         <div class="campo-formulario">
                             <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" value="<?= htmlspecialchars($usuario['nombre']) ?>" required>
+                            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" value="<?= htmlspecialchars($usuario->nombre) ?>" required>
                         </div>
 
                         <div class="campo-formulario">
                             <label for="rol">Rol:</label>
                             <select id="rol" name="rol" required>
                                 <option value="">Seleccionar rol</option>
-                                <option value="admin_familiar">Administrador familiar</option>
-                                <option value="familiar">Familiar</option>
+                                <option value="Administrador familiar">Administrador familiar</option>
+                                <option value="Familiar">Familiar</option>
                             </select>
                         </div>
 
                         <div class="campo-formulario">
                             <label for="password">Contraseña:</label>
-                            <input type="password" id="password" name="password" placeholder = "Ingrese su contraseña" value="<?= htmlspecialchars($usuario['contrasena']) ?>" required>
+                            <input type="password" id="password" name="password" placeholder = "Ingrese su contraseña" value="<?= htmlspecialchars($usuario->contrasena) ?>" required>
                         </div>
 
                         <!-- Paso 12 del CU-16: El AC-02 selecciona la opción Crear. -->

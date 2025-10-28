@@ -13,16 +13,22 @@ require_once '../gtr/GTR-02_GestionarConcepto.php';
 // Capturar la búsqueda si existe
 $cadena = isset($_GET['cadena']) ? $_GET['cadena'] : '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_concepto'], $_POST['estado'])) {
-    $idConcepto = intval($_POST['id_concepto']);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['concepto_id'], $_POST['estado'])) {
+    $idConcepto = intval($_POST['concepto_id']);
     // Asegurar conversión correcta: cualquier valor > 0 es true
     $estado = (intval($_POST['estado']) === 1);
     /*  Invoca la funcion editarEstadoConcepto del GTR-02 Gestionar concepto para actualizar
         el estado de un concepto segun su id */
-    $resultado = GestionarConcepto::editarEstadoConceptoBD($idConcepto, $estado);
     
+    //var_dump($idConcepto);
+
+    $resultado = GestionarConcepto::editarEstadoConceptoBD($idConcepto, $estado);
+
+    //var_dump($idConcepto);
+
     if(isset($_POST['ajax'])) {
         // Verificar si la consulta fue exitosa
+        header('Content-Type: application/json');
         if($resultado) {
             echo json_encode(['success' => true]);
         } else {
@@ -39,15 +45,18 @@ if ($cadena !== '') {
     /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos filtrados 
         a mostrar segun la cadena ingresada en el buscador */
     $conceptos = array_filter(GestionarConcepto::relacionarDatos($usuarioId), function ($c) use ($cadena) {
-        return stripos($c['nombre'], $cadena) !== false ||
+        return stripos($c['concepto'], $cadena) !== false ||
                stripos($c['categoria'], $cadena) !== false;
     });
 } else {
     $usuarioId = $_SESSION['id_usuario'];
     /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos
         a mostrar en la tabla de la interfaz */
+
+    $conceptos_test = GestionarConcepto::obtenerConceptosBD($familiaId);
+    //var_dump($conceptos_test);
+
     $conceptos = GestionarConcepto::relacionarDatos($familiaId);
-    //var_dump($conceptos);
 }
 ?>
 
@@ -121,9 +130,11 @@ if ($cadena !== '') {
         <main class="contenedor-medio">
             <aside class="submenu-configuracion" id="Sub_menuConfig">
                 <nav>
-                    <a class="opcion-submenu" href="UI-12_VisualizarUsuarios.php">
-                        <i></i>Usuarios
-                    </a>
+                    <?php if ($_SESSION['rol'] === 'Administrador familiar'): ?>
+                        <a class="opcion-submenu" href="UI-12_VisualizarUsuarios.php">
+                            <i></i>Usuarios
+                        </a>
+                    <?php endif; ?>
                     <a class="opcion-submenu activa" href="UI-16_VisualizarConceptos.php">
                         <i></i>Conceptos
                     </a>
@@ -187,6 +198,7 @@ if ($cadena !== '') {
                                             // Convertimos el estado a booleano
                                             $estadoBool = ($c['estado'] === 'Habilitado'); 
                                             $estadoTexto = $estadoBool ? 'Habilitado' : 'Deshabilitado';
+                                            $estadoValor = $estadoBool ? '1' : '0';
 
                                             // Permiso: admin familiar o creador
                                             $puedeCambiarEstado = ($_SESSION['rol'] === 'Administrador familiar') 
@@ -194,10 +206,10 @@ if ($cadena !== '') {
                                         ?>
                                         <button 
                                             type="button" 
-                                            class="link-editar" 
-                                            data-estado="<?= $estadoBool ? '1' : '0' ?>" 
+                                            class="link-editar"
+                                            data-estado="<?= $estadoValor ?>" 
                                             <?= !$puedeCambiarEstado ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?> 
-                                            onclick="abrirModal(<?= $c['concepto_id'] ?>, '<?= $estadoBool ? '1' : '0' ?>', 'concepto')">
+                                            onclick="abrirModal(<?= $c['concepto_id'] ?>, '<?= $estadoValor ?>', 'concepto')">
                                             <?= $estadoTexto ?>
                                         </button>
                                     </td>

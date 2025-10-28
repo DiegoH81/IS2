@@ -2,10 +2,29 @@
 
 // ------------------------------------------------------------
 // UI-12: Visualizar usuarios
-// Caso de uso asociado: CU-19 Gestionar categoría
+// Caso de uso asociado: CU-08 Gestionar usuarios
 // ------------------------------------------------------------
 session_start();
 require_once '../gtr/GTR-01_GestionarUsuario.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_usuario'], $_POST['estado'])) {
+    $idUsuario = intval($_POST['id_usuario']);
+    $estado = (intval($_POST['estado']) === 1); // Convertir a booleano
+    
+    // Llamar a la función para cambiar el estado
+    $resultado = GestionarUsuario::cambiarEstadoUsuarioBD($idUsuario, $estado);
+    
+    // Si es petición AJAX, devolver JSON
+    if(isset($_POST['ajax'])) {
+        header('Content-Type: application/json');
+        if($resultado) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Error al actualizar']);
+        }
+        exit;
+    }
+}
 
 $usuarios = GestionarUsuario::obtenerUsuariosBD($_SESSION['familia_id']);
 //var_dump($usuarios);
@@ -87,9 +106,11 @@ $usuarios = GestionarUsuario::obtenerUsuariosBD($_SESSION['familia_id']);
         <main class="contenedor-medio">
             <aside class="submenu-configuracion" id="Sub_menuConfig">
                 <nav>
-                    <a class="opcion-submenu activa" href="UI-12_VisualizarUsuarios.php">
-                        <i></i>Usuarios
-                    </a>
+                    <?php if ($_SESSION['rol'] === 'Administrador familiar'): ?>
+                        <a class="opcion-submenu activa" href="UI-12_VisualizarUsuarios.php">
+                            <i></i>Usuarios
+                        </a>
+                    <?php endif; ?>
                     <a class="opcion-submenu" href="UI-16_VisualizarConceptos.php">
                         <i></i>Conceptos
                     </a>
@@ -143,24 +164,30 @@ $usuarios = GestionarUsuario::obtenerUsuariosBD($_SESSION['familia_id']);
                         <tbody>
                         <!--<?php if ($usuarios && count($usuarios) > 0): ?>-->
                             <?php foreach ($usuarios as $u): ?>
-                                <tr class="fila-tabla" id="fila-<?= $u['id_usuario'] ?>">
+                                <tr class="fila-tabla" id="fila-<?= $u->idUsuario ?>">
                                     <td class="celda">
-                                        <?= htmlspecialchars($u['usuario']) ?>
+                                        <?= htmlspecialchars($u->usuario) ?>
                                     </td>
                                     <td class="celda">
-                                        <?= htmlspecialchars(string: $u['nombre']) ?>
+                                        <?= htmlspecialchars(string: $u->nombre) ?>
                                     </td>
                                     <td class="celda">
-                                        <?= htmlspecialchars($u['rol']) ?>
+                                        <?= htmlspecialchars($u->rol) ?>
                                     </td>
 
                                     <td class="celda celda-estado">
+                                        <?php
+                                            // Convertimos el estado a booleano
+                                            $estadoBool = ($u->estado === 'Habilitado'); 
+                                            $estadoTexto = $estadoBool ? 'Habilitado' : 'Deshabilitado';
+                                            $estadoValor = $estadoBool ? '1' : '0';
+                                        ?>
                                         <button 
                                             type="button" 
                                             class="link-editar" 
-                                            data-estado="<?= $u['estado'] === 'Habilitado' ? '1' : '0' ?>" 
-                                            onclick="abrirModal(<?= $u['id_usuario'] ?>, '<?= $u['estado'] === 'Habilitado' ? '1' : '0' ?>', 'usuario')">
-                                            <?= htmlspecialchars($u['estado']) ?>
+                                            data-estado="<?= $estadoValor ?>" 
+                                            onclick="abrirModal(<?= $u->idUsuario ?>, '<?= $estadoValor ?>', 'usuario')">
+                                            <?= $estadoTexto ?>
                                         </button>
                                     </td>
 
@@ -171,7 +198,7 @@ $usuarios = GestionarUsuario::obtenerUsuariosBD($_SESSION['familia_id']);
 
                                     <td class="celda">
                                         <form action="UI-14_EditarUsuario.php" method="GET">
-                                            <input type="hidden" name="usuario" value="<?= htmlspecialchars($u['usuario']) ?>">
+                                            <input type="hidden" name="usuario" value="<?= htmlspecialchars($u->usuario) ?>">
                                             <button type="submit" class="link-editar">
                                                 Editar
                                             </button>

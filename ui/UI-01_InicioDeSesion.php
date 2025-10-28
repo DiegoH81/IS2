@@ -21,16 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         /*  Invoca la funcion obtenerUsuario del GTR-04 Validar para extraer la informacion del 
             usuario ingresado */
         $usuarioData = Validar::solicitarUsuario($usuario);
-        //var_dump($usuarioData);
+        var_dump($usuarioData);
         // Guardar datos en sesión
 
-        $_SESSION['id_usuario'] = $usuarioData['id_usuario'];
-        $_SESSION['nombre'] = $usuarioData['nombre'];
-        $_SESSION['usuario'] = $usuarioData['usuario'];
-        $_SESSION['contrasena'] = $usuarioData['contrasena'];
-        $_SESSION['rol'] = $usuarioData['rol'];
-        $_SESSION['familia_id'] = $usuarioData['familia_id'];
-        $_SESSION['nombre_familia'] = $usuarioData['nombre_familia'];
+        $_SESSION['id_usuario'] = $usuarioData->idUsuario;
+        $_SESSION['nombre'] = $usuarioData->nombre;
+        $_SESSION['usuario'] = $usuarioData->usuario;
+        $_SESSION['contrasena'] = $usuarioData->contrasena;
+        $_SESSION['rol'] = $usuarioData->rol;
+        $_SESSION['familia_id'] = $usuarioData->idFamilia;
         
         // Paso 13 del CU-01: Redirigir al usuario
         //header("Location: UI-16_VisualizarConceptos.php");
