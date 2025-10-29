@@ -1,4 +1,17 @@
 <?php
+function filtrarConceptosPorBusqueda($familiaId, $cadena) {
+    $conceptos = GestionarConcepto::relacionarDatos($familiaId);
+
+    return array_filter($conceptos, function ($c) use ($cadena) {
+        return stripos($c['concepto'], $cadena) !== false ||
+               stripos($c['categoria'], $cadena) !== false ||
+               stripos($c['tipo'], $cadena) !== false ||
+               stripos($c['subido_por'], $cadena) !== false;
+    });
+}
+?>
+
+<?php
 
 // ------------------------------------------------------------
 // UI-16: Visualizar conceptos
@@ -44,19 +57,15 @@ $familiaId = $_SESSION['familia_id'];
 if ($cadena !== '') {
     /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos filtrados 
         a mostrar segun la cadena ingresada en el buscador */
-    $conceptos = array_filter(GestionarConcepto::relacionarDatos($usuarioId), function ($c) use ($cadena) {
-        return stripos($c['concepto'], $cadena) !== false ||
-               stripos($c['categoria'], $cadena) !== false;
-    });
+    $conceptos = filtrarConceptosPorBusqueda($familiaId, $cadena);
 } else {
-    $usuarioId = $_SESSION['id_usuario'];
     /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos
         a mostrar en la tabla de la interfaz */
-
     $conceptos_test = GestionarConcepto::obtenerConceptosBD($familiaId);
     //var_dump($conceptos_test);
 
     $conceptos = GestionarConcepto::relacionarDatos($familiaId);
+    // var_dump($conceptos);
 }
 ?>
 
@@ -235,7 +244,7 @@ if ($cadena !== '') {
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <tr><td colspan="8" class="celda">No hay conceptos registrados.</td></tr>
+                            <tr><td colspan="8" class="celda">No se encontraron conceptos.</td></tr>
                         <?php endif; ?>
                         </tbody>
                     </table>

@@ -1,4 +1,19 @@
 <?php
+function filtrarUsuariosPorBusqueda($familiaId, $cadena, &$usuarios) {
+    $usuarios = GestionarUsuario::obtenerUsuariosBD($familiaId);
+
+
+    $usuarios = array_filter($usuarios, function ($u) use ($cadena) {
+        return stripos($u->usuario, $cadena) !== false ||
+               stripos($u->nombre, $cadena) !== false ||
+               stripos($u->rol, $cadena) !== false ||
+               stripos($u->estado, $cadena) !== false;
+    });    
+}
+?>
+
+
+<?php
 
 // ------------------------------------------------------------
 // UI-12: Visualizar usuarios
@@ -6,6 +21,8 @@
 // ------------------------------------------------------------
 session_start();
 require_once '../gtr/GTR-01_GestionarUsuario.php';
+
+$cadena = isset($_GET['cadena']) ? $_GET['cadena'] : '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_usuario'], $_POST['estado'])) {
     $idUsuario = intval($_POST['id_usuario']);
@@ -26,10 +43,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_usuario'], $_POST[
     }
 }
 
-$usuarios = GestionarUsuario::obtenerUsuariosBD($_SESSION['familia_id']);
-//var_dump($usuarios);
+$usuarios = null;
+$familiaId = $_SESSION['familia_id'];
 
+if ($cadena !== '') {
+    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos filtrados 
+        a mostrar segun la cadena ingresada en el buscador */
+        filtrarUsuariosPorBusqueda($familiaId, $cadena, $usuarios);
+} else {
+    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos
+        a mostrar en la tabla de la interfaz */
+    $usuarios = GestionarUsuario::obtenerUsuariosBD($familiaId);
 
+    //var_dump($usuarios);
+}
 ?>
 
 <!DOCTYPE html>
@@ -125,21 +152,21 @@ $usuarios = GestionarUsuario::obtenerUsuariosBD($_SESSION['familia_id']);
                     <!-- Paso 8 del CU-15: Mostrar opción de Crear concepto. -->
                     <header>
                         <div class="encabezado-tabla-superior">
-                            <form method="GET" action="UI-16_VisualizarConceptos.php" class="form-busqueda">
+                            <form method="GET" action="UI-12_VisualizarUsuarios.php" class="form-busqueda">
                                 <input 
                                     type="text" 
                                     name="cadena" 
                                     placeholder="Buscar..." 
-                                    value="A buscar"
+                                    value="<?= htmlspecialchars($cadena) ?>"
                                     class="input-busqueda">
                                 <button type="submit" class="boton-buscar">Buscar</button>
 
 
-                                <!--<?php if ($cadena !== ''): ?>
+                                <?php if ($cadena !== ''): ?>
 
-                                    <a href="UI-16_VisualizarConceptos.php" class="boton-limpiar">Limpiar</a>
+                                    <a href="UI-12_VisualizarUsuarios.php" class="boton-limpiar">Limpiar</a>
                                 <?php endif; ?>
-                                -->
+                                
 
 
                             </form>
@@ -162,7 +189,7 @@ $usuarios = GestionarUsuario::obtenerUsuariosBD($_SESSION['familia_id']);
                             </tr>
                         </thead>
                         <tbody>
-                        <!--<?php if ($usuarios && count($usuarios) > 0): ?>-->
+                        <?php if ($usuarios && count($usuarios) > 0): ?>
                             <?php foreach ($usuarios as $u): ?>
                                 <tr class="fila-tabla" id="fila-<?= $u->idUsuario ?>">
                                     <td class="celda">
@@ -206,12 +233,10 @@ $usuarios = GestionarUsuario::obtenerUsuariosBD($_SESSION['familia_id']);
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
-                                <!--           
+                                      
                         <?php else: ?>
-                            <tr><td colspan="8" class="celda">No hay usuarios registrados.</td></tr>
+                            <tr><td colspan="8" class="celda">No se encontraron usuarios.</td></tr>
                         <?php endif; ?>
-                        -->
-
 
                         </tbody>
                     </table>

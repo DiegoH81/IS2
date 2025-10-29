@@ -1,4 +1,31 @@
-    <?php
+<?php
+function filtrarCategoriasPorBusqueda($familiaId, $cadena, &$categorias, &$usuarios) {
+    $categorias = GestionarCategoria::obtenerCategoriasBD($familiaId);
+    $usuarios = GestionarUsuario::obtenerUsuariosBD($familiaId);
+
+    //CATEGORIA
+    //nombre
+    //descripcion
+    //estado
+
+    //USUARIO
+    //nombre
+
+    $categorias = array_filter($categorias, function ($cat) use ($cadena) {
+        return stripos($cat->nombre, $cadena) !== false ||
+               stripos($cat->descripcion, $cadena) !== false ||
+               stripos($cat->estado, $cadena) !== false;
+    });
+
+    // Filtrar los usuarios que coincidan con la cadena (por nombre, por ejemplo)
+    $usuarios = array_filter($usuarios, function ($u) use ($cadena) {
+        return stripos($u->nombre, $cadena) !== false;
+    });
+    
+}
+?>
+
+<?php
 
 // ------------------------------------------------------------
 // UI-20: Visualizar categoria
@@ -8,6 +35,8 @@
 session_start();
 require_once '../gtr/GTR-09_GestionarCategoria.php';
 require_once '../gtr/GTR-01_GestionarUsuario.php';
+
+$cadena = isset($_GET['cadena']) ? $_GET['cadena'] : '';
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idcategoria'], $_POST['estado'])) {
@@ -29,10 +58,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idcategoria'], $_POST
     }
 }
 
-$categorias = GestionarCategoria::obtenerCategoriasBD($_SESSION['familia_id']);
-$usuarios = GestionarUsuario::obtenerUsuariosBD(($_SESSION['familia_id']));
+$categorias = null;
+$usuarios = null;
 
+$familiaId = $_SESSION['familia_id'];
+if ($cadena !== '') {
+    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos filtrados 
+        a mostrar segun la cadena ingresada en el buscador */
+        filtrarCategoriasPorBusqueda($familiaId, $cadena, $categorias, $usuarios);
+} else {
+    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos
+        a mostrar en la tabla de la interfaz */
 
+    $categorias = GestionarCategoria::obtenerCategoriasBD($familiaId);
+    $usuarios = GestionarUsuario::obtenerUsuariosBD($familiaId);
+
+    //var_dump($usuarios);
+}
 
 //var_dump( $usuarios );
 //var_dump($categorias);
@@ -131,21 +173,21 @@ $usuarios = GestionarUsuario::obtenerUsuariosBD(($_SESSION['familia_id']));
                     <!-- Paso 8 del CU-15: Mostrar opción de Crear concepto. -->
                     <header>
                         <div class="encabezado-tabla-superior">
-                            <form method="GET" action="UI-16_VisualizarConceptos.php" class="form-busqueda">
+                            <form method="GET" action="UI-20_VisualizarCategoria.php" class="form-busqueda">
                                 <input 
                                     type="text" 
                                     name="cadena" 
                                     placeholder="Buscar..." 
-                                    value="A buscar"
+                                    value="<?= htmlspecialchars($cadena) ?>"
                                     class="input-busqueda">
                                 <button type="submit" class="boton-buscar">Buscar</button>
 
 
-                                <!--<?php if ($cadena !== ''): ?>
+                                <?php if ($cadena !== ''): ?>
 
-                                    <a href="UI-16_VisualizarConceptos.php" class="boton-limpiar">Limpiar</a>
+                                    <a href="UI-20_VisualizarCategoria.php" class="boton-limpiar">Limpiar</a>
                                 <?php endif; ?>
-                                -->
+                                
 
 
                             </form>
@@ -168,7 +210,7 @@ $usuarios = GestionarUsuario::obtenerUsuariosBD(($_SESSION['familia_id']));
                             </tr>
                         </thead>
                         <tbody>
-                        <!--<?php if ($categorias && count($categorias) > 0): ?>-->
+                        <?php if ($categorias && count($categorias) > 0): ?>
                             <?php
                                 // Crear un mapa id_usuario → nombre para buscar rápido
                                 $mapaUsuarios = [];
@@ -221,11 +263,9 @@ $usuarios = GestionarUsuario::obtenerUsuariosBD(($_SESSION['familia_id']));
 
                                 </tr>
                             <?php endforeach; ?>
-                     <!--           
                         <?php else: ?>
-                            <tr><td colspan="8" class="celda">No hay categorías registradas.</td></tr>
+                            <tr><td colspan="8" class="celda">No se encontraron categorias.</td></tr>
                         <?php endif; ?>
-                        -->
 
 
                         </tbody>
