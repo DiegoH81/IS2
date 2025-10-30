@@ -16,7 +16,7 @@ class Familia {
         $this->estado = $estado;
     }
 
-     /* FUN-20 existeContrasenaFamiliarBD 
+     /* FUN-38 existeContrasenaFamiliarBD 
         Verifica si ya esta en uso la contraseña familiar en la base de datos */
     public static function existeContrasenaFamiliar($contrasena_familiar) {
         $conn = Database::connect();
@@ -28,7 +28,7 @@ class Familia {
     }
 
 
-    /* FUN-21 crearFamilia 
+    /* FUN-39 crearFamilia 
         Inserta un nuevo grupo familiar en la base de dato */
     public static function crearFamilia($nombre_familia, $codigo_familiar) {
         $conn = Database::connect();
