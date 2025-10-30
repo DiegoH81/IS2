@@ -32,7 +32,7 @@ class Concepto {
         $this->idCategoria = $idCategoria;
     }
 
-    /* FUN-07 obtenerConceptosBD 
+    /* FUN-33 obtenerConceptosBD 
     Extrae la información de todos los conceptos de la base de datos */
     public static function obtenerConceptos($familia_id) {
         $conn = Database::connect();
@@ -64,7 +64,7 @@ class Concepto {
         return $conceptos;
     }
 
-    /* FUN-11 crearConceptoBD 
+    /* FUN-34 crearConceptoBD 
         Inserta un nuevo concepto en la base de datos */
     public static function crearConcepto(
     $nombre, 
@@ -104,7 +104,7 @@ class Concepto {
         $result = pg_query_params($conn, $query, $params);
     }
 
-    /* FUN-12 obtenerConceptoBD
+    /* FUN-35 obtenerConceptoBD
    Extrae la información de un concepto específico según su id */
     public static function obtenerConcepto($idConcepto) {
         $conn = Database::connect();
@@ -135,7 +135,7 @@ class Concepto {
         );
     }
 
-    /* FUN-13 editarConceptoBD
+    /* FUN-36 editarConceptoBD
         Actualiza la informacion de un concepto en la base de datos segun su id */
     public static function editarConcepto($id_concepto, $nombre, $tipo, $monto, $periodo, $periodicidad, $fecha_inicio, $fecha_fin, $p_id_categoria ) {
         $conn = Database::connect();
@@ -153,7 +153,7 @@ class Concepto {
         return $result;
     }
 
-    /* FUN-14 editarEstadoConcepto
+    /* FUN-37 editarEstadoConcepto
         Actualiza el estado de un concepto en la base de datos segun su id */
     public static function editarEstadoConcepto($id_concepto, $estado) {
         $conn = Database::connect();

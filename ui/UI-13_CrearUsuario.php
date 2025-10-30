@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Usuario existente.";
     } else {
         GestionarUsuario::crearUsuarioBD($usuario_val, $nombre_val, $password_val, $rol_val, $_SESSION['familia_id']);
+        $_SESSION['mensaje_exito'] = "Usuario creado correctamente.";
         header("Location: UI-12_VisualizarUsuarios.php");
         exit;
     }

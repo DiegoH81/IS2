@@ -18,19 +18,19 @@ class GestionarCategoria {
         return Categoria::crearCategoria($nombre, $descripcion, $familia_id, $usuario_id);
     }
 
-    /* FUN-24 actualizarCategoriaBD 
+    /* FUN-25 actualizarCategoriaBD 
         Permite actualizar una categoria ya existente*/
     public static function actualizarCategoriaBD($id, $nombre, $descripcion) {
         return Categoria::actualizarCategoria($id, $nombre, $descripcion);
     }
 
-    /* FUN-24 editarEstadoCategoriaBD 
+    /* FUN-26 editarEstadoCategoriaBD 
         Permite eitar una categoría ya existente*/
     public static function editarEstadoCategoriaBD($id, $estado) {
         return Categoria::editarEstadoCategoria($id, $estado);
     }
 
-    /* FUN-25 obtenerCategoriaIdBD 
+    /* FUN-27 obtenerCategoriaIdBD 
         Permite obtener una categoria por id*/
     public static function obtenerCategoriaIdBD($id_categoria) {
         return Categoria::obtenerCategoriaId($id_categoria);

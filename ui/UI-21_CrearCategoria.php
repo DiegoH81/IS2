@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $descripcion_val     = $_POST['descripcion'];
     
     GestionarCategoria::crearCategoriaBD($nombre_val, $descripcion_val, $_SESSION['familia_id'], $_SESSION['id_usuario']);
+    $_SESSION['mensaje_exito'] = "Categoría creada correctamente.";
     header("Location: UI-20_VisualizarCategoria.php");
     exit;
 }
