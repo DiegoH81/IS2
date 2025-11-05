@@ -6,7 +6,7 @@ require_once '../entity/usuario.php';
 
 class GestionarUsuario {
 
-    /* FUN-01 obtenerUsuariosBd
+    /* FUN-01 obtenerUsuariosBD
         Extrae la informacion de todos los usuarios de la base de datos */
    
     public static function obtenerUsuariosBD($familia_id) {

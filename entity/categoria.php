@@ -46,7 +46,7 @@ class Categoria {
         return $categorias;
     }
     
-    /* FUN-29 crearCategoriaBD 
+    /* FUN-29 crearCategoria
         Permite crear una categoria a la base de datos actual*/
     public static function crearCategoria($nombre, $descripcion, $familia_id, $usuario_id) {
         $conn = Database::connect();
@@ -55,7 +55,7 @@ class Categoria {
         $result = pg_query_params($conn, $query, $params);
         return $result !== false;
     }
-    /* FUN-30 actualizarCategoriaBD 
+    /* FUN-30 actualizarCategoria
         Permite actualizar una categoria ya existente*/
     public static function actualizarCategoria($id, $nombre, $descripcion) {
         $conn = Database::connect();
@@ -65,7 +65,7 @@ class Categoria {
         return $result !== false;
     }
 
-    /* FUN-31 editarEstadoCategoriaBD 
+    /* FUN-31 editarEstadoCategoria
         Permite eitar una categoría ya existente*/
     public static function editarEstadoCategoria($id, $estado) {
         $conn = Database::connect();
@@ -76,7 +76,7 @@ class Categoria {
     }
 
 
-    /* FUN-32 obtenerCategoriaIdBD 
+    /* FUN-32 obtenerCategoriaId
         Permite obtener una categoria por id*/
     public static function obtenerCategoriaId($id_categoria) {
         $conn = Database::connect();

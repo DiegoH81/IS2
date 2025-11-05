@@ -13,7 +13,7 @@ class GestionarFamilia {
     }
 
 
-    /* FUN-21 crearFamilia 
+    /* FUN-21 crearFamiliaBD
         Inserta un nuevo grupo familiar en la base de dato */
 
     public static function crearFamiliaBD($nombre_familia, $codigo_familiar) {

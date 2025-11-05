@@ -23,7 +23,7 @@ class Usuario {
     }
 
 
-    /* FUN-40 obtenerUsuariosBd
+    /* FUN-40 obtenerUsuarios
         Extrae la informacion de todos los usuarios de la base de datos */
    
     public static function obtenerUsuarios($familia_id) {
@@ -51,7 +51,7 @@ class Usuario {
 
     }
 
-    /* FUN-41 validarUsuarioBD
+    /* FUN-41 validarUsuario
         Verifica si el usuario ingresado existe en la base de datos */
     public static function validarUsuario($usuario) {
         $conn = Database::connect();
@@ -62,7 +62,7 @@ class Usuario {
         return $val === 't';
     }
 
-    /* FUN-42 validarCredencialesBD
+    /* FUN-42 validarCredenciales
         Verifica si la contraseña ingresada coincide con la del usuario ingresado */
     public static function validarCredenciales($usuario, $contrasena) {
         $conn = Database::connect();
@@ -73,7 +73,7 @@ class Usuario {
         return $val === 't';
     }
 
-    /* FUN-43 usuarioDisponibleBD
+    /* FUN-43 usuarioDisponible
         Verifica si el usuario(nombre de usuario) no esta en uso */
     public static function usuarioDisponible($usuario) {
         $conn = Database::connect();
@@ -84,7 +84,7 @@ class Usuario {
         return $val === 't';
     }
 
-    /* FUN-44 crearUsuarioBD
+    /* FUN-44 crearUsuario
         Inserta un nuevo usuario en la base de datos */
     public static function crearUsuario($usuario, $nombre, $contrasena, $rol, $familia_id) {
         $conn = Database::connect();
@@ -93,7 +93,7 @@ class Usuario {
         pg_query_params($conn, $query, $params);
     }
 
-    /* FUN-45 obtenerUsuarioBD
+    /* FUN-45 obtenerUsuario
         Extrae los datos de un usuario especifico segun su id */
     public static function obtenerUsuario($usuario) {
         $conn = Database::connect();
@@ -115,7 +115,7 @@ class Usuario {
         
     }
 
-    /* FUN-46 actualizarDatosUsuarioBD 
+    /* FUN-46 actualizarDatosUsuario
         Editar los datos de un usuario existente */
 
     public static function actualizarDatosUsuario($usuario, $nombre, $contrasena, $rol) {
@@ -125,7 +125,7 @@ class Usuario {
         $result = pg_query_params($conn, $query, $params);
     }
 
-    /* FUN-47 cambiarEstadoUsuarioBD 
+    /* FUN-47 cambiarEstadoUsuario
         Permite modificar el estado de un usario, para habilitarlo/deshabilitarlo */
     public static function cambiarEstadoUsuario($id, $estado) {
         $conn = Database::connect();

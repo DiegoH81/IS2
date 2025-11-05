@@ -110,7 +110,7 @@ class GestionarConcepto {
     }
 
 
-    /* FUN-14 editarEstadoConcepto
+    /* FUN-14 editarEstadoConceptoBD
         Actualiza el estado de un concepto en la base de datos segun su id */
     public static function editarEstadoConceptoBD($id_concepto, $estado) {
         return Concepto::editarEstadoConcepto($id_concepto, $estado);
