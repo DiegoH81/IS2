@@ -136,8 +136,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="rol">Rol:</label>
                             <select id="rol" name="rol" required>
                                 <option value="">Seleccionar categoría</option>
-                                <option value="admin_familiar">Administrador familiar</option>
-                                <option value="familiar">Familiar</option>
+                                <option value="Administrador familiar">Administrador familiar</option>
+                                <option value="Familiar">Familiar</option>
                             </select>
                         </div>
 
