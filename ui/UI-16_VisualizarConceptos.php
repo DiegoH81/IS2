@@ -2,6 +2,13 @@
 function filtrarConceptosPorBusqueda($familiaId, $cadena) {
     $conceptos = GestionarConcepto::relacionarDatos($familiaId);
 
+    // Línea A: Validación de condiciones iniciales
+    if (empty($cadena) || empty($conceptos)) {
+        // C0: No hay cadena o no hay conceptos → retornar array vacío
+        return [];
+    }
+
+    // Línea B y C: Aplicar filtro con predicado OR sobre los campos
     return array_filter($conceptos, function ($c) use ($cadena) {
         return stripos($c['concepto'], $cadena) !== false ||
                stripos($c['categoria'], $cadena) !== false ||
