@@ -54,12 +54,41 @@ class Usuario {
     /* FUN-41 validarUsuario
         Verifica si el usuario ingresado existe en la base de datos */
     public static function validarUsuario($usuario) {
-        $conn = Database::connect();
-        $query = "SELECT consultarExistenciaUsuario($1)";
-        $params = array($usuario);
-        $result = pg_query_params($conn, $query, $params);
-        $val = pg_fetch_result($result, 0, 0);
-        return $val === 't';
+        // Línea A: Validación de entrada
+        if (empty($usuario) || !is_string($usuario)) {
+            // Retornamos false si el parámetro no es válido
+            return false;
+        }
+    
+        try {
+            // Línea B: Conexión a la base de datos
+            $conn = Database::connect();
+            if (!$conn) {
+                // En caso de error de conexión
+                return false;
+            }
+    
+            // Línea C: Ejecución de la función SQL
+            $query = "SELECT consultarExistenciaUsuario($1)";
+            $params = array($usuario);
+            $result = pg_query_params($conn, $query, $params);
+    
+            if (!$result) {
+                // Error en la consulta
+                return false;
+            }
+    
+            // Línea D: Obtención del resultado
+            $val = pg_fetch_result($result, 0, 0);
+    
+            // Línea E: Validación final del resultado
+            return $val === 't';
+    
+        } catch (Exception $e) {
+            // Línea F: Manejo de excepciones generales
+            error_log("Error en validarUsuario: " . $e->getMessage());
+            return false;
+        }
     }
 
     /* FUN-42 validarCredenciales
