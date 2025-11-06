@@ -4,12 +4,7 @@ function filtrarCategoriasPorBusqueda($familiaId, $cadena, &$categorias, &$usuar
     $usuarios = GestionarUsuario::obtenerUsuariosBD($familiaId);
 
     //CATEGORIA
-    //nombre
-    //descripcion
-    //estado
-
     //USUARIO
-    //nombre
 
     $categorias = array_filter($categorias, function ($cat) use ($cadena) {
         return stripos($cat->nombre, $cadena) !== false ||
@@ -18,10 +13,7 @@ function filtrarCategoriasPorBusqueda($familiaId, $cadena, &$categorias, &$usuar
     });
 
     // Filtrar los usuarios que coincidan con la cadena (por nombre, por ejemplo)
-    $usuarios = array_filter($usuarios, function ($u) use ($cadena) {
-        return stripos($u->nombre, $cadena) !== false;
-    });
-    
+    $usuarios = GestionarUsuario::obtenerUsuariosBD($familiaId);    
 }
 ?>
 
@@ -258,10 +250,15 @@ if ($cadena !== '') {
                                         <?php
                                             // Permite editar si es Admin Familiar o si el concepto lo subió el mismo usuario
                                             $puedeEditar = ($_SESSION['rol'] === 'Administrador familiar') || ($_SESSION['id_usuario'] == $c->idUsuario);
+
+                                            // Bloquea el botón si no puede editar o si la categoría está deshabilitada
+                                            $deshabilitarBoton = !$puedeEditar || ($c->estado === 'Deshabilitado');
                                         ?>
                                         <form action="UI-22_EditarCategoria.php" method="GET">
                                             <input type="hidden" name="idcategoria" value="<?= $c->idCategoria ?>">
-                                            <button type="submit" class="link-editar" <?= !$puedeEditar ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?>>
+                                            <button type="submit" class="link-editar"
+                                            <?= $deshabilitarBoton ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : '' ?>
+                                            >
                                                 Editar
                                             </button>
                                         </form>

@@ -22,6 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
+<!-- Paso 1 del CU-10-1: La interfaz de Crear categoría (UI-21) se carga. -->
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -105,11 +107,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="linea-separadora"></div>
                         <div class="linea-azul"></div>
                     </header>
-
+                    
+                    
                     <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
 
                     
-
+                    <!-- Paso 3-6 del CU-10-1: Proceso de registro de datos. -->
                     <form class="form-crear-concepto" method="POST">
 
                     <h1 style="text-align: center;">Crear categoría</h1>
@@ -124,10 +127,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <textarea rows="5" cols="40" name="descripcion" id="descripcion" placeholder="Ingrese la descripcion"   spellcheck="false"></textarea>
                         </div>
 
-                        <!-- Paso 12 del CU-16: El AC-02 selecciona la opción Crear. -->
+                        <!-- Paso 5 del CU-10-1: El AC-02 selecciona la opción Crear. -->
                         <div style="text-align:center;">
 
                             <div class="grupo-botones">
+                                <!-- Paso 5 del CU-10-1: La interfaz (UI-21) redirige al AC-02-Familiar a la interfaz (UI-20). -->
                                 <button type="button" class="boton-crear boton-cancelar" onclick="window.location.href='UI-20_VisualizarCategoria.php'">Cancelar</button>
                                 <button type="submit" class="boton-crear">Guardar categoria</button>
                             </div>
@@ -141,24 +145,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
-<script>
-// Paso 9 del CU-17: Mostrar campo de periodicidad si se selecciona "Personalizado".
-document.addEventListener('DOMContentLoaded', function() {
-    const radiosPeriodo = document.querySelectorAll('input[name="periodo"]');
-    const campoPersonalizado = document.querySelector('.periodicidad-personalizada');
-
-    radiosPeriodo.forEach(radio => {
-        radio.addEventListener('change', function() {
-            if (this.value === "Personalizado") {
-                campoPersonalizado.style.display = "flex";
-                campoPersonalizado.style.alignItems = "center";
-                campoPersonalizado.style.gap = "10px";
-            } else {
-                campoPersonalizado.style.display = "none";
-            }
-        });
-    });
-});
-</script>
 </body>
 </html>

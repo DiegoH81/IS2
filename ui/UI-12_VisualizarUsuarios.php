@@ -232,7 +232,8 @@ if ($cadena !== '') {
                                     <td class="celda">
                                         <form action="UI-14_EditarUsuario.php" method="GET">
                                             <input type="hidden" name="usuario" value="<?= htmlspecialchars($u->usuario) ?>">
-                                            <button type="submit" class="link-editar">
+                                            <button type="submit" class="link-editar"
+                                            <?= ($u->estado === 'Deshabilitado') ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : '' ?>>
                                                 Editar
                                             </button>
                                         </form>
