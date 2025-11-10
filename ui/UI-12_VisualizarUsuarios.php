@@ -22,6 +22,12 @@ function filtrarUsuariosPorBusqueda($familiaId, $cadena, &$usuarios) {
 session_start();
 require_once '../gtr/GTR-01_GestionarUsuario.php';
 
+$mensaje_exito = '';
+if (isset($_SESSION['mensaje_exito'])) {
+    $mensaje_exito = $_SESSION['mensaje_exito'];
+    unset($_SESSION['mensaje_exito']);
+}
+
 $cadena = isset($_GET['cadena']) ? $_GET['cadena'] : '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_usuario'], $_POST['estado'])) {
@@ -226,7 +232,8 @@ if ($cadena !== '') {
                                     <td class="celda">
                                         <form action="UI-14_EditarUsuario.php" method="GET">
                                             <input type="hidden" name="usuario" value="<?= htmlspecialchars($u->usuario) ?>">
-                                            <button type="submit" class="link-editar">
+                                            <button type="submit" class="link-editar"
+                                            <?= ($u->estado === 'Deshabilitado') ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : '' ?>>
                                                 Editar
                                             </button>
                                         </form>
@@ -266,6 +273,39 @@ if ($cadena !== '') {
         </div>
     </div>
 </div>
+
+<?php if ($mensaje_exito): ?>
+<div id="modalExito" class="modal" style="display:block;">
+    <div class="modal-contenido modal-exito">
+        <div class="icono-exito">✓</div>
+        <p><?= htmlspecialchars($mensaje_exito) ?></p>
+        <button id="btnCerrarExito" class="boton-aceptar">Aceptar</button>
+    </div>
+</div>
+
+<script>
+// Cerrar modal de éxito
+document.addEventListener('DOMContentLoaded', function() {
+    const btnCerrar = document.getElementById('btnCerrarExito');
+    const modal = document.getElementById('modalExito');
+    
+    if (btnCerrar && modal) {
+        btnCerrar.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+        
+        // También cerrar al hacer clic fuera del modal
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+});
+</script>
+<?php endif; ?>
+
 <script src="../js/popup_estado.js"></script>
+
 </body>
 </html>

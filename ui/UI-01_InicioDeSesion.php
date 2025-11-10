@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Paso 13 del CU-01: Redirigir al usuario
         //header("Location: UI-16_VisualizarConceptos.php");
-        header("Location: UI-12_VisualizarUsuarios.php");
+        header("Location: UI-16_VisualizarConceptos.php");
         exit;
     } else {
         $error = "Usuario o contraseña incorrectos";
