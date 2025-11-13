@@ -1,4 +1,6 @@
 <?php
+/* FUN-49 filtrarConceptosPorBusqueda
+        Permite filtrar conceptos por la barra de búsqueda*/
 function filtrarConceptosPorBusqueda($familiaId, $cadena) {
     $conceptos = GestionarConcepto::relacionarDatos($familiaId);
 

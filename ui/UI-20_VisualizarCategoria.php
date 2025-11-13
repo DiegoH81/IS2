@@ -1,4 +1,7 @@
 <?php
+
+/* FUN-50 filtrarCategoriasPorBusqueda
+        Permite filtrar categorias por la barra de búsqueda*/
 function filtrarCategoriasPorBusqueda($familiaId, $cadena, &$categorias, &$usuarios) {
     $categorias = GestionarCategoria::obtenerCategoriasBD($familiaId);
     $usuarios = GestionarUsuario::obtenerUsuariosBD($familiaId);

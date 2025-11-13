@@ -1,4 +1,6 @@
 <?php
+/* FUN-48 filtrarUsuariosPorBusqueda
+        Permite filtrar usuarios por la barra de búsqueda*/
 function filtrarUsuariosPorBusqueda($familiaId, $cadena, &$usuarios) {
     $usuarios = GestionarUsuario::obtenerUsuariosBD($familiaId);
 
