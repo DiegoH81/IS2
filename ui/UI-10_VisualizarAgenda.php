@@ -13,13 +13,10 @@ require_once '../gtr/GTR-04_Validar.php';
 
 $usuario = Validar::obtenerUsuarioActual();
 
+//$transaccionesProgramadas = // aquí llamarías a tu función que obtiene las transacciones de la BD
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deshabilitar']))
-{
-    GestionarUsuario::cambiarEstadoUsuarioBD($usuario->idUsuario, 0);
-    //var_dump($usuario->idUsuario);
-    header("Location: UI-01_InicioDeSesion.php");
-}
+//var_dump($usuario)
+
 ?>
 
 <!DOCTYPE html>
@@ -49,14 +46,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deshabilitar']))
         </section>
 
         <section class="seccion-derecha">
-            <h2 class="subtitulo">Registro Diario</h2>
+            <h2 class="subtitulo">Agenda</h2>
 
             <div class="info-usuario">
                 <span class="nombre-usuario">
-                        <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+                        <?php echo htmlspecialchars($usuario->nombre); ?>
                 </span>
                 <span class="rol-usuario">
-                        <?php echo htmlspecialchars($_SESSION['rol']); ?>
+                        <?php echo htmlspecialchars($usuario->rol); ?>
                 </span>
             </div>
         </section>
@@ -96,155 +93,98 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deshabilitar']))
 
         <!-- Area principal -->
         <main class="area-trabajo">
-        <!-- Barra de búsqueda -->
-            <div class="busqueda">
-                <input type="text" placeholder="Buscar...">
+            <!-- Barra de búsqueda y filtros -->
+            <div class="barra-filtros">
+                <div class="contenedor-busqueda">
+                    <input type="text" class="input-busqueda" placeholder="Buscar">
+                    <i class="icono-busqueda">🔍</i>
+                </div>
+                
+                <div class="filtros-tabs">
+                    <button class="tab-filtro activo">Todos</button>
+                    <button class="tab-filtro">Ingresos</button>
+                    <button class="tab-filtro">Egresos</button>
+                </div>
             </div>
 
             <!-- Proyección esperada -->
-            <section class="proyecciones">
-                <div class="proyeccion-card">
-                    <h4>Ingresos esperados</h4>
-                    <p>S/. 2700.00</p>
-                </div>
-                <div class="proyeccion-card">
-                    <h4>Egresos Esperados</h4>
-                    <p>S/. 500.00</p>
-                </div>
-                <div class="proyeccion-card">
-                    <h4>Balance esperado</h4>
-                    <p>S/. 2200.00</p>
-                </div>
-            </section>
-
-            <!-- Filtros de selección (Todos/Ingesos/Egresos) -->
-            <section class="filtros">
-                <button>Todos</button>
-                <button>Ingresos</button>
-                <button>Egresos</button>
-            </section>
-
-            <!-- Lista de eventos -->
-            <section class="lista-eventos">
-                <div class="evento-card">
-                    <div class="evento-info">
-                        <p>20 de septiembre (3 días restantes)</p>
-                        <p><strong>Ingreso:</strong> Negocio - Cevichería</p>
-                        <p>S/. 1750.00</p>
+            <div class="seccion-proyeccion">
+                <h3 class="titulo-seccion">Proyección esperada - resto del año</h3>
+                
+                <div class="contenedor-proyeccion">
+                    <div class="item-proyeccion">
+                        <button class="btn-proyeccion btn-ingresos">Ingresos esperados</button>
+                        <span class="valor-proyeccion">S/2700.00</span>
                     </div>
-                    <div class="evento-iconos">
-                        <span>⚠️</span><p>Menos de 7 días</p>
+                    
+                    <div class="item-proyeccion">
+                        <button class="btn-proyeccion btn-egresos">Egresos Esperados</button>
+                        <span class="valor-proyeccion">S/.500</span>
                     </div>
                 </div>
 
-                <div class="evento-card">
-                    <div class="evento-info">
-                        <p>5 de octubre (15 días restantes)</p>
-                        <p><strong>Egreso:</strong> Servicios Básicos - Luz</p>
-                        <p>S/. 200.00</p>
-                    </div>
-                    <div class="evento-iconos">
-                        <span>⏳</span><p>Próximo</p>
-                    </div>
+                <div class="contenedor-balance">
+                    <button class="btn-balance">Balance esperado</button>
+                    <span class="valor-balance">S/2200.00</span>
                 </div>
-
-                <div class="evento-card">
-                    <div class="evento-info">
-                        <p>15 de octubre (25 días restantes)</p>
-                        <p><strong>Egreso:</strong> Deudas - Cuota Préstamo</p>
-                        <p>S/. 100.00</p>
-                    </div>
-                    <div class="evento-iconos">
-                        <span>⏳</span><p>Próximo</p>
-                    </div>
-                </div>
-
-                <div class="evento-card">
-                    <div class="evento-info">
-                        <p>25 de octubre (35 días restantes)</p>
-                        <p><strong>Ingreso:</strong> Rentas - Departamento A</p>
-                        <p>S/. 250.00</p>
-                    </div>
-                    <div class="evento-iconos">
-                        <span>⏳</span><p>Próximo</p>
-                    </div>
-                </div>
-            </section><!-- Barra de búsqueda -->
-            <div class="busqueda">
-                <input type="text" placeholder="Buscar...">
             </div>
 
-            <!-- Proyección esperada -->
-            <section class="proyecciones">
-                <div class="proyeccion-card">
-                    <h4>Ingresos esperados</h4>
-                    <p>S/. 2700.00</p>
-                </div>
-                <div class="proyeccion-card">
-                    <h4>Egresos Esperados</h4>
-                    <p>S/. 500.00</p>
-                </div>
-                <div class="proyeccion-card">
-                    <h4>Balance esperado</h4>
-                    <p>S/. 2200.00</p>
-                </div>
-            </section>
+            <!-- Lista de transacciones programadas -->
+             <div class="lista-transacciones">
+                <?php if ($transaccionesProgramadas && count($transaccionesProgramadas) > 0): ?>
+                    <?php foreach ($transaccionesProgramadas as $transaccion): ?>
+                        <?php 
+                            // Calcular días restantes
+                            $fechaActual = new DateTime();
+                            $fechaTransaccion = new DateTime($transaccion->fecha);
+                            $diasRestantes = $fechaActual->diff($fechaTransaccion)->days;
+                            
+                            // Determinar si es urgente (menos de 7 días)
+                            $esUrgente = $diasRestantes < 7;
+                        ?>
+                        
+                        <div class="item-transaccion <?php echo $esUrgente ? 'urgente' : ''; ?>">
+                            <div class="fecha-transaccion">
+                                <i class="icono-calendario">📅</i>
+                                <span class="fecha"><?php echo date('d \d\e F', strtotime($transaccion->fecha)); ?></span>
+                                <span class="dias-restantes">(<?php echo $diasRestantes; ?> días restantes)</span>
+                            </div>
+                            
+                            <div class="detalle-transaccion">
+                                <span class="icono-tipo">💰</span>
+                                <span class="tipo-transaccion"><?php echo htmlspecialchars($transaccion->tipo); ?></span>
+                                <span class="separador">-</span>
+                                <span class="categoria"><?php echo htmlspecialchars($transaccion->categoria); ?></span>
+                                <span class="separador">-</span>
+                                <span class="concepto"><?php echo htmlspecialchars($transaccion->concepto); ?></span>
+                            </div>
+                            
+                            <span class="monto">S/<?php echo number_format($transaccion->monto, 2); ?></span>
+                            
+                            <div class="estado-transaccion">
+                                <?php if ($esUrgente): ?>
+                                    <i class="icono-alerta">⚠️</i>
+                                    <span class="texto-estado">Menos de 7 días</span>
+                                <?php else: ?>
+                                    <i class="icono-reloj">🕐</i>
+                                    <span class="texto-estado">Próximo</span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="mensaje-vacio">
+                        <p>No hay transacciones programadas.</p>
+                    </div>
+                <?php endif; ?>
+            </div>
 
-            <!-- Filtros de selección (Todos/Ingesos/Egresos) -->
-            <section class="filtros">
-                <button>Todos</button>
-                <button>Ingresos</button>
-                <button>Egresos</button>
-            </section>
-
-            <!-- Lista de eventos -->
-            <section class="lista-eventos">
-                <div class="evento-card">
-                    <div class="evento-info">
-                        <p>20 de septiembre (3 días restantes)</p>
-                        <p><strong>Ingreso:</strong> Negocio - Cevichería</p>
-                        <p>S/. 1750.00</p>
-                    </div>
-                    <div class="evento-iconos">
-                        <span>⚠️</span><p>Menos de 7 días</p>
-                    </div>
-                </div>
-
-                <div class="evento-card">
-                    <div class="evento-info">
-                        <p>5 de octubre (15 días restantes)</p>
-                        <p><strong>Egreso:</strong> Servicios Básicos - Luz</p>
-                        <p>S/. 200.00</p>
-                    </div>
-                    <div class="evento-iconos">
-                        <span>⏳</span><p>Próximo</p>
-                    </div>
-                </div>
-
-                <div class="evento-card">
-                    <div class="evento-info">
-                        <p>15 de octubre (25 días restantes)</p>
-                        <p><strong>Egreso:</strong> Deudas - Cuota Préstamo</p>
-                        <p>S/. 100.00</p>
-                    </div>
-                    <div class="evento-iconos">
-                        <span>⏳</span><p>Próximo</p>
-                    </div>
-                </div>
-
-                <div class="evento-card">
-                    <div class="evento-info">
-                        <p>25 de octubre (35 días restantes)</p>
-                        <p><strong>Ingreso:</strong> Rentas - Departamento A</p>
-                        <p>S/. 250.00</p>
-                    </div>
-                    <div class="evento-iconos">
-                        <span>⏳</span><p>Próximo</p>
-                    </div>
-                </div>
-            </section>
-            
-
+            <!-- Paginación -->
+            <div class="paginacion">
+                <span class="pagina-actual">1-2</span>
+                <button class="btn-paginacion">&lt;</button>
+                <button class="btn-paginacion">&gt;</button>
+            </div>
         </main>
     </div>
 </div>
@@ -252,16 +192,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deshabilitar']))
 <!-- JavaScript -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Switch on/off
-        const switchBtn = document.querySelector('.boton-switch input');
-        if (switchBtn) {
-            switchBtn.addEventListener('change', function() {
-                console.log('Modo:', this.checked ? 'Personal' : 'Familiar');
+        // Filtros de tabs
+        const tabs = document.querySelectorAll('.tab-filtro');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                tabs.forEach(t => t.classList.remove('activo'));
+                this.classList.add('activo');
+                console.log('Filtro activo:', this.textContent);
+            });
+        });
+
+        // Búsqueda
+        const inputBusqueda = document.querySelector('.input-busqueda');
+        if (inputBusqueda) {
+            inputBusqueda.addEventListener('input', function() {
+                console.log('Buscando:', this.value);
             });
         }
+
+        // Paginación
+        const btnsPaginacion = document.querySelectorAll('.btn-paginacion');
+        btnsPaginacion.forEach(btn => {
+            btn.addEventListener('click', function() {
+                console.log('Cambio de página');
+            });
+        });
     });
 </script>
 
 </body>
 </html>
-
