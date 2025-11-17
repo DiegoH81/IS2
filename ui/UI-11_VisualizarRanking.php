@@ -76,10 +76,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deshabilitar']))
                     <i class="icono icono-persona"></i>Cuenta
                 </a>
                 <a class="opcion-menu" href="UI-10_VisualizarAgenda.php">
-                    <i class="icono icono-calendario"></i>Agenda
+                    <i class="icono icono-grafico"></i>Agenda
                 </a>
-                <a class="opcion-menu activa" href="#">
-                    <i class="icono icono-ranking"></i>Ranking
+                <a class="opcion-menu activa" href="UI-11_VisualizarRanking.php">
+                    <i class="icono icono-grafico"></i>Ranking
                 </a>
                 <a class="opcion-menu" href="UI-16_VisualizarConceptos.php">
                     <i class="icono icono-configuracion"></i>Configuración

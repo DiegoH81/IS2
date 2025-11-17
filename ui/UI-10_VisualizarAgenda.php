@@ -73,10 +73,10 @@ $usuario = Validar::obtenerUsuarioActual();
                 <a class="opcion-menu" href="UI-07_CuentaPersonal.php">
                     <i class="icono icono-persona"></i>Cuenta
                 </a>
-                <a class="opcion-menu activa" href="#">
+                <a class="opcion-menu activa" href="UI-10_VisualizarAgenda.php">
                     <i class="icono icono-grafico"></i>Agenda
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-11_VisualizarRanking.php">
                     <i class="icono icono-grafico"></i>Ranking
                 </a>
                 <a class="opcion-menu" href="UI-16_VisualizarConceptos.php">
