@@ -1,0 +1,71 @@
+/* Contenedor de los botones principales (Egresos / Ingresos) */
+.grupo-controles {
+    display: flex;
+    flex-direction: column; /* Organiza los botones en una columna */
+    gap: 20px; /* Espacio entre las filas */
+    margin-top: 20px;
+}
+
+/* Contenedor de los botones Egresos/Ingesos */
+.botones-principales {
+    display: flex;
+    justify-content: space-around; /* Distribuye los botones de manera equitativa */
+    gap: 20px;
+    width: 100%; /* Asegura que los botones ocupen todo el espacio disponible */
+}
+
+/* Estilo de los botones Egresos/Ingresos */
+.boton-crear, .boton-balance {
+    padding: 12px 28px;
+    background-color: #f0f0f0;
+    color: #333;
+    border: 2px solid #ccc;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s;
+    width: 150px;  /* Establece un ancho fijo para que los botones no se estiren */
+    text-align: center;
+}
+
+/* Efecto hover para los botones */
+.boton-crear:hover, .boton-balance:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+/* Filtro de rango de fechas */
+.filtro-rango {
+    display: flex;
+    justify-content: space-between; /* Alinea los filtros en una fila */
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* Estilo para los botones de filtro */
+.filtro-btn {
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    border: 2px solid #ccc;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: background-color 0.3s, color 0.3s;
+    width: 150px;  /* Establece un ancho fijo para los botones de filtro */
+    text-align: center;
+}
+
+/* Efecto hover para los botones de filtro */
+.filtro-btn:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+/* Botón activo (cuando se selecciona un rango o tipo de balance) */
+.boton-crear.active, .boton-balance.active, .filtro-btn.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+}

@@ -1,38 +1,34 @@
 <?php
 
 // ------------------------------------------------------------
-// UI-21: Crear categoría
-// Caso de uso asociado: CU-10-1 Crear categoría
+// UI-07: Cuenta Personal
+// Caso de uso asociado: FALTAFALTA
 // ------------------------------------------------------------
 
-
 session_start();
-require_once '../gtr/GTR-09_GestionarCategoria.php';
+require_once '../gtr/GTR-01_GestionarUsuario.php';
+require_once '../gtr/GTR-04_Validar.php';
+
+$usuario = Validar::obtenerUsuarioActual();
 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombre_val          = $_POST['nombre'];
-    $descripcion_val     = $_POST['descripcion'];
-    
-    GestionarCategoria::crearCategoriaBD($nombre_val, $descripcion_val, $_SESSION['familia_id'], $_SESSION['id_usuario']);
-    $_SESSION['mensaje_exito'] = "Categoría creada correctamente.";
-    header("Location: UI-20_VisualizarCategoria.php");
-    exit;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deshabilitar']))
+{
+    GestionarUsuario::cambiarEstadoUsuarioBD($usuario->idUsuario, 0);
+    //var_dump($usuario->idUsuario);
+    header("Location: UI-01_InicioDeSesion.php");
 }
-
 ?>
-
-<!-- Paso 1 del CU-10-1: La interfaz de Crear categoría (UI-21) se carga. -->
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear concepto</title>
+    <title>Editar concepto</title>
     <link rel="stylesheet" href="../css/principal.css">
-    <link rel="stylesheet" href="../css/icons.css">
     <link rel="stylesheet" href="../css/configuracion.css">
+    <link rel="stylesheet" href="../css/icons.css">
 </head>
 <body>
 <div class="contenedor-principal">
@@ -40,8 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <section class="seccion-izquierda">
             <h1 class="titulo-app">On a budget</h1>
         </section>
+
         <section class="seccion-derecha">
-            <h2 class="subtitulo">Configuración</h2>
+            <h2 class="subtitulo">Cuenta</h2>
+
             <div class="info-usuario">
                 <span class="nombre-usuario">
                         <?php echo htmlspecialchars($_SESSION['nombre']); ?>
@@ -54,6 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
 
     <div class="contenedor-medio">
+        <!-- Paso 4 del CU-17: La interfaz muestra la opción de Crear categoría. -->
+        <!-- Menú lateral -->
         <aside class="menu-lateral" id="menuLateral">
             <nav>
                 <a class="opcion-menu" href="UI-04_RegistroDiario.php">
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a class="opcion-menu" href="UI-05_Balance.php">
                     <i class="icono icono-grafico"></i>Balance
                 </a>
-                <a class="opcion-menu" href="UI-07_CuentaPersonal.php">
+                <a class="opcion-menu activa" href="UI-07_CuentaPersonal.php">
                     <i class="icono icono-persona"></i>Cuenta
                 </a>
                 <a class="opcion-menu" href="#">
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a class="opcion-menu" href="#">
                     <i class="icono icono-grafico"></i>Ranking
                 </a>
-                <a class="opcion-menu activa" href="UI-16_VisualizarConceptos.php">
+                <a class="opcion-menu" href="UI-16_VisualizarConceptos.php">
                     <i class="icono icono-configuracion"></i>Configuración
                 </a>
             </nav>
@@ -84,56 +84,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </aside>
 
         <main class="contenedor-medio">
-            <aside class="submenu-configuracion" id="Sub_menuConfig">
-                <nav>
-                    <?php if ($_SESSION['rol'] === 'Administrador familiar'): ?>
-                        <a class="opcion-submenu" href="UI-12_VisualizarUsuarios.php">
-                            <i></i>Usuarios
-                        </a>
-                    <?php endif; ?>
-                    <a class="opcion-submenu" href="UI-16_VisualizarConceptos.php">
-                        <i></i>Conceptos
-                    </a>
-                    <a class="opcion-submenu activa" href="UI-20_VisualizarCategoria.php">
-                        <i></i>Categorías
-                    </a>
-                </nav>
-            </aside>
 
             <section class="contenedor-tablas">
                 <article class="tabla">
                     <header>
-                        <h2 class="titulo-tabla">Crear categoría</h2>
+                        <h2 class="titulo-tabla">Editar cuenta</h2>
                         <div class="linea-separadora"></div>
                         <div class="linea-azul"></div>
                     </header>
-                    
-                    
-                    <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
 
+                    <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
                     
-                    <!-- Paso 3-6 del CU-10-1: Proceso de registro de datos. -->
+
                     <form class="form-crear-concepto" method="POST">
 
-                    <h1 style="text-align: center;">Crear categoría</h1>
+                    <h1 style="text-align: center;">Mi cuenta </h1>
+                        
+
                         
                         <div class="campo-formulario">
-                            <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre" required>
-                        </div>
+                            <label for="usuario">Usuario:</label>
 
+                            <input type="text" id="usuario" name="usuario" value="<?= htmlspecialchars($usuario->usuario) ?>" readonly>
+
+                        </div>
+                        
                         <div class="campo-formulario">
-                            <label for="descripcion">Descripcion:</label>
-                            <textarea rows="5" cols="40" name="descripcion" id="descripcion" placeholder="Ingrese la descripcion"   spellcheck="false"></textarea>
+                            <label for="password">Contraseña:</label>
+                            <input type="password" id="password" name="password" placeholder = "Ingrese su contraseña" value="<?= htmlspecialchars($usuario->contrasena) ?>" readonly>
                         </div>
+                        
 
-                        <!-- Paso 5 del CU-10-1: El AC-02 selecciona la opción Crear. -->
+                        <!-- Paso 12 del CU-16: El AC-02 selecciona la opción Crear. -->
                         <div style="text-align:center;">
 
                             <div class="grupo-botones">
-                                <!-- Paso 5 del CU-10-1: La interfaz (UI-21) redirige al AC-02-Familiar a la interfaz (UI-20). -->
-                                <button type="button" class="boton-crear boton-cancelar" onclick="window.location.href='UI-20_VisualizarCategoria.php'">Cancelar</button>
-                                <button type="submit" class="boton-crear">Guardar categoria</button>
+                                <button type="submit" name="deshabilitar" class="boton-crear boton-cancelar">Deshabilitar</button>
+                                <button type="button" class="boton-crear" onclick="window.location.href='UI-08_EditarCuentaPersonal.php'">Editar Perfil</button>
                             </div>
 
                         </div>
@@ -145,5 +132,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const radiosPeriodo = document.querySelectorAll('input[name="periodo"]');
+    const campoPersonalizado = document.querySelector('.periodicidad-personalizada');
+
+    radiosPeriodo.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.value === "Personalizado") {
+                campoPersonalizado.style.display = "flex";
+                campoPersonalizado.style.alignItems = "center";
+                campoPersonalizado.style.gap = "10px";
+            } else {
+                campoPersonalizado.style.display = "none";
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>

@@ -88,13 +88,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="contenedor-medio">
         <aside class="menu-lateral" id="menuLateral">
             <nav>
-                <a class="opcion-menu" href="daily_input.php">
+                <a class="opcion-menu" href="UI-04_RegistroDiario.php">
                     <i class="icono icono-documento"></i>Registro Diario
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-05_Balance.php">
                     <i class="icono icono-grafico"></i>Balance
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-07_CuentaPersonal.php">
                     <i class="icono icono-persona"></i>Cuenta
                 </a>
                 <a class="opcion-menu" href="#">

@@ -60,38 +60,5 @@ class GestionarUsuario {
         return Usuario::cambiarEstadoUsuario($id, $estado);
     }
 
-
-
-
-
-    // EN DUDA
-    public static function solicitarUsuariosEspecificos($ids) {
-    $conn = Database::connect();
-        // Convertir el array PHP a formato PostgreSQL: {1,2,3}
-        $id_array = '{' . implode(',', $ids) . '}';
-
-        $query = "SELECT * FROM obtenerUsuariosPorIds($1);";
-        $params = array($id_array);
-        $result = pg_query_params($conn, $query, $params);
-
-        return pg_fetch_all($result);
-    }
-
-    //NUEVO
-    public static function solicitarCategoriasEspecificas($ids) {
-        $conn = Database::connect();
-
-        // Convertir array PHP a formato PostgreSQL {1,2,3}
-        $id_array = '{' . implode(',', $ids) . '}';
-
-        $query = "SELECT * FROM obtenerCategoriasPorIds($1);";
-        $params = array($id_array);
-        $result = pg_query_params($conn, $query, $params);
-
-        return pg_fetch_all($result);
-    }
-
-    
-
 }
 ?>

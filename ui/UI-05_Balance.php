@@ -1,4 +1,27 @@
 <!-- UI inactiva -->
+
+<?php
+
+// ------------------------------------------------------------
+// UI-05: Balance
+// Caso de uso asociado: FALTAFALTA
+// ------------------------------------------------------------
+
+session_start();
+require_once '../gtr/GTR-01_GestionarUsuario.php';
+require_once '../gtr/GTR-04_Validar.php';
+
+$usuario = Validar::obtenerUsuarioActual();
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deshabilitar']))
+{
+    GestionarUsuario::cambiarEstadoUsuarioBD($usuario->idUsuario, 0);
+    //var_dump($usuario->idUsuario);
+    header("Location: UI-01_InicioDeSesion.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,11 +29,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro Diario</title>
 
-    <link rel="stylesheet" href="css/principal.css">
+    
     <!-- CSS principal -->
-    <link rel="stylesheet" href="css/daily_input.css">
+    <link rel="stylesheet" href="../css/daily_input.css">
+     <link rel="stylesheet" href="../css/principal.css">
+    <link rel="stylesheet" href="../css/configuracion.css">
     <!-- CSS de íconos -->
-    <link rel="stylesheet" href="css/icons.css">
+    <link rel="stylesheet" href="../css/icons.css">
+
+    <script src="../js/filtro_semanal.js"></script>
 
 </head>
 <body>
@@ -18,19 +45,20 @@
 
     <!-- Cabecera -->
     <header class="barra-superior">
-        <!-- Parte izquierda oscura con el título -->
         <section class="seccion-izquierda">
             <h1 class="titulo-app">On a budget</h1>
         </section>
 
-        <!-- Parte derecha blanca -->
         <section class="seccion-derecha">
-            <h2 class="subtitulo">Registro Diario</h2>
+            <h2 class="subtitulo">Balance</h2>
 
-            <!-- Info Usuario -->
             <div class="info-usuario">
-                <span class="nombre-usuario">Pepe Grillo</span>
-                <span class="rol-usuario">Papa / Mama</span>
+                <span class="nombre-usuario">
+                        <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+                </span>
+                <span class="rol-usuario">
+                        <?php echo htmlspecialchars($_SESSION['rol']); ?>
+                </span>
             </div>
         </section>
     </header>
@@ -40,13 +68,13 @@
         <!-- Menu lateral - ACTUALIZADO -->
         <aside class="menu-lateral" id="menuLateral">
             <nav>
-                <a class="opcion-menu activa" href="daily_input.php">
+                <a class="opcion-menu" href="UI-04_RegistroDiario.php">
                     <i class="icono icono-documento"></i>Registro Diario
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu activa" href="UI-05_Balance.php">
                     <i class="icono icono-grafico"></i>Balance
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-07_CuentaPersonal.php">
                     <i class="icono icono-persona"></i>Cuenta
                 </a>
                 <a class="opcion-menu" href="#">
@@ -55,14 +83,13 @@
                 <a class="opcion-menu" href="#">
                     <i class="icono icono-grafico"></i>Ranking
                 </a>
-                <a class="opcion-menu" href="visualizar_conceptos.php">
+                <a class="opcion-menu" href="UI-16_VisualizarConceptos.php">
                     <i class="icono icono-configuracion"></i>Configuración
                 </a>
             </nav>
 
-            <!-- Cerrar sesión abajo -->
             <footer class="parte-abajo">
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-01_InicioDeSesion.php">
                     <i class="icono icono-salir"></i>Cerrar sesión
                 </a>
             </footer>
@@ -82,7 +109,21 @@
                             <input type="checkbox" checked>
                             <span class="deslizador"></span>
                         </label>
-                    </div>                    
+                    </div> 
+                        <button class="boton-balance-semanal" id="filtro-semanal">
+                            Balance por rango
+                        </button>
+
+                        <!-- Contenedor de los calendarios -->
+                        <div id="filtro-fechas" style="display: none; margin-top: 10px;">
+                            <label for="fecha-inicio">Fecha de inicio:</label>
+                            <input type="date" id="fecha-inicio">
+
+                            <label for="fecha-fin">Fecha de fin:</label>
+                            <input type="date" id="fecha-fin">
+
+                            <button id="aplicar-fechas" class="boton-crear">Aplicar fechas</button>
+                        </div>                   
                 </div>
             </section>
 

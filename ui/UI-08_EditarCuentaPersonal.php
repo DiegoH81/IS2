@@ -1,34 +1,31 @@
 <?php
 
 // ------------------------------------------------------------
-// UI-22: Editar categoria
-// Caso de uso asociado: CU-10-2 Editar categoría
+// UI-08: Editar Cuenta Personal
+// Caso de uso asociado: FALTAFALTA
 // ------------------------------------------------------------
 
 session_start();
-require_once '../gtr/GTR-09_GestionarCategoria.php';
+require_once '../gtr/GTR-01_GestionarUsuario.php';
+require_once '../gtr/GTR-04_Validar.php';
 
-if (!isset($_GET['idcategoria']))
-{
-    die("No se especificó la categoria");
-}
-$id_categoria = $_GET['idcategoria'];
-
-$categoria = GestionarCategoria::obtenerCategoriaIdBD($id_categoria);
-//var_dump($categoria);
+$usuario = Validar::obtenerUsuarioActual();
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $usuario_val = $_POST['usuario'];
     $nombre_val = $_POST['nombre'];
-    $descripcion_val = $_POST['descripcion'];
+    $contrasena_val = $_POST['password'];
+    $rol_val = $_POST['rol'];
 
     // Llamar a la función del gestor para actualizar
-    GestionarCategoria::actualizarCategoriaBD($id_categoria, $nombre_val, $descripcion_val);
+    GestionarUsuario::actualizarDatosUsuarioBD($usuario_val, $nombre_val, $contrasena_val, $rol_val);
     
-    header("Location: UI-20_VisualizarCategoria.php");
+    header("Location: UI-08_EditarCuentaPersonal.php");
     exit;
     
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -49,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </section>
 
         <section class="seccion-derecha">
-            <h2 class="subtitulo">Configuración</h2>
+            <h2 class="subtitulo">Cuenta</h2>
 
             <div class="info-usuario">
                 <span class="nombre-usuario">
@@ -73,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a class="opcion-menu" href="UI-05_Balance.php">
                     <i class="icono icono-grafico"></i>Balance
                 </a>
-                <a class="opcion-menu" href="UI-07_CuentaPersonal.php">
+                <a class="opcion-menu activa" href="UI-07_CuentaPersonal.php">
                     <i class="icono icono-persona"></i>Cuenta
                 </a>
                 <a class="opcion-menu" href="#">
@@ -82,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a class="opcion-menu" href="#">
                     <i class="icono icono-grafico"></i>Ranking
                 </a>
-                <a class="opcion-menu activa" href="UI-16_VisualizarConceptos.php">
+                <a class="opcion-menu" href="UI-16_VisualizarConceptos.php">
                     <i class="icono icono-configuracion"></i>Configuración
                 </a>
             </nav>
@@ -95,63 +92,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </aside>
 
         <main class="contenedor-medio">
-            <aside class="submenu-configuracion" id="Sub_menuConfig">
-                <nav>
-                    <?php if ($_SESSION['rol'] === 'Administrador familiar'): ?>
-                        <a class="opcion-submenu" href="UI-12_VisualizarUsuarios.php">
-                            <i></i>Usuarios
-                        </a>
-                    <?php endif; ?>
-                    <a class="opcion-submenu" href="UI-16_VisualizarConceptos.php">
-                        <i></i>Conceptos
-                    </a>
-                    <a class="opcion-submenu activa" href="UI-20_VisualizarCategoria.php">
-                        <i></i>Categorías
-                    </a>
-                </nav>
-            </aside>
-
             <section class="contenedor-tablas">
                 <article class="tabla">
                     <header>
-                        <h2 class="titulo-tabla">Editar categoria</h2>
+                        <h2 class="titulo-tabla">Editar cuenta</h2>
                         <div class="linea-separadora"></div>
                         <div class="linea-azul"></div>
                     </header>
 
                     <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
+                    
 
                     <form class="form-crear-concepto" method="POST">
 
-                        <h1 style="text-align: center;">Editar categoría</h1>
+                    <h1 style="text-align: center;">Mi cuenta </h1>
+                        
+
+                        
+                        <div class="campo-formulario">
+                            <label for="usuario">Usuario:</label>
+
+                            <input type="text" id="usuario" name="usuario" value="<?= htmlspecialchars($usuario->usuario) ?>" readonly>
+
+                        </div>
                         
                         <div class="campo-formulario">
                             <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre" value="<?= htmlspecialchars($categoria->nombre) ?>" required>
+                            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" value="<?= htmlspecialchars($usuario->nombre) ?>" required>
                         </div>
 
                         <div class="campo-formulario">
-                            <label for="descripcion">Descripción:</label>
-                            <textarea 
-                                rows="5" 
-                                cols="40" 
-                                name="descripcion" 
-                                id="descripcion" 
-                                placeholder="Ingrese la descripción" 
-                                spellcheck="false"
-                            ><?= htmlspecialchars($categoria->descripcion) ?></textarea>
+                            <label for="rol">Rol:</label>
+                            <select id="rol" name="rol" required>
+                                <option value="">Seleccionar rol</option>
+                                <option value="Administrador familiar">Administrador familiar</option>
+                                <option value="Familiar">Familiar</option>
+                            </select>
+                        </div>
+
+                        <div class="campo-formulario">
+                            <label for="password">Contraseña:</label>
+                            <input type="password" id="password" name="password" placeholder = "Ingrese su contraseña" value="<?= htmlspecialchars($usuario->contrasena) ?>" required>
                         </div>
 
                         <!-- Paso 12 del CU-16: El AC-02 selecciona la opción Crear. -->
                         <div style="text-align:center;">
 
                             <div class="grupo-botones">
-                                <button type="button" class="boton-crear boton-cancelar" onclick="window.location.href='UI-20_VisualizarCategoria.php'">Cancelar</button>
-                                <button type="submit" class="boton-crear">Guardar categoria</button>
+                                <button type="button" class="boton-crear boton-cancelar" onclick="window.location.href='UI-07_CuentaPersonal.php'">Cancelar</button>
+                                <button type="submit" class="boton-crear">Guardar</button>
                             </div>
 
                         </div>
-                       
 
                     </form>
                 </article>
