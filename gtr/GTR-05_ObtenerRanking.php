@@ -7,6 +7,8 @@ require_once 'GTR-07_GestionarTransaccion.php';
 
 class ObtenerRanking {
 
+    /* FUN-59 relacionarDatos
+        Obtiene el ranking de una familia, relacionando diversos datos*/
     public static function relacionarDatos($idFamilia) {
         // Inicializamos el array de resultados
         $resultado = [];
@@ -55,6 +57,8 @@ class ObtenerRanking {
         return $resultado; // Retorna el array de datos relacionados
     }
 
+    /* FUN-60 obtenerIngresos 
+        Obtiene el ranking de una familia, relacionando a los ingresos */
     public static function obtenerIngresos($idFamilia) {
         // Obtener todas las transacciones relacionadas
         $transacciones = self::relacionarDatos($idFamilia);
@@ -67,6 +71,8 @@ class ObtenerRanking {
         return $ingresos; // Retorna solo los ingresos
     }
 
+    /* FUN-60 obtenerEgresos 
+        Obtiene el ranking de una familia, relacionando a los egresos */
     public static function obtenerEgresos($idFamilia) {
         // Obtener todas las transacciones relacionadas
         $transacciones = self::relacionarDatos($idFamilia);
@@ -79,6 +85,8 @@ class ObtenerRanking {
         return $ingresos; // Retorna solo los ingresos
     }
 
+    /* FUN-61 filtrarPorUltimas4Semanas 
+        Filtrar transacciones por las ultimas 4 semanas */
     public static function filtrarPorUltimas4Semanas($transacciones) {
         $fechaLimite = date('Y-m-d', strtotime('-4 weeks'));  // Calcula la fecha de hace 4 semanas
         return array_filter($transacciones, function($transaccion) use ($fechaLimite) {
@@ -86,7 +94,8 @@ class ObtenerRanking {
         });
     }
 
-    // Función para filtrar transacciones de los últimos 6 meses
+    /* FUN-62 filtrarPorUltimos6Meses 
+        Filtrar transacciones por l0s ultimas 6 meses */
     public static function filtrarPorUltimos6Meses($transacciones) {
         $fechaLimite = date('Y-m-d', strtotime('-6 months'));  // Calcula la fecha de hace 6 meses
         return array_filter($transacciones, function($transaccion) use ($fechaLimite) {
@@ -94,7 +103,8 @@ class ObtenerRanking {
         });
     }
 
-    // Función para filtrar transacciones de los últimos 12 meses
+    /* FUN-63 filtrarPorUltimos12Meses 
+        Filtrar transacciones por l0s ultimas 12 meses */
     public static function filtrarPorUltimos12Meses($transacciones) {
         $fechaLimite = date('Y-m-d', strtotime('-12 months'));  // Calcula la fecha de hace 12 meses
         return array_filter($transacciones, function($transaccion) use ($fechaLimite) {

@@ -38,6 +38,8 @@ class ControladorAgenda {
         return $conceptos;
     }
 
+    /* FUN-64 obtenerProyeccionIngresos 
+        Obtiene las proyecciones de ingresos de todo el año de una familia especifica */
     public static function obtenerProyeccionIngresos($idFamilia, $fecha) {
         // Conexión a la base de datos
         $conn = Database::connect();
@@ -53,7 +55,8 @@ class ControladorAgenda {
         return $row['hallar_proyeccion_ingresos'];
     }
 
-    // Función para obtener la proyección de egresos
+    /* FUN-65 obtenerProyeccionEgresos 
+        Obtiene las proyecciones de egresos de todo el año de una familia especifica */
     public static function obtenerProyeccionEgresos($idFamilia, $fecha) {
         // Conexión a la base de datos
         $conn = Database::connect();

@@ -7,6 +7,8 @@ require_once 'GTR-07_GestionarTransaccion.php';
 class GestionarRegistroDiario {
 
 
+    /* FUN-76 relacionarDatos 
+        Relaciona los datos de para poder construir los datos para registro diario */
     public static function relacionarDatos($idFamilia, $fecha_inicio, $fecha_fin) {
         // Inicializamos el array de resultados
         $resultado = [];
@@ -55,11 +57,15 @@ class GestionarRegistroDiario {
         return $resultado; // Retorna el array de datos relacionados
     }
 
+    /* FUN-77 vistaFamiliar 
+        Filtra los datos para obtener los conceptos para la vista familiar */
     public static function vistaFamiliar($idFamilia, $fecha_inicio, $fecha_fin) {
         // Llamar a relacionarDatos sin ningún filtro adicional
         return self::relacionarDatos($idFamilia, $fecha_inicio, $fecha_fin);
     }
 
+    /* FUN-78 vistaUsuario 
+        Filtra los datos para obtener los conceptos para la vista de usuario */
     public static function vistaUsuario($idFamilia, $fecha_inicio, $fecha_fin, $idUsuario) {
         // Obtener todos los datos relacionados
         $datosRelacionados = self::relacionarDatos($idFamilia, $fecha_inicio, $fecha_fin);
