@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar concepto</title>
+    <title>Editar cuenta</title>
     <link rel="stylesheet" href="../css/principal.css">
     <link rel="stylesheet" href="../css/configuracion.css">
     <link rel="stylesheet" href="../css/icons.css">

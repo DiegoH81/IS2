@@ -1,5 +1,3 @@
-<!-- UI inactiva -->
-
 <?php
 
 // ------------------------------------------------------------
@@ -10,17 +8,38 @@
 session_start();
 require_once '../gtr/GTR-01_GestionarUsuario.php';
 require_once '../gtr/GTR-04_Validar.php';
+require_once '../gtr/GTR-05_ObtenerRanking.php';
 
 $usuario = Validar::obtenerUsuarioActual();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deshabilitar']))
-{
-    GestionarUsuario::cambiarEstadoUsuarioBD($usuario->idUsuario, 0);
-    header("Location: UI-01_InicioDeSesion.php");
+// Obtener parámetros de los filtros (por GET)
+$tipo = isset($_GET['tipo']) ? $_GET['tipo'] : 'egresos';
+$periodo = isset($_GET['periodo']) ? $_GET['periodo'] : '4semanas';
+
+// Obtener ranking según el tipo seleccionado
+if ($tipo === 'ingresos') {
+    $ranking = ObtenerRanking::obtenerIngresos($usuario->idFamilia);
+} else {
+    $ranking = ObtenerRanking::obtenerEgresos($usuario->idFamilia);
 }
 
-// Aquí obtendrías los datos del ranking desde la BD
-// $rankingData = GestionarRanking::obtenerRanking($periodo, $tipo);
+// Filtrar según el período seleccionado
+switch($periodo) {
+    case '4semanas':
+        $rankingFiltrado = ObtenerRanking::filtrarPorUltimas4Semanas($ranking);
+        break;
+    case '6meses':
+        $rankingFiltrado = ObtenerRanking::filtrarPorUltimos6Meses($ranking);
+        break;
+    case '12meses':
+        $rankingFiltrado = ObtenerRanking::filtrarPorUltimos12Meses($ranking);
+        break;
+    default:
+        $rankingFiltrado = ObtenerRanking::filtrarPorUltimas4Semanas($ranking);
+}
+
+
+//var_dump($rankingFiltrado)
 ?>
 
 <!DOCTYPE html>
@@ -99,15 +118,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deshabilitar']))
             <div class="controles-ranking">
                 <!-- Botones Egresos/Ingresos -->
                 <div class="grupo-tipo">
-                    <button class="btn-tipo activo" data-tipo="egresos">Egresos</button>
-                    <button class="btn-tipo" data-tipo="ingresos">Ingresos</button>
+                    <button class="btn-tipo <?php echo $tipo === 'egresos' ? 'activo' : ''; ?>" 
+                            data-tipo="egresos">
+                        Egresos
+                    </button>
+                    <button class="btn-tipo <?php echo $tipo === 'ingresos' ? 'activo' : ''; ?>" 
+                            data-tipo="ingresos">
+                        Ingresos
+                    </button>
                 </div>
 
                 <!-- Filtros de período -->
                 <div class="grupo-periodo">
-                    <button class="btn-periodo activo" data-periodo="4semanas">Últimas 4 semanas</button>
-                    <button class="btn-periodo" data-periodo="6meses">Últimos 6 meses</button>
-                    <button class="btn-periodo" data-periodo="12meses">Últimos 12 meses</button>
+                    <button class="btn-periodo <?php echo $periodo === '4semanas' ? 'activo' : ''; ?>" 
+                            data-periodo="4semanas">
+                        Últimas 4 semanas
+                    </button>
+                    <button class="btn-periodo <?php echo $periodo === '6meses' ? 'activo' : ''; ?>" 
+                            data-periodo="6meses">
+                        Últimos 6 meses
+                    </button>
+                    <button class="btn-periodo <?php echo $periodo === '12meses' ? 'activo' : ''; ?>" 
+                            data-periodo="12meses">
+                        Últimos 12 meses
+                    </button>
                 </div>
             </div>
 
@@ -135,60 +169,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deshabilitar']))
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Ejemplo de datos estáticos - reemplazar con foreach de PHP -->
-                        <tr class="fila-ranking">
-                            <td>Universidad</td>
-                            <td>Educación</td>
-                            <td>S/. 1500</td>
-                            <td>Erick Ramirez</td>
-                        </tr>
-                        <tr class="fila-ranking">
-                            <td>Casa</td>
-                            <td>Alquiler</td>
-                            <td>S/. 1250</td>
-                            <td>Erick Ramirez</td>
-                        </tr>
-                        <tr class="fila-ranking">
-                            <td>Insumos</td>
-                            <td>Alimentación</td>
-                            <td>S/. 800</td>
-                            <td>Rosa Ramirez</td>
-                        </tr>
-                        <tr class="fila-ranking">
-                            <td>Cochera</td>
-                            <td>Alquiler</td>
-                            <td>S/. 200</td>
-                            <td>Rosa Ramirez</td>
-                        </tr>
-                        <tr class="fila-ranking">
-                            <td>Internet</td>
-                            <td>Servicios básicos</td>
-                            <td>S/. 100</td>
-                            <td>Manuel Ramirez</td>
-                        </tr>
-                        <tr class="fila-ranking">
-                            <td>Agua</td>
-                            <td>Servicios básicos</td>
-                            <td>S/. 25</td>
-                            <td>Rosa Ramirez</td>
-                        </tr>
-
-                        <!-- Aquí iría el foreach con datos reales:
-                        <?php if (isset($rankingData) && count($rankingData) > 0): ?>
-                            <?php foreach ($rankingData as $item): ?>
+                        <?php if ($rankingFiltrado && count($rankingFiltrado) > 0): ?>
+                            <?php foreach ($rankingFiltrado as $item): ?>
                                 <tr class="fila-ranking">
-                                    <td><?php echo htmlspecialchars($item->concepto); ?></td>
-                                    <td><?php echo htmlspecialchars($item->categoria); ?></td>
-                                    <td>S/. <?php echo number_format($item->costo, 0); ?></td>
-                                    <td><?php echo htmlspecialchars($item->usuario); ?></td>
+                                    <td><?php echo htmlspecialchars($item['concepto']); ?></td>
+                                    <td><?php echo htmlspecialchars($item['categoria']); ?></td>
+                                    <td>S/. <?php echo number_format($item['monto'], 2); ?></td>
+                                    <td><?php echo htmlspecialchars($item['usuario']); ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="4" class="celda-vacia">No hay datos para mostrar</td>
+                                <td colspan="4" class="celda-vacia">
+                                    No hay datos para mostrar en este período
+                                </td>
                             </tr>
                         <?php endif; ?>
-                        -->
                     </tbody>
                 </table>
             </div>
@@ -199,15 +195,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deshabilitar']))
 <!-- JavaScript -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Obtener los parámetros actuales de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const tipoActual = urlParams.get('tipo') || 'egresos';
+        const periodoActual = urlParams.get('periodo') || '4semanas';
+
         // Manejo de botones de tipo (Egresos/Ingresos)
         const btnsTipo = document.querySelectorAll('.btn-tipo');
         btnsTipo.forEach(btn => {
             btn.addEventListener('click', function() {
-                btnsTipo.forEach(b => b.classList.remove('activo'));
-                this.classList.add('activo');
-                const tipo = this.dataset.tipo;
-                console.log('Tipo seleccionado:', tipo);
-                // Aquí harías la petición AJAX o recarga con el nuevo tipo
+                const nuevoTipo = this.dataset.tipo;
+                
+                // Actualizar URL con el nuevo tipo, manteniendo el período
+                window.location.href = `UI-11_VisualizarRanking.php?tipo=${nuevoTipo}&periodo=${periodoActual}`;
             });
         });
 
@@ -215,20 +215,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deshabilitar']))
         const btnsPeriodo = document.querySelectorAll('.btn-periodo');
         btnsPeriodo.forEach(btn => {
             btn.addEventListener('click', function() {
-                btnsPeriodo.forEach(b => b.classList.remove('activo'));
-                this.classList.add('activo');
-                const periodo = this.dataset.periodo;
-                console.log('Período seleccionado:', periodo);
-                // Aquí harías la petición AJAX o recarga con el nuevo período
+                const nuevoPeriodo = this.dataset.periodo;
+                
+                // Actualizar URL con el nuevo período, manteniendo el tipo
+                window.location.href = `UI-11_VisualizarRanking.php?tipo=${tipoActual}&periodo=${nuevoPeriodo}`;
             });
         });
 
-        // Manejo de ordenamiento de columnas
+        // Manejo de ordenamiento de columnas (opcional - para implementar después)
         const columnasOrdenables = document.querySelectorAll('.columna-ordenable');
         columnasOrdenables.forEach(columna => {
             columna.addEventListener('click', function() {
                 console.log('Ordenar por:', this.textContent.trim());
-                // Aquí implementarías la lógica de ordenamiento
+                // Aquí podrías implementar ordenamiento con JavaScript o AJAX
             });
         });
     });

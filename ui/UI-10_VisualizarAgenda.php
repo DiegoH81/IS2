@@ -1,5 +1,3 @@
-<!-- UI inactiva -->
-
 <?php
 
 // ------------------------------------------------------------
@@ -10,12 +8,31 @@
 session_start();
 require_once '../gtr/GTR-01_GestionarUsuario.php';
 require_once '../gtr/GTR-04_Validar.php';
+require_once '../gtr/GTR-06_ControladorDeAgenda.php';
 
+$fecha_hoy = date('Y-m-d');  // Obtiene la fecha de hoy en formato YYYY-MM-DD
 $usuario = Validar::obtenerUsuarioActual();
+$agenda = ControladorAgenda::obtenerConceptosPorFecha($fecha_hoy, $usuario->idFamilia);
 
-//$transaccionesProgramadas = // aquí llamarías a tu función que obtiene las transacciones de la BD
+$start_year = date('Y') . '-01-01';  // Esto dará la fecha en formato "YYYY-01-01", es decir, el 1 de enero del año actual.
+$proyeccion_ingresos = ControladorAgenda::obtenerProyeccionIngresos($usuario->idFamilia, $start_year);
+$proyeccion_egresos = ControladorAgenda::obtenerProyeccionEgresos($usuario->idFamilia, $start_year);
+$balance_esperado = $proyeccion_ingresos - $proyeccion_egresos;
 
-//var_dump($usuario)
+
+
+$filtro = isset($_GET['filtro']) ? $_GET['filtro'] : 'todos';
+// Filtrar la agenda según el filtro seleccionado
+$agendaFiltrada = $agenda;
+if ($filtro === 'ingresos') {
+    $agendaFiltrada = array_filter($agenda, function($item) {
+        return strtolower($item->tipo) === 'ingreso';
+    });
+} elseif ($filtro === 'egresos') {
+    $agendaFiltrada = array_filter($agenda, function($item) {
+        return strtolower($item->tipo) === 'egreso';
+    });
+}
 
 ?>
 
@@ -73,7 +90,7 @@ $usuario = Validar::obtenerUsuarioActual();
                 <a class="opcion-menu" href="UI-07_CuentaPersonal.php">
                     <i class="icono icono-persona"></i>Cuenta
                 </a>
-                <a class="opcion-menu activa" href="UI-10_VisualizarAgenda.php">
+                <a class="opcion-menu activa" href="#">
                     <i class="icono icono-grafico"></i>Agenda
                 </a>
                 <a class="opcion-menu" href="UI-11_VisualizarRanking.php">
@@ -95,15 +112,17 @@ $usuario = Validar::obtenerUsuarioActual();
         <main class="area-trabajo">
             <!-- Barra de búsqueda y filtros -->
             <div class="barra-filtros">
-                <div class="contenedor-busqueda">
-                    <input type="text" class="input-busqueda" placeholder="Buscar">
-                    <i class="icono-busqueda">🔍</i>
-                </div>
                 
                 <div class="filtros-tabs">
-                    <button class="tab-filtro activo">Todos</button>
-                    <button class="tab-filtro">Ingresos</button>
-                    <button class="tab-filtro">Egresos</button>
+                    <a href="?filtro=todos" class="tab-filtro <?php echo $filtro === 'todos' ? 'activo' : ''; ?>" style="text-decoration: none;">
+                        Todos
+                    </a>
+                    <a href="?filtro=ingresos" class="tab-filtro <?php echo $filtro === 'ingresos' ? 'activo' : ''; ?>"style="text-decoration: none;">
+                        Ingresos
+                    </a>
+                    <a href="?filtro=egresos" class="tab-filtro <?php echo $filtro === 'egresos' ? 'activo' : ''; ?>"style="text-decoration: none;">
+                        Egresos
+                    </a>
                 </div>
             </div>
 
@@ -114,52 +133,69 @@ $usuario = Validar::obtenerUsuarioActual();
                 <div class="contenedor-proyeccion">
                     <div class="item-proyeccion">
                         <button class="btn-proyeccion btn-ingresos">Ingresos esperados</button>
-                        <span class="valor-proyeccion">S/2700.00</span>
+                        <span class="valor-proyeccion">
+                            <?php echo 'S/ ' . number_format($proyeccion_ingresos, 2); ?>
+                        </span>
                     </div>
                     
                     <div class="item-proyeccion">
                         <button class="btn-proyeccion btn-egresos">Egresos Esperados</button>
-                        <span class="valor-proyeccion">S/.500</span>
+                        <span class="valor-proyeccion">
+                            <?php echo 'S/ ' . number_format($proyeccion_egresos, 2); ?>
+                        </span>
                     </div>
                 </div>
 
                 <div class="contenedor-balance">
                     <button class="btn-balance">Balance esperado</button>
-                    <span class="valor-balance">S/2200.00</span>
+                    <span class="valor-balance">
+                        <?php echo 'S/ ' . number_format($balance_esperado, 2); ?>
+                    </span>
                 </div>
             </div>
 
             <!-- Lista de transacciones programadas -->
-             <div class="lista-transacciones">
-                <?php if ($transaccionesProgramadas && count($transaccionesProgramadas) > 0): ?>
-                    <?php foreach ($transaccionesProgramadas as $transaccion): ?>
+            <div class="lista-transacciones">
+                <?php if ($agendaFiltrada && count($agendaFiltrada) > 0): ?>
+                    <?php foreach ($agendaFiltrada as $ag): ?>
                         <?php 
-                            // Calcular días restantes
-                            $fechaActual = new DateTime();
-                            $fechaTransaccion = new DateTime($transaccion->fecha);
-                            $diasRestantes = $fechaActual->diff($fechaTransaccion)->days;
+                            // Obtener días restantes
+                            $diasRestantes = (int)$ag->dias_restantes;
                             
                             // Determinar si es urgente (menos de 7 días)
                             $esUrgente = $diasRestantes < 7;
+                            
+                            // Formatear la fecha en español
+                            $fecha = new DateTime($ag->proxima_fecha);
+                            $mesesES = [
+                                'January' => 'enero', 'February' => 'febrero', 'March' => 'marzo',
+                                'April' => 'abril', 'May' => 'mayo', 'June' => 'junio',
+                                'July' => 'julio', 'August' => 'agosto', 'September' => 'septiembre',
+                                'October' => 'octubre', 'November' => 'noviembre', 'December' => 'diciembre'
+                            ];
+                            $fechaFormateada = $fecha->format('d \d\e F');
+                            foreach ($mesesES as $en => $es) {
+                                $fechaFormateada = str_replace($en, $es, $fechaFormateada);
+                            }
                         ?>
                         
                         <div class="item-transaccion <?php echo $esUrgente ? 'urgente' : ''; ?>">
                             <div class="fecha-transaccion">
                                 <i class="icono-calendario">📅</i>
-                                <span class="fecha"><?php echo date('d \d\e F', strtotime($transaccion->fecha)); ?></span>
+                                <span class="fecha"><?php echo $fechaFormateada; ?></span>
                                 <span class="dias-restantes">(<?php echo $diasRestantes; ?> días restantes)</span>
                             </div>
                             
                             <div class="detalle-transaccion">
                                 <span class="icono-tipo">💰</span>
-                                <span class="tipo-transaccion"><?php echo htmlspecialchars($transaccion->tipo); ?></span>
+                                <span class="tipo-transaccion"><?php echo htmlspecialchars($ag->tipo); ?></span>
                                 <span class="separador">-</span>
-                                <span class="categoria"><?php echo htmlspecialchars($transaccion->categoria); ?></span>
+                                <span class="categoria"><?php echo htmlspecialchars($ag->categoria); ?></span>
                                 <span class="separador">-</span>
-                                <span class="concepto"><?php echo htmlspecialchars($transaccion->concepto); ?></span>
+                                <span class="concepto"><?php echo htmlspecialchars($ag->nombre); ?></span>
                             </div>
                             
-                            <span class="monto">S/<?php echo number_format($transaccion->monto, 2); ?></span>
+                            <span class="monto">S/<?php echo number_format($ag->monto, 2); ?></span>
                             
                             <div class="estado-transaccion">
                                 <?php if ($esUrgente): ?>
