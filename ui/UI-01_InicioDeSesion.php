@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <p style="text-align: center;">
                         ¿No tienes cuenta? 
-                        <a href="register.php" style="color: #3862AA; text-decoration: none; font-weight: bold;">
+                        <a href="UI-02_RegistrarUsuario.php" style="color: #3862AA; text-decoration: none; font-weight: bold;">
                             Regístrate
                         </a>
                     </p>

@@ -188,9 +188,6 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                             }
                         }
                         ?>
-                        <tr class="fila-vacia">
-                            <td class="celda" colspan="4">&nbsp;</td>
-                        </tr>
 
                         </tbody>
                         <tfoot>

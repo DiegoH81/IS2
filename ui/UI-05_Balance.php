@@ -212,9 +212,6 @@ $balanceCalculado = $ingresos - $egresos;
                             }
                         }
                         ?>
-                        <tr class="fila-vacia">
-                            <td class="celda" colspan="4">&nbsp;</td>
-                        </tr>
 
                         </tbody>
                         <tfoot>
