@@ -24,6 +24,8 @@ class Transaccion {
     }
 
     
+    /* FUN-52 obtenerTransaccionesRango
+        Obtiene todas las transacciones en un rango especifico */
     public static function obtenerTransaccionesRango($idFamilia, $fecha_inicio, $fecha_fin) {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerTransaccionesRango($1, $2, $3);";
@@ -51,6 +53,8 @@ class Transaccion {
         return $transacciones; // Retorna el array de instancias de Transaccion
     }
 
+    /* FUN-53 obtenerTransaccionesPorFamilia
+        Obtiene todas las transacciones de una familia */
     public static function obtenerTransaccionesPorFamilia($idFamilia) {
         // Conectar a la base de datos
         $conn = Database::connect();
@@ -84,7 +88,8 @@ class Transaccion {
         return $transacciones;
     }
 
-    
+    /* FUN-54 obtenerBalance
+        Obtiene el balance entre un rango de fechas */
     public static function obtenerBalance($idFamilia, $fecha_inicio, $fecha_fin) {
         $conn = Database::connect();
         $query = "SELECT obtenerBalance($1, $2, $3);";  // Añadimos idFamilia como parámetro
@@ -97,6 +102,8 @@ class Transaccion {
         return $row[0]; // Retorna el balance neto calculado (ingresos - egresos)
     }
 
+    /* FUN-55 obtenerIngreso
+        Obtiene los ingresos entre un rango de fechas */
     public static function obtenerIngreso($idFamilia, $fecha_inicio, $fecha_fin) {
         $conn = Database::connect();
         $query = "SELECT obtenerIngreso($1, $2, $3);";  // Llamamos a la función obtenerIngreso en la base de datos
@@ -109,6 +116,8 @@ class Transaccion {
         return $row[0];  // Retorna el total de ingresos
     }
 
+    /* FUN-56 obtenerEgreso
+        Obtiene el egreso entre un rango de fechas */
     public static function obtenerEgreso($idFamilia, $fecha_inicio, $fecha_fin) {
         $conn = Database::connect();
         $query = "SELECT obtenerEgreso($1, $2, $3);";  // Llamamos a la función obtenerEgreso en la base de datos
@@ -121,6 +130,8 @@ class Transaccion {
         return $row[0];  // Retorna el total de egresos
     }
 
+    /* FUN-57 obtenerIngresoPorUsuario
+        Obtiene los ingresos de un usuario especifico en un rango de fechas*/
     public static function obtenerIngresoPorUsuario($idUsuario, $fecha_inicio, $fecha_fin) {
         $conn = Database::connect();
         $query = "SELECT obtenerIngresoPorUsuario($1, $2, $3);";  // Llamamos a la función obtenerIngresoPorUsuario en la base de datos
@@ -133,6 +144,8 @@ class Transaccion {
         return $row[0];  // Retorna el total de ingresos
     }
 
+    /* FUN-58 obtenerEgresoPorUsuario
+        Obtiene los egresos de un usuario especifico en un rango de fechas*/
     public static function obtenerEgresoPorUsuario($idUsuario, $fecha_inicio, $fecha_fin) {
         $conn = Database::connect();
         $query = "SELECT obtenerEgresoPorUsuario($1, $2, $3);";  // Llamamos a la función obtenerEgresoPorUsuario en la base de datos

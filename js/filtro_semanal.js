@@ -1,40 +1,49 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Obtener los elementos del DOM
-    const filtroBoton = document.getElementById('filtro-semanal'); // Botón que muestra el filtro de fechas
-    const contenedorFechas = document.getElementById('filtro-fechas'); // Contenedor de las fechas
-    const fechaInicio = document.getElementById('fecha-inicio'); // Input de fecha de inicio
-    const fechaFin = document.getElementById('fecha-fin'); // Input de fecha de fin
-    const botonAplicar = document.getElementById('aplicar-fechas'); // Botón para aplicar las fechas
-
-    // Setear las fechas por defecto (hoy)
-    const hoy = new Date().toISOString().split('T')[0];  // 'YYYY-MM-DD'
-    fechaInicio.value = hoy;  // Asignar la fecha de hoy al input de fecha inicio
-    fechaFin.value = hoy;  // Asignar la fecha de hoy al input de fecha fin
-
-    // Mostrar el contenedor de fechas al hacer clic en el botón
-    filtroBoton.addEventListener('click', function() {
-        contenedorFechas.style.display = (contenedorFechas.style.display === 'none' || contenedorFechas.style.display === '') ? 'block' : 'none';
-    });
-
-    // Acción cuando el usuario aplica el filtro de fechas
-    botonAplicar.addEventListener('click', function() {
-        const fechaInicioValor = fechaInicio.value;
-        const fechaFinValor = fechaFin.value;
-
-        if (fechaInicioValor && fechaFinValor) {
-            console.log('Rango de fechas:', fechaInicioValor, 'a', fechaFinValor);
-
-            // Redirigir a la misma página con los parámetros de fecha
-            // Tomamos el modo desde el checkbox (personal/familiar)
-            const modo = document.querySelector('.boton-switch input').checked ? 'familiar' : 'personal';
-
-            // Redirigir a la página con los parámetros de fecha
-            window.location.href = `UI-05_Balance.php?modo=${modo}&fecha_inicio=${fechaInicioValor}&fecha_fin=${fechaFinValor}`;
+    const botonFiltro = document.getElementById('filtro-semanal');
+    const contenedorFechas = document.getElementById('filtro-fechas');
+    const botonAplicar = document.getElementById('aplicar-fechas');
+    
+    // Toggle del contenedor de fechas
+    botonFiltro.addEventListener('click', function() {
+        if (contenedorFechas.style.display === 'none') {
+            contenedorFechas.style.display = 'flex';
+            botonFiltro.style.backgroundColor = '#4a7ba7';
         } else {
-            alert('Por favor, selecciona un rango de fechas válido');
+            contenedorFechas.style.display = 'none';
+            botonFiltro.style.backgroundColor = '#3d5a6c';
         }
-
-        // Ocultar el contenedor de las fechas después de aplicar
-        contenedorFechas.style.display = 'none';
+    });
+    
+    // Aplicar fechas
+    botonAplicar.addEventListener('click', function() {
+        const fechaInicio = document.getElementById('fecha-inicio').value;
+        const fechaFin = document.getElementById('fecha-fin').value;
+        
+        if (!fechaInicio || !fechaFin) {
+            alert('Por favor selecciona ambas fechas');
+            return;
+        }
+        
+        if (fechaInicio > fechaFin) {
+            alert('La fecha de inicio no puede ser posterior a la fecha de fin');
+            return;
+        }
+        
+        // Obtener parámetros actuales
+        const urlParams = new URLSearchParams(window.location.search);
+        const modo = urlParams.get('modo') || 'familiar';
+        
+        // Redirigir con las nuevas fechas
+        window.location.href = `UI-05_Balance.php?modo=${modo}&fecha_inicio=${fechaInicio}&fecha_fin=${fechaFin}`;
+    });
+    
+    // Cerrar al hacer clic fuera
+    document.addEventListener('click', function(event) {
+        if (!botonFiltro.contains(event.target) && !contenedorFechas.contains(event.target)) {
+            if (contenedorFechas.style.display === 'flex') {
+                contenedorFechas.style.display = 'none';
+                botonFiltro.style.backgroundColor = '#3d5a6c';
+            }
+        }
     });
 });

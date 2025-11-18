@@ -62,6 +62,7 @@ $balanceCalculado = $ingresos - $egresos;
     <link rel="stylesheet" href="../css/daily_input.css">
      <link rel="stylesheet" href="../css/principal.css">
     <link rel="stylesheet" href="../css/configuracion.css">
+    <link rel="stylesheet" href="../css/calendar.css">
     <!-- CSS de íconos -->
     <link rel="stylesheet" href="../css/icons.css">
 
@@ -128,30 +129,41 @@ $balanceCalculado = $ingresos - $egresos;
 
             <!-- Controles de arriba -->
             <section class="controles-superiores">
-                <!-- Toggle y calendario -->
                 <div class="grupo-controles">
-                    <!-- Switch familiar/personal -->
+                    <!-- Switch familiar/personal - IZQUIERDA -->
                     <div class="contenedor-switch">
-                        <span class="texto-switch">FAMILIAR / PERSONAL</span>
+                        <span class="texto-switch">Personal / Familiar</span>
                         <label class="boton-switch">
                             <input type="checkbox" checked>
                             <span class="deslizador"></span>
                         </label>
-                    </div> 
+                    </div>
+                    
+                    <!-- Contenedor derecho: botón + calendarios -->
+                    <div class="contenedor-filtro-derecha" style="margin-left: auto;">
                         <button class="boton-balance-semanal" id="filtro-semanal">
                             Balance por rango
                         </button>
-
-                        <!-- Contenedor de los calendarios -->
-                        <div id="filtro-fechas" style="display: none; margin-top: 10px;">
-                            <label for="fecha-inicio">Fecha de inicio:</label>
-                            <input type="date" id="fecha-inicio">
-
-                            <label for="fecha-fin">Fecha de fin:</label>
-                            <input type="date" id="fecha-fin">
-
-                            <button id="aplicar-fechas" class="boton-crear">Aplicar fechas</button>
-                        </div>                   
+                        
+                        <!-- Contenedor de los calendarios - APARECE AL LADO -->
+                        <div id="filtro-fechas" style="display: none;">
+                            <div class="grupo-fecha">
+                                <label for="fecha-inicio">Desde:</label>
+                                <input type="date" id="fecha-inicio" value="<?php echo $fecha_inicio; ?>">
+                            </div>
+                            
+                            <span class="separador-vertical"></span>
+                            
+                            <div class="grupo-fecha">
+                                <label for="fecha-fin">Hasta:</label>
+                                <input type="date" id="fecha-fin" value="<?php echo $fecha_fin; ?>">
+                            </div>
+                            
+                            <button id="aplicar-fechas" style="background-color: #4A7BA7;">
+                                Aplicar fechas
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </section>
 
