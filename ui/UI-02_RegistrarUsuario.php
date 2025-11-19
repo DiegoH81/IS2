@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../gtr/GTR-04_Validar.php';
+require_once '../gtr/GTR-10_GestionarFamilia.php';
 
 $error = '';
 
@@ -9,19 +10,44 @@ $error = '';
 // Caso de uso asociado: FALTA
 // ------------------------------------------------------------
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST')
+    {
     $usuario = trim($_POST['usuario']);
     $nombre = trim($_POST['nombre']);
-    $contrasena = trim($_POST['password']);
-    $confirmar = trim($_POST['confirm_password']);
-    $familiaPassword = trim($_POST['family_password']);
+    $password = trim($_POST['password']);
+    $confirm_password = trim($_POST['confirm_password']);
+    $family_password = trim($_POST['family_password']);
+    
+    $usuarioExistente = Validar::solicitarValidacionUsuario("ana_rod");
+    $familiaId = GestionarFamilia::obtenerFamiliaPorCodigoBD($family_password);
+    
+    
+    // Verificar si las contraseñas coinciden
+    if ($password !== $confirm_password) {
+        $error = 'Las contraseñas no coinciden';
+    }
+    else if ($usuarioExistente === 't')
+    {
+        $error = "El nombre de usuario ya está registrado.";
+    }
+    else if ($familiaId === -1)
+    {
+        $error = "Contraseña familiar incorrecta.";
+    }
+    else {
+        // Realizar validación de datos antes de registrar (ej. verificar si el usuario ya existe)
+        // Aquí puedes agregar tu lógica de validación adicional (ej. verificar si el usuario ya está registrado)
 
-    // Validar que las contraseñas coincidan
-    if ($contrasena !== $confirmar) {
-        $error = "Las contraseñas no coinciden";
-    } else {
-        // Aquí iría la lógica de registro
-        // Por ejemplo: Validar::registrarUsuario($usuario, $nombre, $contrasena, $familiaPassword);
+        // Si no hay errores, realizar el registro (esto es solo un ejemplo)
+        // Puedes agregar tu función para guardar en la base de datos, por ejemplo:
+        // Registrar el usuario y la contraseña
+
+        // Llamar a la función para registrar el usuario (asumiendo que existe una función registrarUsuario)
+        GestionarUsuario::crearUsuarioBD($usuario, $nombre, $password, "Familiar", $familiaId);
+        
+        header("Location: UI-01_InicioDeSesion.php");
+        exit();
     }
 }
 ?>
@@ -132,18 +158,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             eyeSlashIcon.style.display = 'none'; // Oculta el icono de ojo tachado
         }
     }
-
-    // Validación de contraseñas en el frontend
-    document.querySelector('.form-crear-concepto').addEventListener('submit', function(e) {
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirm_password').value;
-        
-        if (password !== confirmPassword) {
-            e.preventDefault();
-            alert('Las contraseñas no coinciden');
-            return false;
-        }
-    });
 </script>
 
 </body>

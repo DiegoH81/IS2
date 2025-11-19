@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../gtr/GTR-04_Validar.php';
+require_once '../gtr/GTR-10_GestionarFamilia.php';
 
 $error = '';
 
@@ -10,18 +11,27 @@ $error = '';
 // ------------------------------------------------------------
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $usuario = trim($_POST['usuario']);
-    $nombre = trim($_POST['nombre']);
-    $contrasena = trim($_POST['password']);
-    $confirmar = trim($_POST['confirm_password']);
-    $familiaPassword = trim($_POST['family_password']);
+    // Obtener los datos del formulario
+    $apellido = trim($_POST['apellido']);
+    $family_password = trim($_POST['family_password']);
 
-    // Validar que las contraseñas coincidan
-    if ($contrasena !== $confirmar) {
-        $error = "Las contraseñas no coinciden";
-    } else {
-        // Aquí iría la lógica de registro
-        // Por ejemplo: Validar::registrarUsuario($usuario, $nombre, $contrasena, $familiaPassword);
+
+    $result = GestionarFamilia::existeContrasenaFamiliarBD($family_password);
+
+    //$result = GestionarFamilia::existeContrasenaFamiliarBD("Rodriguez");
+
+    // Verificar si la contraseña ya existe en la base de datos
+    if ($result === 't') {
+        $error = "La contraseña familiar ya está en uso. Por favor, genere una nueva.";
+        
+    }
+    else
+    {
+        // Si no existe la contraseña, registrar la familia
+        GestionarFamilia::crearFamiliaBD($apellido, $family_password);
+        // Redirigir a otra página después de registrar
+        header("Location: UI-02_RegistrarUsuario.php");
+        exit();
     }
 }
 ?>
@@ -51,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="contenedor-form">
         <section class="contenedor-tablas-reg">
             <article class="tabla">
-                <form class="form-crear-concepto" action="" method="POST">
+                <form id="formRegistrarFamilia" class="form-crear-concepto" action="" method="POST">
                     <h2>Registrar Familia</h2>
 
                     <?php if ($error !== ''): ?>

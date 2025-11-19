@@ -51,6 +51,8 @@ if ($filtro === 'ingresos') {
     <link rel="stylesheet" href="../css/agenda.css">
     <!-- CSS de íconos -->
     <link rel="stylesheet" href="../css/icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 
 </head>
 <body>
@@ -181,13 +183,13 @@ if ($filtro === 'ingresos') {
                         
                         <div class="item-transaccion <?php echo $esUrgente ? 'urgente' : ''; ?>">
                             <div class="fecha-transaccion">
-                                <i class="icono-calendario">📅</i>
+                                <i class="icono-calendario"><i class="fa-solid fa-calendar"></i></i>
                                 <span class="fecha"><?php echo $fechaFormateada; ?></span>
                                 <span class="dias-restantes">(<?php echo $diasRestantes; ?> días restantes)</span>
                             </div>
                             
                             <div class="detalle-transaccion">
-                                <span class="icono-tipo">💰</span>
+                                <span class="icono-tipo"><i class="fa-solid fa-sack-dollar"></i></span>
                                 <span class="tipo-transaccion"><?php echo htmlspecialchars($ag->tipo); ?></span>
                                 <span class="separador">-</span>
                                 <span class="categoria"><?php echo htmlspecialchars($ag->categoria); ?></span>
@@ -199,10 +201,10 @@ if ($filtro === 'ingresos') {
                             
                             <div class="estado-transaccion">
                                 <?php if ($esUrgente): ?>
-                                    <i class="icono-alerta">⚠️</i>
+                                    <i class="icono-alerta"><i class="fa-solid fa-triangle-exclamation"></i></i>
                                     <span class="texto-estado">Menos de 7 días</span>
                                 <?php else: ?>
-                                    <i class="icono-reloj">🕐</i>
+                                    <i class="icono-reloj"><i class="fa-regular fa-clock"></i></i>
                                     <span class="texto-estado">Próximo</span>
                                 <?php endif; ?>
                             </div>
