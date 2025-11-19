@@ -1,7 +1,7 @@
 <?php
 
 // ------------------------------------------------------------
-// UI-22: Editar categoria
+// UI-14: Editar usuario
 // Caso de uso asociado: CU-08-2 Editar usuario
 // ------------------------------------------------------------
 
@@ -14,6 +14,7 @@ if (!isset($_GET['usuario']))
 }
 $usuario_v = $_GET['usuario'];
 
+//<!-- Paso 1 del CU-08-2: El GTR-01 obtiene el usuario seleccionado -->
 $usuario = GestionarUsuario::obtenerUsuarioBD($usuario_v);
 //var_dump($usuario);
 

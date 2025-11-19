@@ -2,13 +2,14 @@
 
 // ------------------------------------------------------------
 // UI-07: Cuenta Personal
-// Caso de uso asociado: FALTAFALTA
+// Caso de uso asociado: CU-05 Gestionar cuenta
 // ------------------------------------------------------------
 
 session_start();
 require_once '../gtr/GTR-01_GestionarUsuario.php';
 require_once '../gtr/GTR-04_Validar.php';
 
+//<!-- Paso 1 del CU-05: El GTR-04 obtiene el usuario actual -->
 $usuario = Validar::obtenerUsuarioActual();
 
 
@@ -20,6 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deshabilitar']))
 }
 ?>
 
+
+<!-- Paso 2-6 del CU-05: Carga el formulario, presentando los campos de usuario, contraseña, nombre,
+                         y presenta la posiblidad de cambiar la visibilidad de las contraseñas-->
+<!-- Paso 7 del CU-05: La UI-07 Muestra los datos obtenidos -->
 <!DOCTYPE html>
 <html lang="es">
 <head>

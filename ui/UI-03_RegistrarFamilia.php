@@ -7,7 +7,7 @@ $error = '';
 
 // ------------------------------------------------------------
 // UI-03: Registrar familia
-// Caso de uso asociado: FALTA
+// Caso de uso asociado: CU-02 Registrarse en la aplicación flujo alterno
 // ------------------------------------------------------------
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -15,10 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $apellido = trim($_POST['apellido']);
     $family_password = trim($_POST['family_password']);
 
-
+    //<!-- Paso 6 del CU-02-Alterno: Se inicia el proceso de validacion de datos de familia -->
+    //<!-- Paso 7 del CU-02-Alterno: El GTR-10 Gestionar Familia verifica la contraseña familiar -->
     $result = GestionarFamilia::existeContrasenaFamiliarBD($family_password);
-
-    //$result = GestionarFamilia::existeContrasenaFamiliarBD("Rodriguez");
 
     // Verificar si la contraseña ya existe en la base de datos
     if ($result === 't') {
@@ -27,9 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     else
     {
-        // Si no existe la contraseña, registrar la familia
+        //<!-- Paso 8 del CU-02-Alterno: El GTR-10 Gestionar Familia crea una familia -->
         GestionarFamilia::crearFamiliaBD($apellido, $family_password);
-        // Redirigir a otra página después de registrar
+        
+        //<!-- Paso 9 del CU-02-Alterno: Se Redirige a la UI-02 Registrar Usuario -->
         header("Location: UI-02_RegistrarUsuario.php");
         exit();
     }
@@ -67,12 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php if ($error !== ''): ?>
                         <p class="mensaje-error"><?= htmlspecialchars($error) ?></p>
                     <?php endif; ?>
-
+                    
+                    <!-- Paso 2 del CU-02-Alterno: El AC-02 Familiar ingresa el apellido familiar -->
                     <div class="campo-formulario">
                         <label for="apellido">Apellido de la familia</label>
                         <input type="text" id="apellido" name="apellido" placeholder="Ingrese apellido familiar" required>
                     </div>
                     
+                    <!-- Paso 3 del CU-02-Alterno: El AC-02 Familiar selecciona el botón generar contraseña -->
                     <div class="campo-formulario">
                         <label for="family_password">Contraseña Familiar</label>
                         <div style="display: flex; align-items: center;">
@@ -81,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
 
+                    <!-- Paso 5 del CU-02-Alterno: El AC-02 Familiar selecciona Registrar -->
                     <div class="botones-formulario">
                         <a href="UI-02_RegistrarUsuario.php" class="boton-cancelar">Cancelar</a>
                         <button type="submit" class="boton-registrar">Registrar</button>
@@ -91,6 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
+<!-- Paso 4 del CU-02-Alterno: La UI-03 Genera una contraseña familiar -->
 <script>
     function generarContrasena() {
         const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

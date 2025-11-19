@@ -4,7 +4,7 @@
 
 // ------------------------------------------------------------
 // UI-05: Balance
-// Caso de uso asociado: FALTAFALTA
+// Caso de uso asociado: CU-04 Visualizar balance
 // ------------------------------------------------------------
 
 session_start();
@@ -32,7 +32,10 @@ $modo = isset($_GET['modo']) ? $_GET['modo'] : 'familiar';  // Valor predetermin
 //var_dump($fecha_hoy);
 //var_dump($usuario->idFamilia);
 
-// Llamar a la función relacionarDatos con las fechas de hoy
+//<!-- Paso 4-8 del CU-04: Se relacionan los datos para la transaccion -->
+//<!-- Paso 9-10 del CU-04: El GTR-03 Solicita al GTR-10 y GTR-01 filtrar las vistas segun usuario o familiar -->
+//<!-- Paso 12 del CU-04: El GTR-07 solicita las transacciones del periodo filtrado -->
+//<!-- Paso 13 del CU-04: El GTR-07 calcula los totales basados en los conceptos obtenidos en el periodo filtrado -->
 if ($modo == 'familiar') {
     $datosRelacionados = GestionarBalance::vistaFamiliar($usuario->idFamilia, $fecha_inicio, $fecha_fin);
     $ingresos = GestionarTransaccion::obtenerIngresoBD($usuario->idFamilia, $fecha_inicio, $fecha_fin);
@@ -50,6 +53,7 @@ $balanceCalculado = $ingresos - $egresos;
 //var_dump($balanceCalculado);
 ?>
 
+<!-- Paso 11 del CU-04: La UI-05 muestra los campos pertinentes -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -130,7 +134,8 @@ $balanceCalculado = $ingresos - $egresos;
             <!-- Controles de arriba -->
             <section class="controles-superiores">
                 <div class="grupo-controles">
-                    <!-- Switch familiar/personal - IZQUIERDA -->
+
+                    <!-- Paso 1 del CU-04: La UI-05 se carga y presenta el switch -->
                     <div class="contenedor-switch">
                         <span class="texto-switch">Personal / Familiar</span>
                         <label class="boton-switch">
@@ -145,7 +150,7 @@ $balanceCalculado = $ingresos - $egresos;
                             Balance por rango
                         </button>
                         
-                        <!-- Contenedor de los calendarios - APARECE AL LADO -->
+                        <!-- Paso 12 del CU-04: El GTR-07 solicita las transacciones del periodo filtrado -->
                         <div id="filtro-fechas" style="display: none;">
                             <div class="grupo-fecha">
                                 <label for="fecha-inicio">Desde:</label>
@@ -169,6 +174,8 @@ $balanceCalculado = $ingresos - $egresos;
 
             <!-- Las dos tablas -->
             <!-- Las dos tablas -->
+
+            <!-- Paso 2 del CU-04: La UI-05 muestra las secciones de ingresos y egresos -->
             <section class="contenedor-tablas">
 
                 <!-- Tabla Ingresos -->
@@ -193,6 +200,7 @@ $balanceCalculado = $ingresos - $egresos;
 
                         <?php
                         // Filtrar ingresos
+                        // <!-- Paso 3 del CU-04: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
                         foreach ($datosRelacionados as $dato) {
                             if ($dato['tipo'] === 'Ingreso') {
 
@@ -222,7 +230,7 @@ $balanceCalculado = $ingresos - $egresos;
                         </tfoot>
                     </table>
 
-                    <!-- Boton mas -->
+                    <!-- Paso 3 del CU-04: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
                      <form action="UI-17_CrearConcepto.php" method="GET">
                         <button type="submit" class="boton-mas">+</button>
                     </form>
@@ -249,6 +257,7 @@ $balanceCalculado = $ingresos - $egresos;
                         <tbody>
                         <?php
                         // Filtrar egresos
+                        //<!-- Paso 3 del CU-04: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
                         foreach ($datosRelacionados as $dato) {
                             if ($dato['tipo'] === 'Egreso') {
                                 $puedeEditar = ($dato['usuario_id'] == $usuario->idUsuario);
@@ -276,7 +285,7 @@ $balanceCalculado = $ingresos - $egresos;
                         </tfoot>
                     </table>
 
-                    <!-- Boton mas -->
+                    <!-- Paso 3 del CU-04: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
                     <form action="UI-17_CrearConcepto.php" method="GET">
                         <button type="submit" class="boton-mas">+</button>
                     </form>
@@ -286,14 +295,11 @@ $balanceCalculado = $ingresos - $egresos;
             <!-- Parte de abajo -->
             <footer class="seccion-inferior">
 
-                <!-- Verificar si es domingo y mostrar la caja de Corte Semanal -->
-                
-                <!-- Mostrar artículo vacío si no es domingo -->
                 <article>
-                    <!-- No contenido aquí, solo un artículo vacío -->
                 </article>
 
-                <!-- Caja de resumen -->
+                
+                //<!-- Paso 14 del CU-04: La UI-05 presenta los totales de ingresos, egresos y balances -->
                 <aside class="caja-resumen">
                     <h4 class="titulo-resumen">Resumen del Balance</h4>
                     <div class="linea-resumen">

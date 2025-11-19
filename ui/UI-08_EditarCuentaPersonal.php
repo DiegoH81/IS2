@@ -2,25 +2,28 @@
 
 // ------------------------------------------------------------
 // UI-08: Editar Cuenta Personal
-// Caso de uso asociado: FALTAFALTA
+// Caso de uso asociado: CU-05-1 Editar datos de la cuenta
 // ------------------------------------------------------------
 
 session_start();
 require_once '../gtr/GTR-01_GestionarUsuario.php';
 require_once '../gtr/GTR-04_Validar.php';
 
+//<!-- Paso 1 del CU-05-1: Se obtiene el usuario actual -->
 $usuario = Validar::obtenerUsuarioActual();
 
-
+//<!-- Paso 7 del CU-05-1: Se obtienen los datos pertinentes -->
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario_val = $_POST['usuario'];
     $nombre_val = $_POST['nombre'];
     $contrasena_val = $_POST['password'];
     $rol_val = $_POST['rol'];
 
+    //<!-- Paso 8 del CU-05-1: Se actualiza con los datos modificados -->
     // Llamar a la función del gestor para actualizar
     GestionarUsuario::actualizarDatosUsuarioBD($usuario_val, $nombre_val, $contrasena_val, $rol_val);
     
+    //<!-- Paso 9 del CU-05-1: Se actualiza con los datos modificados -->
     header("Location: UI-08_EditarCuentaPersonal.php");
     exit;
     
@@ -28,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
+<!-- Paso 2 del CU-05-1: La UI-08 se carga y presenta los campos nombre, usuario y contraseña -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -60,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
 
     <div class="contenedor-medio">
-        <!-- Paso 4 del CU-17: La interfaz muestra la opción de Crear categoría. -->
+        
         <!-- Menú lateral -->
         <aside class="menu-lateral" id="menuLateral">
             <nav>
@@ -109,9 +113,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         
 
                         
+                    <!-- Paso 3-4 del CU-05-1: La UI-08 presenta los datos pertinentes  -->
                         <div class="campo-formulario">
                             <label for="usuario">Usuario:</label>
-
                             <input type="text" id="usuario" name="usuario" value="<?= htmlspecialchars($usuario->usuario) ?>" readonly>
 
                         </div>
@@ -135,9 +139,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="password" id="password" name="password" placeholder = "Ingrese su contraseña" value="<?= htmlspecialchars($usuario->contrasena) ?>" required>
                         </div>
 
-                        <!-- Paso 12 del CU-16: El AC-02 selecciona la opción Crear. -->
+                        
                         <div style="text-align:center;">
-
+                            <!-- Paso 6 del CU-05-1: Se selecciona la opcion de no guardar -->
                             <div class="grupo-botones">
                                 <button type="button" class="boton-crear boton-cancelar" onclick="window.location.href='UI-07_CuentaPersonal.php'">Cancelar</button>
                                 <button type="submit" class="boton-crear">Guardar</button>

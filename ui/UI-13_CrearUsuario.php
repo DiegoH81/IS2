@@ -17,11 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $rol_val    = $_POST['rol'];
     $password_val = $_POST['password'];
     
+    //<!-- Paso 10 del CU-08-1: El GTR-01 verificara la disponibilidad del usuario -->
     $repetido = Validar::solicitarValidacionUsuario($usuario_val);
 
     if ($repetido) {
         $error = "Usuario existente.";
     } else {
+        //<!-- Paso 11 del CU-08-1: Se obtiene la ID de la familia actual -->
+        //<!-- Paso 12-14 del CU-08-1: Se crea al nuevo usuario, mostrando un mensaje de exito y redirigiendo a la UI-12 -->
         GestionarUsuario::crearUsuarioBD($usuario_val, $nombre_val, $password_val, $rol_val, $_SESSION['familia_id']);
         $_SESSION['mensaje_exito'] = "Usuario creado correctamente.";
         header("Location: UI-12_VisualizarUsuarios.php");
@@ -29,6 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
+<!-- Paso 1 del CU-08-1: La UI-13 se carga y presenta los campos
+                         Usuario, Nombre, Rol, Contraseña -->
+
+<!-- Paso 7-9 del CU-08-1: La UI-13 Validara los datos -->
 
 <!DOCTYPE html>
 <html lang="es">
@@ -120,9 +128,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <form class="form-crear-concepto" method="POST">
 
                     <h1 style="text-align: center;">Crear usuario</h1>
-                        
 
-                        
+                        <!-- Paso 2-5 del CU-08-1: El usuario ingresara los datos necesarios -->
+
                         <div class="campo-formulario">
                             <label for="usuario">Usuario:</label>
                             <input type="text" id="usuario" name="usuario" placeholder="Ingrese usuario" required>
@@ -147,9 +155,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         
 
-                        <!-- Paso 12 del CU-16: El AC-02 selecciona la opción Crear. -->
+                        <!-- Paso 6 del CU-08-1: El administrador confirma la contraseña en el campo ConfirmarContraseña -->
                         <div style="text-align:center;">
-
                             <div class="grupo-botones">
                                 <button type="button" class="boton-crear boton-cancelar" onclick="window.location.href='UI-12_VisualizarUsuarios.php'">Cancelar</button>
                                 <button type="submit" class="boton-crear">Crear</button>

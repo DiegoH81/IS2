@@ -7,7 +7,7 @@ $error = '';
 
 // ------------------------------------------------------------
 // UI-02: Registro de usuario
-// Caso de uso asociado: FALTA
+// Caso de uso asociado: CU-02 Registrarse en la aplicación
 // ------------------------------------------------------------
 
 
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
     $familiaId = GestionarFamilia::obtenerFamiliaPorCodigoBD($family_password);
     
     
-    // Verificar si las contraseñas coinciden
+    //<!-- Paso 9-12 del CU-02: Se empiezan a hacer los procesos de validacion necesarios -->
     if ($password !== $confirm_password) {
         $error = 'Las contraseñas no coinciden';
     }
@@ -35,23 +35,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
     {
         $error = "Contraseña familiar incorrecta.";
     }
-    else {
-        // Realizar validación de datos antes de registrar (ej. verificar si el usuario ya existe)
-        // Aquí puedes agregar tu lógica de validación adicional (ej. verificar si el usuario ya está registrado)
-
-        // Si no hay errores, realizar el registro (esto es solo un ejemplo)
-        // Puedes agregar tu función para guardar en la base de datos, por ejemplo:
-        // Registrar el usuario y la contraseña
-
-        // Llamar a la función para registrar el usuario (asumiendo que existe una función registrarUsuario)
+    else
+    {
+        //<!-- Paso 13 del CU-02: El GTR-01 crea un usuario nuevo en la BD -->
         GestionarUsuario::crearUsuarioBD($usuario, $nombre, $password, "Familiar", $familiaId);
-        
+
+        //<!-- Paso 14 del CU-02: La UI-02 redirige al AC-02 Familiar a la UI-01 -->
         header("Location: UI-01_InicioDeSesion.php");
         exit();
     }
 }
 ?>
 
+<!-- Paso 1 del CU-02: Cargar interfaces -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -85,7 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
                     <?php if ($error !== ''): ?>
                         <p class="mensaje-error"><?= htmlspecialchars($error) ?></p>
                     <?php endif; ?>
-
+                    
+                    <!-- Paso 3-6 del CU-02: Ingresar usuario, nobmre, contraseña y contraseña familiar -->
                     <div class="campo-formulario">
                         <label for="usuario">Usuario</label>
                         <input type="text" id="usuario" name="usuario" placeholder="Ingrese nombre de usuario" required>
@@ -129,8 +126,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
                         </div>
                     </div>
 
+                    <!-- Paso 2 del CU-02: La interfaz presenta la opcion de Registrar y Registrar Familia -->
                     <div class="botones-formulario" style="display: flex; align-items: center; justify-content: center; gap: 12px;">
                         <a href="UI-01_InicioDeSesion.php" class="boton-cancelar">Cancelar</a>
+                        <!-- Paso 7 del CU-02: El AC-02 selecciona la opcion de registrar -->
                         <button type="submit" class="boton-registrar" style = "height: 45px">Registrar</button>
                         <a href="UI-03_RegistrarFamilia.php" class="boton-registrar-familia">Registrar Familia</a>
                     </div>

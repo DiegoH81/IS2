@@ -2,7 +2,7 @@
 
 // ------------------------------------------------------------
 // UI-11: Visualizar Ranking
-// Caso de uso asociado: FALTAFALTA
+// Caso de uso asociado: CU-07 Visualizar Ranking
 // ------------------------------------------------------------
 
 session_start();
@@ -16,7 +16,8 @@ $usuario = Validar::obtenerUsuarioActual();
 $tipo = isset($_GET['tipo']) ? $_GET['tipo'] : 'egresos';
 $periodo = isset($_GET['periodo']) ? $_GET['periodo'] : '4semanas';
 
-// Obtener ranking según el tipo seleccionado
+//<!-- Paso 1-8 del CU-07: El GTR-05 Relaciona los datos necesarios para poder construir el ranking,
+//                         calculando montos, ordenandolos de mayor a menor  -->
 if ($tipo === 'ingresos') {
     $ranking = ObtenerRanking::obtenerIngresos($usuario->idFamilia);
 } else {
@@ -42,6 +43,8 @@ switch($periodo) {
 //var_dump($rankingFiltrado)
 ?>
 
+<!-- Paso 9 del CU-07: La UI-11 Se carga y presenta las opciones de filtro por tipo (egresos e ingresos) -->
+<!-- Paso 11 del CU-07: La UI-11 Muestra los conceptos ordenados -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -128,7 +131,7 @@ switch($periodo) {
                     </button>
                 </div>
 
-                <!-- Filtros de período -->
+                <!-- Paso 10 del CU-07: La UI-11 Muestra las opciones 4 semanas, 6 meses y 12 meses -->
                 <div class="grupo-periodo">
                     <button class="btn-periodo <?php echo $periodo === '4semanas' ? 'activo' : ''; ?>" 
                             data-periodo="4semanas">

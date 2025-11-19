@@ -2,7 +2,7 @@
 
 // ------------------------------------------------------------
 // UI-10: Visualizar Agenda
-// Caso de uso asociado: FALTAFALTA
+// Caso de uso asociado: CU-06 Visualizar agenda
 // ------------------------------------------------------------
 
 session_start();
@@ -10,10 +10,16 @@ require_once '../gtr/GTR-01_GestionarUsuario.php';
 require_once '../gtr/GTR-04_Validar.php';
 require_once '../gtr/GTR-06_ControladorDeAgenda.php';
 
+
+//<!-- Paso 1-5 del CU-06: El GTR-06 obtiene los datos para mostrar de la agenda,
+//                         relacionando los datos relacionados -->
+
+
 $fecha_hoy = date('Y-m-d');  // Obtiene la fecha de hoy en formato YYYY-MM-DD
 $usuario = Validar::obtenerUsuarioActual();
 $agenda = ControladorAgenda::obtenerConceptosPorFecha($fecha_hoy, $usuario->idFamilia);
 
+//<!-- Paso 6-7 del CU-06: El GTR-06 obtiene la proyeccion esperada y los ordena -->
 $start_year = date('Y') . '-01-01';  // Esto dará la fecha en formato "YYYY-01-01", es decir, el 1 de enero del año actual.
 $proyeccion_ingresos = ControladorAgenda::obtenerProyeccionIngresos($usuario->idFamilia, $start_year);
 $proyeccion_egresos = ControladorAgenda::obtenerProyeccionEgresos($usuario->idFamilia, $start_year);
@@ -114,7 +120,7 @@ if ($filtro === 'ingresos') {
         <main class="area-trabajo">
             <!-- Barra de búsqueda y filtros -->
             <div class="barra-filtros">
-                
+                <!-- Paso 8 del CU-06: La UI-10 muestra las opciones de filtro como (todos, ingresos y egresos) -->
                 <div class="filtros-tabs">
                     <a href="?filtro=todos" class="tab-filtro <?php echo $filtro === 'todos' ? 'activo' : ''; ?>" style="text-decoration: none;">
                         Todos
@@ -128,10 +134,12 @@ if ($filtro === 'ingresos') {
                 </div>
             </div>
 
-            <!-- Proyección esperada -->
+            <!-- Paso 11 del CU-06: La UI-10 Presenta la proyeccion calculada del resto del año -->
             <div class="seccion-proyeccion">
                 <h3 class="titulo-seccion">Proyección esperada - resto del año</h3>
                 
+
+                <!-- Paso 9 del CU-06: La UI-10 presenta el balance esperado, asi como ingresos y egresos esperados-->
                 <div class="contenedor-proyeccion">
                     <div class="item-proyeccion">
                         <button class="btn-proyeccion btn-ingresos">Ingresos esperados</button>
@@ -156,7 +164,8 @@ if ($filtro === 'ingresos') {
                 </div>
             </div>
 
-            <!-- Lista de transacciones programadas -->
+            <!-- Paso 10 del CU-06: La UI-10 muestra los proximos pagos con fecha, dias restantes, tipo, concepto,
+                                    categoria y estado de proximidad -->
             <div class="lista-transacciones">
                 <?php if ($agendaFiltrada && count($agendaFiltrada) > 0): ?>
                     <?php foreach ($agendaFiltrada as $ag): ?>

@@ -1,6 +1,7 @@
 <?php
 /* FUN-48 filtrarUsuariosPorBusqueda
         Permite filtrar usuarios por la barra de búsqueda*/
+
 function filtrarUsuariosPorBusqueda($familiaId, $cadena, &$usuarios) {
     $usuarios = GestionarUsuario::obtenerUsuariosBD($familiaId);
 
@@ -54,6 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_usuario'], $_POST[
 $usuarios = null;
 $familiaId = $_SESSION['familia_id'];
 
+//<!-- Paso 1 del CU-08: La UI-12 obtiene los usuarios -->
 if ($cadena !== '') {
     /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos filtrados 
         a mostrar segun la cadena ingresada en el buscador */
@@ -67,6 +69,7 @@ if ($cadena !== '') {
 }
 ?>
 
+<!-- Paso 2 del CU-08: La UI-12 se carga y presenta el campo de búsqueda -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -157,7 +160,6 @@ if ($cadena !== '') {
 
             <section class="contenedor-tablas">
                 <article class="tabla">
-                    <!-- Paso 8 del CU-15: Mostrar opción de Crear concepto. -->
                     <header>
                         <div class="encabezado-tabla-superior">
                             <form method="GET" action="UI-12_VisualizarUsuarios.php" class="form-busqueda">
@@ -179,6 +181,7 @@ if ($cadena !== '') {
 
                             </form>
 
+                            <!-- Paso 3 del CU-08: La UI-12 muestra la opcion de crear usuario -->
                             <a href="UI-13_CrearUsuario.php" class="boton-crear">Crear usuario</a>
                         </div>
                         <h2 class="titulo-tabla">Configuración usuarios</h2>
@@ -186,6 +189,7 @@ if ($cadena !== '') {
                         <div class="linea-azul"></div>
                     </header>
 
+                    <!-- Paso 4 del CU-08: Presenta la lista de usuario con opciones (Habilitado/Deshabilitado) -->
                     <table class="tabla-datos">
                         <thead>
                             <tr>
@@ -225,11 +229,6 @@ if ($cadena !== '') {
                                             <?= $estadoTexto ?>
                                         </button>
                                     </td>
-
-
-
-                                    <!-- Paso 9 del CU-15: Mostrar opciones de gestión según el rol. -->
-                                    <!-- Paso 9.1/9.2: Si es familiar, solo puede editar los suyos. -->
 
                                     <td class="celda">
                                         <form action="UI-14_EditarUsuario.php" method="GET">

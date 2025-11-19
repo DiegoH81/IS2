@@ -4,7 +4,7 @@
 
 // ------------------------------------------------------------
 // UI-04: Registro Diario
-// Caso de uso asociado: FALTAFALTA
+// Caso de uso asociado: CU-03 Visualizar registro diario
 // ------------------------------------------------------------
 
 session_start();
@@ -26,20 +26,22 @@ $modo = isset($_GET['modo']) ? $_GET['modo'] : 'familiar';  // Valor predetermin
 //var_dump($fecha_hoy);
 //var_dump($usuario->idFamilia);
 
-// Llamar a la función relacionarDatos con las fechas de hoy
+
+//<!-- Paso 4-8 del CU-03: Se relacionan los datos para la transaccion -->
+//<!-- Paso 9 del CU-03: EL GTR-08 Calcula los ingresos y egresos para hallar el balance -->
 if ($modo == 'familiar') {
     // Llamar a la función vistaFamiliar
-    $datosRelacionados = GestionarRegistroDiario::vistaFamiliar($usuario->idFamilia, "2025-10-26", "2025-10-26");
-    $ingresos = GestionarTransaccion::obtenerIngresoBD($usuario->idFamilia, "2025-10-26", "2025-10-26");
-    $egresos = GestionarTransaccion::obtenerEgresoBD($usuario->idFamilia, "2025-10-26", "2025-10-26");
+    $datosRelacionados = GestionarRegistroDiario::vistaFamiliar($usuario->idFamilia, $fecha_hoy, $fecha_hoy);
+    $ingresos = GestionarTransaccion::obtenerIngresoBD($usuario->idFamilia, $fecha_hoy, $fecha_hoy);
+    $egresos = GestionarTransaccion::obtenerEgresoBD($usuario->idFamilia, $fecha_hoy, $fecha_hoy);
 
     $ingresos_7Dias = GestionarTransaccion::obtenerIngresoBD($usuario->idFamilia, $fecha_hace_7_dias, $fecha_hoy);
     $egresos_7Dias = GestionarTransaccion::obtenerEgresoBD($usuario->idFamilia, $fecha_hace_7_dias, $fecha_hoy);
 } else {
     // Llamar a la función vistaUsuario
-    $datosRelacionados = GestionarRegistroDiario::vistaUsuario($usuario->idFamilia, "2025-10-26", "2025-10-26", $usuario->idUsuario);
-    $ingresos = GestionarTransaccion::obtenerIngresoPorUsuarioBD($usuario->idUsuario, "2025-10-26", "2025-10-26");
-    $egresos = GestionarTransaccion::obtenerEgresoPorUsuarioBD($usuario->idUsuario, "2025-10-26", "2025-10-26");
+    $datosRelacionados = GestionarRegistroDiario::vistaUsuario($usuario->idFamilia, $fecha_hoy, $fecha_hoy, $usuario->idUsuario);
+    $ingresos = GestionarTransaccion::obtenerIngresoPorUsuarioBD($usuario->idUsuario, $fecha_hoy, $fecha_hoy);
+    $egresos = GestionarTransaccion::obtenerEgresoPorUsuarioBD($usuario->idUsuario, $fecha_hoy, $fecha_hoy);
 
     $ingresos_7Dias = GestionarTransaccion::obtenerIngresoBD($usuario->idUsuario, $fecha_hace_7_dias, $fecha_hoy);
     $egresos_7Dias = GestionarTransaccion::obtenerEgresoBD($usuario->idUsuario, $fecha_hace_7_dias, $fecha_hoy);
@@ -55,6 +57,8 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
 
 ?>
 
+
+<!-- Paso 10 del CU-03: La UI-04 Muestra los campos pertinentes -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -128,6 +132,7 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
 
         <!-- Area principal -->
         <main class="area-trabajo">
+            <!-- Paso 1 del CU-03: La interfaz se carga y presenta el switch -->
 
             <!-- Controles de arriba -->
             <section class="controles-superiores">
@@ -144,7 +149,7 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                 </div>
             </section>
 
-            <!-- Las dos tablas -->
+            <!-- Paso 2 del CU-03: Muestra ingresos y egresos -->
             <section class="contenedor-tablas">
 
                 <!-- Tabla Ingresos -->
@@ -169,6 +174,7 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
 
                         <?php
                         // Filtrar ingresos
+                        //<!-- Paso 3 del CU-03: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
                         foreach ($datosRelacionados as $dato) {
                             if ($dato['tipo'] === 'Ingreso') {
 
@@ -197,8 +203,8 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                         </tr>
                         </tfoot>
                     </table>
-
-                    <!-- Boton mas -->
+                    
+                    <!-- Paso 3 del CU-03: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
                      <form action="UI-17_CrearConcepto.php" method="GET">
                         <button type="submit" class="boton-mas">+</button>
                     </form>
@@ -225,6 +231,7 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                         <tbody>
                         <?php
                         // Filtrar egresos
+                        //<!-- Paso 3 del CU-03: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
                         foreach ($datosRelacionados as $dato) {
                             if ($dato['tipo'] === 'Egreso') {
                                 $puedeEditar = ($dato['usuario_id'] == $usuario->idUsuario);
@@ -252,7 +259,7 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                         </tfoot>
                     </table>
 
-                    <!-- Boton mas -->
+                    <!-- Paso 3 del CU-03: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
                     <form action="UI-17_CrearConcepto.php" method="GET">
                         <button type="submit" class="boton-mas">+</button>
                     </form>
