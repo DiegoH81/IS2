@@ -2,7 +2,7 @@
 
 // ------------------------------------------------------------
 // UI-18: Editar concepto
-// Caso de uso asociado: CU-17 - Editar concepto
+// Caso de uso asociado: CU-09-2 - Editar concepto
 // ------------------------------------------------------------
 
 session_start();
@@ -30,7 +30,7 @@ if (!$concepto) {
     die("Concepto no encontrado");
 }
 
-// Paso 13 del CU-17: El AC-02-Familiar selecciona la opción Guardar.
+// Paso 12 del CU-09-2: El AC-02-Familiar selecciona la opción Guardar.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre        = $_POST['nombre'];
     $tipo          = $_POST['tipo'];
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $categoriaId   = $_POST['categoria'];
     $usuarioId = $_SESSION['id_usuario'];
 
-    // Paso 10 del CU-17: El AC-02-Familiar modifica el período (Diario, Semanal, Quincenal, Mensual, Personalizado, Eventual).
+    // Paso 10 del CU-09-2: El AC-02-Familiar modifica el período (Diario, Semanal, Quincenal, Mensual, Personalizado, Eventual).
     $periodo_sel = $_POST['periodo'];
     switch ($periodo_sel) {
         case 'Diario': $periodo = 1; break;
@@ -56,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     /*  Invoca la funcion editarConcepto del GTR-02 Gestionar concepto para actualizar los datos
         de un concepto existente con los datos del formulario */
+    //<!-- Paso 17 del CU-09-2: El GTR-02 actualiza la informacion del concepto. -->
     $resultado = GestionarConcepto::editarConceptoBD(
         $id_concepto,
         $nombre,
@@ -67,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fecha_fin,
         $categoriaId
     );
-    
+    //<!-- Paso 18 del CU-09-2: Se redirige a la UI-16 VisualizarConceptos. -->
     header("Location: UI-16_VisualizarConceptos.php");
     exit;
     
@@ -102,7 +103,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
 
     <div class="contenedor-medio">
-        <!-- Paso 4 del CU-17: La interfaz muestra la opción de Crear categoría. -->
+        <!-- Paso 4 del CU-09-2: La interfaz muestra la opción de Crear categoría. -->
+        <!-- Paso 13-16 del CU-09-2: La UI-18 empieza a validar los campos. -->
         <!-- Menú lateral -->
         <aside class="menu-lateral" id="menuLateral">
             <nav>
@@ -176,13 +178,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </select>
                         </div>
 
-                        <!-- Paso 5 y 7 del CU-17: El AC-02-Familiar modifica el nombre del concepto si es necesario. -->
+                        <!-- Paso 5 y 7 del CU-09-2: El AC-02-Familiar modifica el nombre del concepto si es necesario. -->
                         <div class="campo-formulario">
                             <label for="nombre">Nombre:</label>
                             <input type="text" id="nombre" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ ]+" title="Ingrese solo letras" name="nombre" value="<?= htmlspecialchars($concepto->nombre) ?>" required>
                         </div>
 
-                        <!-- Paso 8 del CU-17: El AC-02-Familiar modifica el tipo (Ingreso o Egreso). -->
+                        <!-- Paso 8 del CU-09-2: El AC-02-Familiar modifica el tipo (Ingreso o Egreso). -->
                         <div class="campo-formulario">
                             <label>Tipo:</label>
                             <div class="opciones-radio">
@@ -191,13 +193,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
-                        <!-- Paso 9 del CU-17: El AC-02-Familiar modifica el monto si es necesario. -->
+                        <!-- Paso 9 del CU-09-2: El AC-02-Familiar modifica el monto si es necesario. -->
                         <div class="campo-formulario">
                             <label for="monto">Monto:</label>
                             <input type="number" id="monto" name="monto" step="0.01" min="0" value="<?= $concepto->monto ?>" required>
                         </div>
 
-                        <!-- Paso 10 del CU-17: El AC-02-Familiar modifica el período. -->
+                        <!-- Paso 10 del CU-09-2: El AC-02-Familiar modifica el período. -->
                         <div class="campo-formulario"><label>Periodo:</label>
                             <div class="opciones-radio columna-vertical">
                                 <?php 
@@ -214,7 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="number" name="periodoPersonalizado" step="1" min="2" value="<?= $concepto->periodo ?>" placeholder="Ingrese número">
                         </div>
 
-                        <!-- Paso 11 y 12 del CU-17: El AC-02-Familiar modifica las fechas si es necesario. -->
+                        <!-- Paso 10 y 11 del CU-09-2: El AC-02-Familiar modifica las fechas si es necesario. -->
                         <div class="campo-formulario">
                             <label>Día de inicio / Día de fin:</label>
                             <div class="fechas">
@@ -223,7 +225,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
-                        <!-- Paso 13 del CU-17: El AC-02-Familiar selecciona “Guardar”. -->
+                        <!-- Paso 12 del CU-09-2: El AC-02-Familiar selecciona “Guardar”. -->
                         <div class="campo-formulario">
                             <button type="submit" class="boton-crear">Guardar concepto</button>
                         </div>

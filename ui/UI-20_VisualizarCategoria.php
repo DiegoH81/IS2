@@ -59,6 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idcategoria'], $_POST
     }
 }
 
+
+//<!-- Paso 1 del CU-10: Se obtienen las categorias. -->
 $categorias = null;
 $usuarios = null;
 
@@ -171,10 +173,11 @@ if ($cadena !== '') {
 
             <section class="contenedor-tablas">
                 <article class="tabla">
-                    <!-- Paso 8 del CU-15: Mostrar opción de Crear concepto. -->
+                    
                     <header>
                         <div class="encabezado-tabla-superior">
                             <form method="GET" action="UI-20_VisualizarCategoria.php" class="form-busqueda">
+                                <!-- Paso 2 del CU-10: Se muestra la búsqueda. -->
                                 <input 
                                     type="text" 
                                     name="cadena" 
@@ -193,6 +196,7 @@ if ($cadena !== '') {
 
                             </form>
 
+                            <!-- Paso 3 del CU-10: Se muestra la opción de crear categoría. -->
                             <a href="UI-21_CrearCategoria.php" class="boton-crear">Crear categoría</a>
                         </div>
                         <h2 class="titulo-tabla">Configuración categoria</h2>
@@ -200,6 +204,8 @@ if ($cadena !== '') {
                         <div class="linea-azul"></div>
                     </header>
 
+
+                    <!-- Paso 4 del CU-10: Se presentan la lista de categorías. -->
                     <table class="tabla-datos">
                         <thead>
                             <tr>
@@ -228,7 +234,7 @@ if ($cadena !== '') {
                                         <?= htmlspecialchars($mapaUsuarios[$c->idUsuario] ?? 'Desconocido') ?>
                                     </td>
 
-
+                                    <!-- Paso 5 del CU-10: Se muestran opciones de gestión según el rol. -->
                                     <?php
                                         // Permite editar si es Admin Familiar o si el concepto lo subió el mismo usuario
                                         $puedeEditar = ($_SESSION['rol'] === 'Administrador familiar') || ($_SESSION['id_usuario'] == $c->idUsuario);
@@ -246,8 +252,6 @@ if ($cadena !== '') {
                                             <?= htmlspecialchars($c->estado) ?>
                                         </button>
                                     </td>
-                                    <!-- Paso 9 del CU-15: Mostrar opciones de gestión según el rol. -->
-                                    <!-- Paso 9.1/9.2: Si es familiar, solo puede editar los suyos. -->
 
                                     <td class="celda">
                                         <?php

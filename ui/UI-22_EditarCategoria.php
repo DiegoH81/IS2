@@ -22,15 +22,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre_val = $_POST['nombre'];
     $descripcion_val = $_POST['descripcion'];
 
-    // Llamar a la función del gestor para actualizar
+    //<!-- Paso 8 del CU-10-2: El GTR-09 actualiza la categoría en la BD. -->
     GestionarCategoria::actualizarCategoriaBD($id_categoria, $nombre_val, $descripcion_val);
     
+    //<!-- Paso 9 del CU-10-2: Se redirige el AC-02 hacia la UI-20. -->
     header("Location: UI-20_VisualizarCategoria.php");
     exit;
     
 }
 ?>
 
+<!-- Paso 1 del CU-10-2: La UI-22 se carga y presenta los campos nombre y descripción. -->
+
+<!-- Paso 6-7 del CU-10-2: La UI-22 valida los campos. -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -63,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
 
     <div class="contenedor-medio">
-        <!-- Paso 4 del CU-17: La interfaz muestra la opción de Crear categoría. -->
+        
         <!-- Menú lateral -->
         <aside class="menu-lateral" id="menuLateral">
             <nav>
@@ -125,6 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <h1 style="text-align: center;">Editar categoría</h1>
                         
+                        <!-- Paso 3-4 del CU-10-2: El usuario modifica el nombre y descripción. -->
                         <div class="campo-formulario">
                             <label for="nombre">Nombre:</label>
                             <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre" value="<?= htmlspecialchars($categoria->nombre) ?>" required>
@@ -142,14 +147,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             ><?= htmlspecialchars($categoria->descripcion) ?></textarea>
                         </div>
 
-                        <!-- Paso 12 del CU-16: El AC-02 selecciona la opción Crear. -->
+                        <!-- Paso 2 del CU-10-2: La UI-22 se carga y presenta los botones de guardar y cancelar. -->
+                        
+                        <!-- Paso 5 del CU-10-2: El AC-02 selecciona la opción guardar. -->
                         <div style="text-align:center;">
-
                             <div class="grupo-botones">
                                 <button type="button" class="boton-crear boton-cancelar" onclick="window.location.href='UI-20_VisualizarCategoria.php'">Cancelar</button>
                                 <button type="submit" class="boton-crear">Guardar categoria</button>
                             </div>
-
                         </div>
                        
 

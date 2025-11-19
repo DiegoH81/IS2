@@ -24,13 +24,13 @@ function filtrarConceptosPorBusqueda($familiaId, $cadena) {
 
 // ------------------------------------------------------------
 // UI-16: Visualizar conceptos
-// Caso de uso asociado: CU-15 Gestionar conceptos
+// Caso de uso asociado: CU-09 Gestionar conceptos
 // ------------------------------------------------------------
 
 session_start();
 require_once '../gtr/GTR-02_GestionarConcepto.php';
 
-// Paso 7 del CU-15: La interfaz presenta el campo de búsqueda.
+// Paso 7 del CU-09: La interfaz presenta el campo de búsqueda.
 
 // Capturar la búsqueda si existe
 $cadena = isset($_GET['cadena']) ? $_GET['cadena'] : '';
@@ -60,19 +60,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['concepto_id'], $_POST
     }
 }
 
+
+//<!-- Paso 2-5 del CU-09: Se relacionan los datos, el GTR-02 va a llamar a GTR-01 Gestionar Usuario,
+//                         GTR-10 Gestionar Familia, GTR-09 Gestionar Categoria. -->
 $usuarioId = $_SESSION['id_usuario'];
 $familiaId = $_SESSION['familia_id'];
-// Si hay texto en la barra, filtrar (esto puedes implementarlo en tu función SQL más adelante)
 if ($cadena !== '') {
-    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos filtrados 
-        a mostrar segun la cadena ingresada en el buscador */
     $conceptos = filtrarConceptosPorBusqueda($familiaId, $cadena);
 } else {
-    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos
-        a mostrar en la tabla de la interfaz */
-    $conceptos_test = GestionarConcepto::obtenerConceptosBD($familiaId);
-    //var_dump($conceptos_test);
-
     $conceptos = GestionarConcepto::relacionarDatos($familiaId);
     // var_dump($conceptos);
 }
@@ -161,10 +156,12 @@ if ($cadena !== '') {
                     </a>
                 </nav>
             </aside>
+            
 
+            <!-- Paso 6 del CU-09: La UI-16 presenta la lista de conceptos. -->
             <section class="contenedor-tablas">
                 <article class="tabla">
-                    <!-- Paso 8 del CU-15: Mostrar opción de Crear concepto. -->
+                    <!-- Paso 8 del CU-09: Mostrar opción de Crear concepto. -->
                     <header>
                         <div class="encabezado-tabla-superior">
                             <form method="GET" action="UI-16_VisualizarConceptos.php" class="form-busqueda">
@@ -233,8 +230,8 @@ if ($cadena !== '') {
                                     </td>
 
 
-                                    <!-- Paso 9 del CU-15: Mostrar opciones de gestión según el rol. -->
-                                    <!-- Paso 9.1/9.2: Si es familiar, solo puede editar los suyos. -->
+                                    <!-- Paso 10 del CU-09: Mostrar opciones de gestión según el rol. -->
+                                    <!-- Paso 10.1/10.2: Si es familiar, solo puede editar los suyos. -->
 
                                     <td class="celda">
                                         <?php

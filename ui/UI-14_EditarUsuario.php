@@ -25,9 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contrasena_val = $_POST['password'];
     $rol_val = $_POST['rol'];
 
-    // Llamar a la función del gestor para actualizar
+    //<!-- Paso 10 del CU-08-2: Actualiza el usuario -->
     GestionarUsuario::actualizarDatosUsuarioBD($usuario_val, $nombre_val, $contrasena_val, $rol_val);
     
+    //<!-- Paso 11 del CU-08-2: Redirige al AC-01 a la interfaz UI-12 -->
     header("Location: UI-12_VisualizarUsuarios.php");
     exit;
     
@@ -35,6 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
+<!-- Paso 2-3 del CU-08-2: La interfaz se carga y presenta los campos pertinentes -->
+
+ 
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -67,7 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
 
     <div class="contenedor-medio">
-        <!-- Paso 4 del CU-17: La interfaz muestra la opción de Crear categoría. -->
         <!-- Menú lateral -->
         <aside class="menu-lateral" id="menuLateral">
             <nav>
@@ -126,24 +129,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
                     
 
+                    <!-- Paso 8-9 del CU-08-2: Se validan los datos y se comprueba que no hayan campos vacios -->
                     <form class="form-crear-concepto" method="POST">
 
                     <h1 style="text-align: center;">Editando usuario: </h1>
-                        
-
-                        
+                        <!-- Paso 4 del CU-08-2: La interfaz se carga y presenta el usuario como no editable -->
                         <div class="campo-formulario">
                             <label for="usuario">Usuario:</label>
-
                             <input type="text" id="usuario" name="usuario" value="<?= htmlspecialchars($usuario->usuario) ?>" readonly>
 
                         </div>
                         
+                        <!-- Paso 5 del CU-08-2: El AC-01 Administrador Familiar modifica el nombre de usuario -->
                         <div class="campo-formulario">
                             <label for="nombre">Nombre:</label>
                             <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" value="<?= htmlspecialchars($usuario->nombre) ?>" required>
                         </div>
 
+                        <!-- Paso 6 del CU-08-2: El AC-01 Administrador Familiar selecciona el rol -->
                         <div class="campo-formulario">
                             <label for="rol">Rol:</label>
                             <select id="rol" name="rol" required>
@@ -158,9 +161,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="password" id="password" name="password" placeholder = "Ingrese su contraseña" value="<?= htmlspecialchars($usuario->contrasena) ?>" required>
                         </div>
 
-                        <!-- Paso 12 del CU-16: El AC-02 selecciona la opción Crear. -->
+                        
+                        <!-- Paso 7 del CU-08-2: El AC-01 Administrador Familiar selecciona la opción guardar -->
                         <div style="text-align:center;">
-
                             <div class="grupo-botones">
                                 <button type="button" class="boton-crear boton-cancelar" onclick="window.location.href='UI-12_VisualizarUsuarios.php'">Cancelar</button>
                                 <button type="submit" class="boton-crear">Guardar</button>
