@@ -2,6 +2,7 @@
 session_start();
 require_once '../gtr/GTR-04_Validar.php';
 require_once '../gtr/GTR-10_GestionarFamilia.php';
+require_once '../gtr/GTR-01_GestionarUsuario.php';
 
 $error = '';
 
@@ -38,7 +39,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
     else
     {
         //<!-- Paso 13 del CU-02: El GTR-01 crea un usuario nuevo en la BD -->
-        GestionarUsuario::crearUsuarioBD($usuario, $nombre, $password, "Familiar", $familiaId);
+
+        $usuarios = GestionarUsuario::obtenerUsuariosBD($familiaId);
+        if (empty($usuarios)) {
+            $rol = "Administrador familiar";
+        } else {
+            $rol = "Familiar";
+        }
+
+        GestionarUsuario::crearUsuarioBD($usuario, $nombre, $password, $rol, $familiaId);
 
         //<!-- Paso 14 del CU-02: La UI-02 redirige al AC-02 Familiar a la UI-01 -->
         header("Location: UI-01_InicioDeSesion.php");
