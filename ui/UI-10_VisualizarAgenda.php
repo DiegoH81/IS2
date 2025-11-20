@@ -28,7 +28,6 @@ $balance_esperado = $proyeccion_ingresos - $proyeccion_egresos;
 
 
 $filtro = isset($_GET['filtro']) ? $_GET['filtro'] : 'todos';
-// Filtrar la agenda según el filtro seleccionado
 $agendaFiltrada = $agenda;
 if ($filtro === 'ingresos') {
     $agendaFiltrada = array_filter($agenda, function($item) {

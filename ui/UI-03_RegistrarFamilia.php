@@ -19,10 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //<!-- Paso 7 del CU-02-Alterno: El GTR-10 Gestionar Familia verifica la contraseña familiar -->
     $result = GestionarFamilia::existeContrasenaFamiliarBD($family_password);
 
-    // Verificar si la contraseña ya existe en la base de datos
     if ($result === 't') {
-        $error = "La contraseña familiar ya está en uso. Por favor, genere una nueva.";
-        
+        $error = "La contraseña familiar ya está en uso. Por favor, genere una nueva.";        
     }
     else
     {
@@ -45,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- CSS principal -->
     <link rel="stylesheet" href="../css/principal.css">
-    <link rel="stylesheet" href="../css/register.css"> <!-- NUEVO ARCHIVO -->
+    <link rel="stylesheet" href="../css/register.css">
     <link rel="stylesheet" href="../css/icons.css">
 </head>
 <body>

@@ -9,17 +9,12 @@ session_start();
 require_once '../gtr/GTR-02_GestionarConcepto.php';
 require_once '../gtr/GTR-09_GestionarCategoria.php';
 
-// Obtener id del concepto a editar (por GET)
 if (!isset($_GET['id'])) {
     die("No se especificó el concepto");
 }
 $id_concepto = (int)$_GET['id'];
 
-/*  Invoca la funcion obtenerCategorias del GTR-09 Gestionar categoria para obtener
-     las categorías disponibles. */
 $categorias = GestionarCategoria::obtenerCategoriasBD($_SESSION['familia_id']);
-/*  Invoca la funcion obtenerConcepto del GTR-02 Gestionar concepto para extraer los datos
-de un concepto existente y mostrarlo en el formulario */
 $concepto = GestionarConcepto::obtenerConceptoBD($id_concepto);
 
 
@@ -54,8 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             break;
     }
 
-    /*  Invoca la funcion editarConcepto del GTR-02 Gestionar concepto para actualizar los datos
-        de un concepto existente con los datos del formulario */
     //<!-- Paso 17 del CU-09-2: El GTR-02 actualiza la informacion del concepto. -->
     $resultado = GestionarConcepto::editarConceptoBD(
         $id_concepto,

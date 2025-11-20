@@ -13,16 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario = trim($_POST['nombre']);
     $contrasena = trim($_POST['password']);
 
-    // Paso 8-12 del CU-01: Validar credenciales a través del gestor
+    // Paso 8-12 del CU-01: Validar credenciales a través del GTR-04
 
-    /*  Invoca la funcion validarCredenciales del GTR-04 Validar para verificar 
-        las credenciales ingresadas */
     if (Validar::solicitarValidacionCredenciales($usuario, $contrasena)) {
-        /*  Invoca la funcion obtenerUsuario del GTR-04 Validar para extraer la informacion del 
-            usuario ingresado */
         $usuarioData = Validar::solicitarUsuario($usuario);
         var_dump($usuarioData);
-        // Guardar datos en sesión
+        
 
         $_SESSION['id_usuario'] = $usuarioData->idUsuario;
         $_SESSION['nombre'] = $usuarioData->nombre;

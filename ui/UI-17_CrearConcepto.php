@@ -9,10 +9,7 @@ session_start();
 require_once '../gtr/GTR-02_GestionarConcepto.php';
 require_once '../gtr/GTR-09_GestionarCategoria.php';
 
-/*  Invoca la funcion obtenerCategorias del GTR-09 Gestionar categoria para obtener
-     las categorías disponibles. */
 $categorias = GestionarCategoria::obtenerCategoriasBD($_SESSION['familia_id']);
-//var_dump($categorias);
 
 
 // Verificar si el formulario fue enviado
@@ -37,9 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $periodo = $_POST['periodoPersonalizado'];
             break;
     }
-
-    /*  Invoca la funcion crearConcepto del GTR-02 Gestionar concepto para crear un nuevo
-        concepto con los datos del formulario */
     GestionarConcepto::crearConceptoBD(
         $nombre,
         $tipo,

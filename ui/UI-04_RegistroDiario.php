@@ -15,22 +15,16 @@ require_once '../gtr/GTR-08_GestionarRegistroDiario.php';
 
 $usuario = Validar::obtenerUsuarioActual();
 
-// Obtener la fecha de hoy (como fecha de inicio y fin)
-$fecha_hoy = date('Y-m-d');  // Obtiene la fecha de hoy en formato YYYY-MM-DD
-$fecha_hace_7_dias = date('Y-m-d', strtotime('-7 days'));  // Fecha de hace 7 días
+$fecha_hoy = date('Y-m-d');
+$fecha_hace_7_dias = date('Y-m-d', strtotime('-7 days'));
 
 $diaActual = date('l');
-$modo = isset($_GET['modo']) ? $_GET['modo'] : 'familiar';  // Valor predeterminado es 'familiar'
-//var_dump($diaActual);
-//var_dump($usuario);
-//var_dump($fecha_hoy);
-//var_dump($usuario->idFamilia);
+$modo = isset($_GET['modo']) ? $_GET['modo'] : 'familiar';
 
 
 //<!-- Paso 4-8 del CU-03: Se relacionan los datos para la transaccion -->
 //<!-- Paso 9 del CU-03: EL GTR-08 Calcula los ingresos y egresos para hallar el balance -->
 if ($modo == 'familiar') {
-    // Llamar a la función vistaFamiliar
     $datosRelacionados = GestionarRegistroDiario::vistaFamiliar($usuario->idFamilia, $fecha_hoy, $fecha_hoy);
     $ingresos = GestionarTransaccion::obtenerIngresoBD($usuario->idFamilia, $fecha_hoy, $fecha_hoy);
     $egresos = GestionarTransaccion::obtenerEgresoBD($usuario->idFamilia, $fecha_hoy, $fecha_hoy);
@@ -38,7 +32,6 @@ if ($modo == 'familiar') {
     $ingresos_7Dias = GestionarTransaccion::obtenerIngresoBD($usuario->idFamilia, $fecha_hace_7_dias, $fecha_hoy);
     $egresos_7Dias = GestionarTransaccion::obtenerEgresoBD($usuario->idFamilia, $fecha_hace_7_dias, $fecha_hoy);
 } else {
-    // Llamar a la función vistaUsuario
     $datosRelacionados = GestionarRegistroDiario::vistaUsuario($usuario->idFamilia, $fecha_hoy, $fecha_hoy, $usuario->idUsuario);
     $ingresos = GestionarTransaccion::obtenerIngresoPorUsuarioBD($usuario->idUsuario, $fecha_hoy, $fecha_hoy);
     $egresos = GestionarTransaccion::obtenerEgresoPorUsuarioBD($usuario->idUsuario, $fecha_hoy, $fecha_hoy);
@@ -178,18 +171,29 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                         foreach ($datosRelacionados as $dato) {
                             if ($dato['tipo'] === 'Ingreso') {
 
-                                $puedeEditar = ($dato['usuario_id'] == $usuario->idUsuario);
+                                $puedeEditar = (
+                                    $dato['usuario_id'] == $usuario->idUsuario
+                                    || $usuario->rol === "Administrador familiar"
+                                );
 
                                 echo "<tr class='fila-tabla'>
                                         <td class='celda'>{$dato['concepto']}</td>
                                         <td class='celda'>{$dato['categoria']}</td>
                                         <td class='celda'>S/. {$dato['monto']}</td>
                                         <td class='celda'>{$dato['usuario']}</td>
-                                        <td class='celda derecha'>
-                                            <a href='UI-18_EditarConcepto.php?id={$dato['idConcepto']}' class='link-editar' " . (!$puedeEditar ? 'style="opacity:0.5;cursor:not-allowed;"' : '') . ">
+                                        <td class='celda derecha'>";
+
+                                    ?>
+                                        <form action="UI-18_EditarConcepto.php" method="GET">
+                                            <input type="hidden" name="id" value="<?= $dato['idConcepto'] ?>">
+                                            <button type="submit" class="link-editar" <?= !$puedeEditar ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?>>
+                                            
                                                 Editar
-                                            </a>
-                                        </td>
+                                            </button>
+                                        </form>
+                                    <?php
+
+                                echo "   </td>
                                     </tr>";
                             }
                         }
@@ -234,17 +238,30 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                         //<!-- Paso 3 del CU-03: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
                         foreach ($datosRelacionados as $dato) {
                             if ($dato['tipo'] === 'Egreso') {
-                                $puedeEditar = ($dato['usuario_id'] == $usuario->idUsuario);
+
+                                $puedeEditar = (
+                                    $dato['usuario_id'] == $usuario->idUsuario
+                                    || $usuario->rol === "Administrador familiar"
+                                );
+
                                 echo "<tr class='fila-tabla'>
                                         <td class='celda'>{$dato['concepto']}</td>
                                         <td class='celda'>{$dato['categoria']}</td>
                                         <td class='celda'>S/. {$dato['monto']}</td>
                                         <td class='celda'>{$dato['usuario']}</td>
-                                        <td class='celda derecha'>
-                                            <a href='UI-18_EditarConcepto.php?id={$dato['idConcepto']}' class='link-editar' " . (!$puedeEditar ? 'style="opacity:0.5;cursor:not-allowed;"' : '') . ">
+                                        <td class='celda derecha'>";
+
+                                    ?>
+                                        <form action="UI-18_EditarConcepto.php" method="GET">
+                                            <input type="hidden" name="id" value="<?= $dato['idConcepto'] ?>">
+                                            <button type="submit" class="link-editar" <?= !$puedeEditar ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?>>
+                                            
                                                 Editar
-                                            </a>
-                                        </td>
+                                            </button>
+                                        </form>
+                                    <?php
+
+                                echo "   </td>
                                     </tr>";
                             }
                         }

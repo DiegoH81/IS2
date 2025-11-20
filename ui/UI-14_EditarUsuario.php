@@ -16,8 +16,6 @@ $usuario_v = $_GET['usuario'];
 
 //<!-- Paso 1 del CU-08-2: El GTR-01 obtiene el usuario seleccionado -->
 $usuario = GestionarUsuario::obtenerUsuarioBD($usuario_v);
-//var_dump($usuario);
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario_val = $_POST['usuario'];

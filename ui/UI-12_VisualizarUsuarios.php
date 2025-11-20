@@ -37,10 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_usuario'], $_POST[
     $idUsuario = intval($_POST['id_usuario']);
     $estado = (intval($_POST['estado']) === 1); // Convertir a booleano
     
-    // Llamar a la función para cambiar el estado
     $resultado = GestionarUsuario::cambiarEstadoUsuarioBD($idUsuario, $estado);
     
-    // Si es petición AJAX, devolver JSON
     if(isset($_POST['ajax'])) {
         header('Content-Type: application/json');
         if($resultado) {
@@ -57,15 +55,9 @@ $familiaId = $_SESSION['familia_id'];
 
 //<!-- Paso 1 del CU-08: La UI-12 obtiene los usuarios -->
 if ($cadena !== '') {
-    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos filtrados 
-        a mostrar segun la cadena ingresada en el buscador */
         filtrarUsuariosPorBusqueda($familiaId, $cadena, $usuarios);
 } else {
-    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos
-        a mostrar en la tabla de la interfaz */
     $usuarios = GestionarUsuario::obtenerUsuariosBD($familiaId);
-
-    //var_dump($usuarios);
 }
 ?>
 
@@ -169,7 +161,7 @@ if ($cadena !== '') {
                                     placeholder="Buscar..." 
                                     value="<?= htmlspecialchars($cadena) ?>"
                                     class="input-busqueda">
-                                <button type="submit" class="boton-buscar">Buscar</button>
+                                <button type="submit" class="boton-buscar" style="background-color: #4A5568;">Buscar</button>
 
 
                                 <?php if ($cadena !== ''): ?>

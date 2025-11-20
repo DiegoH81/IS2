@@ -15,8 +15,6 @@ if (!isset($_GET['idcategoria']))
 $id_categoria = $_GET['idcategoria'];
 
 $categoria = GestionarCategoria::obtenerCategoriaIdBD($id_categoria);
-//var_dump($categoria);
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre_val = $_POST['nombre'];

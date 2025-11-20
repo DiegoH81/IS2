@@ -171,7 +171,7 @@ if ($cadena !== '') {
                                     placeholder="Buscar..." 
                                     value="<?= htmlspecialchars($cadena) ?>"
                                     class="input-busqueda">
-                                <button type="submit" class="boton-buscar">Buscar</button>
+                                <button type="submit" class="boton-buscar" style="background-color: #4A5568;">Buscar</button>
                                 <?php if ($cadena !== ''): ?>
                                     <a href="UI-16_VisualizarConceptos.php" class="boton-limpiar">Limpiar</a>
                                 <?php endif; ?>
@@ -184,7 +184,7 @@ if ($cadena !== '') {
                         <div class="linea-azul"></div>
                     </header>
 
-                    <table class="tabla-datos">
+                    <table class="tabla-datos" >
                         <thead>
                             <tr>
                                 <th class="encabezado-tabla">Concepto</th>

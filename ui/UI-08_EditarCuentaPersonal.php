@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $rol_val = $_POST['rol'];
 
     //<!-- Paso 8 del CU-05-1: Se actualiza con los datos modificados -->
-    // Llamar a la función del gestor para actualizar
     GestionarUsuario::actualizarDatosUsuarioBD($usuario_val, $nombre_val, $contrasena_val, $rol_val);
     
     //<!-- Paso 9 del CU-05-1: Se actualiza con los datos modificados -->

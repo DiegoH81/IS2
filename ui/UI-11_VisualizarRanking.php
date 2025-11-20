@@ -39,8 +39,6 @@ switch($periodo) {
         $rankingFiltrado = ObtenerRanking::filtrarPorUltimas4Semanas($ranking);
 }
 
-
-//var_dump($rankingFiltrado)
 ?>
 
 <!-- Paso 9 del CU-07: La UI-11 Se carga y presenta las opciones de filtro por tipo (egresos e ingresos) -->

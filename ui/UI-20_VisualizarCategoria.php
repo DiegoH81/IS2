@@ -66,17 +66,10 @@ $usuarios = null;
 
 $familiaId = $_SESSION['familia_id'];
 if ($cadena !== '') {
-    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos filtrados 
-        a mostrar segun la cadena ingresada en el buscador */
         filtrarCategoriasPorBusqueda($familiaId, $cadena, $categorias, $usuarios);
 } else {
-    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos
-        a mostrar en la tabla de la interfaz */
-
     $categorias = GestionarCategoria::obtenerCategoriasBD($familiaId);
     $usuarios = GestionarUsuario::obtenerUsuariosBD($familiaId);
-
-    //var_dump($usuarios);
 }
 
 //var_dump( $usuarios );
@@ -184,7 +177,7 @@ if ($cadena !== '') {
                                     placeholder="Buscar..." 
                                     value="<?= htmlspecialchars($cadena) ?>"
                                     class="input-busqueda">
-                                <button type="submit" class="boton-buscar">Buscar</button>
+                                <button type="submit" class="boton-buscar" style="background-color: #4A5568;">Buscar</button>
 
 
                                 <?php if ($cadena !== ''): ?>
