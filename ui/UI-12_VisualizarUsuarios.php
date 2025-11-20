@@ -223,6 +223,7 @@ if ($cadena !== '') {
                                     </td>
 
                                     <td class="celda">
+
                                         <form action="UI-14_EditarUsuario.php" method="GET">
                                             <input type="hidden" name="usuario" value="<?= htmlspecialchars($u->usuario) ?>">
                                             <button type="submit" class="link-editar"
@@ -230,6 +231,7 @@ if ($cadena !== '') {
                                                 Editar
                                             </button>
                                         </form>
+                                        
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

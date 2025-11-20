@@ -236,16 +236,27 @@ if ($cadena !== '') {
                                     <td class="celda">
                                         <?php
                                             $puedeEditar = false;
-                                            if ($_SESSION['rol'] === 'Administrador familiar' || $_SESSION['id_usuario'] == $c['usuario_id']) {
-                                                $puedeEditar = true;
-                                            }
+                                            if (
+                                                    ($c['estado'] === 'Habilitado') && 
+                                                    (
+                                                        $_SESSION['rol'] === 'Administrador familiar' ||
+                                                        $_SESSION['id_usuario'] == $c['usuario_id']
+                                                    )
+                                                ) {
+                                                    $puedeEditar = true;
+                                                }
                                         ?>
+
                                         <form action="UI-18_EditarConcepto.php" method="GET">
                                             <input type="hidden" name="id" value="<?= $c['concepto_id'] ?>">
                                             <button type="submit" class="link-editar" <?= !$puedeEditar ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?>>
                                                 Editar
                                             </button>
                                         </form>
+                                        
+
+                                        
+
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
