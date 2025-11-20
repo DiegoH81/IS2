@@ -38,12 +38,21 @@ class ObtenerRanking {
 
         // Relacionar las transacciones con sus conceptos, categorías y usuarios
         foreach ($transacciones as $t) {
+            $conceptoObj = isset($conceptosIndex[$t->idConcepto]) 
+                    ? $conceptosIndex[$t->idConcepto] 
+                    : null;
+
+            $nombreCategoria = '';
+            if ($conceptoObj && isset($categoriasIndex[$conceptoObj->idCategoria])) {
+                $nombreCategoria = $categoriasIndex[$conceptoObj->idCategoria];
+            }
+
             $transaccionRelacionada = [
                 'idTransaccion' => $t->idTransaccion,
                 'fecha'         => $t->fecha,
                 'monto'         => $t->monto,
                 'tipo'          => $t->tipo,
-                'categoria'     => isset($categoriasIndex[$t->idConcepto]) ? $categoriasIndex[$t->idConcepto] : '',
+                'categoria'     => $nombreCategoria,
                 'concepto'      => isset($conceptosIndex[$t->idConcepto]) ? $conceptosIndex[$t->idConcepto]->nombre : '',
                 'idConcepto'    => isset($conceptosIndex[$t->idConcepto]) ? $conceptosIndex[$t->idConcepto]->idConcepto : '',
                 'usuario'       => isset($usuariosIndex[$t->idUsuario]) ? $usuariosIndex[$t->idUsuario] : '',

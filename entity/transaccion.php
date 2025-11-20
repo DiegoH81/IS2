@@ -10,9 +10,8 @@ class Transaccion {
     public $tipo;
     public $idConcepto;
     public $idFamilia;
-    public $idUsuario;  // Añadido el campo idUsuario
+    public $idUsuario;
 
-    // El constructor ahora incluye el idUsuario
     public function __construct($idTransaccion = null, $fecha = null, $monto = null, $tipo = null, $idConcepto = null, $idFamilia = null, $idUsuario = null) {
         $this->idTransaccion = $idTransaccion;
         $this->fecha = $fecha;
