@@ -1,7 +1,7 @@
 # Proyecto Ingenieria de Software II
 ---
 ### Profesor
-- Guillermo Enrique, Calderon Ruiz
+- Guillermo Enrique, Calderón Ruiz
 ---
 
 ### Alumnos
@@ -9,7 +9,7 @@
 - Hidalgo Machaca, Diego Alejandro
 - Huicho Perez, Anthony
 - Valencia Flores, Neymi Arlyz
-- Valenzuela Calderon, Luigi Yamil
+- Valenzuela Calderón, Luigi Yamil
 
 ---
 
