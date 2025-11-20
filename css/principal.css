@@ -78,10 +78,13 @@ body {
     display: flex;
     flex-direction: column;
     flex: 1;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border-radius: 12px;
 }
 
 .tabla-datos thead {
     flex-shrink: 0;
+    border-radius: 12px;
 }
 
 .tabla-datos tbody {
@@ -276,3 +279,5 @@ body {
     align-items: center;
     gap: 16px;
 }
+
+

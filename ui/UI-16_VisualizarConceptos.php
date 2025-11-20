@@ -1,4 +1,6 @@
 <?php
+/* FUN-49 filtrarConceptosPorBusqueda
+        Permite filtrar conceptos por la barra de búsqueda*/
 function filtrarConceptosPorBusqueda($familiaId, $cadena) {
     $conceptos = GestionarConcepto::relacionarDatos($familiaId);
 
@@ -22,13 +24,13 @@ function filtrarConceptosPorBusqueda($familiaId, $cadena) {
 
 // ------------------------------------------------------------
 // UI-16: Visualizar conceptos
-// Caso de uso asociado: CU-15 Gestionar conceptos
+// Caso de uso asociado: CU-09 Gestionar conceptos
 // ------------------------------------------------------------
 
 session_start();
 require_once '../gtr/GTR-02_GestionarConcepto.php';
 
-// Paso 7 del CU-15: La interfaz presenta el campo de búsqueda.
+// Paso 7 del CU-09: La interfaz presenta el campo de búsqueda.
 
 // Capturar la búsqueda si existe
 $cadena = isset($_GET['cadena']) ? $_GET['cadena'] : '';
@@ -58,19 +60,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['concepto_id'], $_POST
     }
 }
 
+
+//<!-- Paso 2-5 del CU-09: Se relacionan los datos, el GTR-02 va a llamar a GTR-01 Gestionar Usuario,
+//                         GTR-10 Gestionar Familia, GTR-09 Gestionar Categoria. -->
 $usuarioId = $_SESSION['id_usuario'];
 $familiaId = $_SESSION['familia_id'];
-// Si hay texto en la barra, filtrar (esto puedes implementarlo en tu función SQL más adelante)
 if ($cadena !== '') {
-    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos filtrados 
-        a mostrar segun la cadena ingresada en el buscador */
     $conceptos = filtrarConceptosPorBusqueda($familiaId, $cadena);
 } else {
-    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos
-        a mostrar en la tabla de la interfaz */
-    $conceptos_test = GestionarConcepto::obtenerConceptosBD($familiaId);
-    //var_dump($conceptos_test);
-
     $conceptos = GestionarConcepto::relacionarDatos($familiaId);
     // var_dump($conceptos);
 }
@@ -115,19 +112,19 @@ if ($cadena !== '') {
         <!-- Menú lateral -->
         <aside class="menu-lateral" id="menuLateral">
             <nav>
-                <a class="opcion-menu" href="daily_input.php">
+                <a class="opcion-menu" href="UI-04_RegistroDiario.php">
                     <i class="icono icono-documento"></i>Registro Diario
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-05_Balance.php">
                     <i class="icono icono-grafico"></i>Balance
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-07_CuentaPersonal.php">
                     <i class="icono icono-persona"></i>Cuenta
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-10_VisualizarAgenda.php">
                     <i class="icono icono-grafico"></i>Agenda
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-11_VisualizarRanking.php">
                     <i class="icono icono-grafico"></i>Ranking
                 </a>
                 <a class="opcion-menu activa" href="UI-16_VisualizarConceptos.php">
@@ -159,10 +156,12 @@ if ($cadena !== '') {
                     </a>
                 </nav>
             </aside>
+            
 
+            <!-- Paso 6 del CU-09: La UI-16 presenta la lista de conceptos. -->
             <section class="contenedor-tablas">
                 <article class="tabla">
-                    <!-- Paso 8 del CU-15: Mostrar opción de Crear concepto. -->
+                    <!-- Paso 8 del CU-09: Mostrar opción de Crear concepto. -->
                     <header>
                         <div class="encabezado-tabla-superior">
                             <form method="GET" action="UI-16_VisualizarConceptos.php" class="form-busqueda">
@@ -172,7 +171,7 @@ if ($cadena !== '') {
                                     placeholder="Buscar..." 
                                     value="<?= htmlspecialchars($cadena) ?>"
                                     class="input-busqueda">
-                                <button type="submit" class="boton-buscar">Buscar</button>
+                                <button type="submit" class="boton-buscar" style="background-color: #4A5568;">Buscar</button>
                                 <?php if ($cadena !== ''): ?>
                                     <a href="UI-16_VisualizarConceptos.php" class="boton-limpiar">Limpiar</a>
                                 <?php endif; ?>
@@ -185,7 +184,7 @@ if ($cadena !== '') {
                         <div class="linea-azul"></div>
                     </header>
 
-                    <table class="tabla-datos">
+                    <table class="tabla-datos" >
                         <thead>
                             <tr>
                                 <th class="encabezado-tabla">Concepto</th>
@@ -231,8 +230,8 @@ if ($cadena !== '') {
                                     </td>
 
 
-                                    <!-- Paso 9 del CU-15: Mostrar opciones de gestión según el rol. -->
-                                    <!-- Paso 9.1/9.2: Si es familiar, solo puede editar los suyos. -->
+                                    <!-- Paso 10 del CU-09: Mostrar opciones de gestión según el rol. -->
+                                    <!-- Paso 10.1/10.2: Si es familiar, solo puede editar los suyos. -->
 
                                     <td class="celda">
                                         <?php

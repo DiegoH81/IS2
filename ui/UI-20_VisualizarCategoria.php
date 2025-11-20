@@ -1,4 +1,7 @@
 <?php
+
+/* FUN-50 filtrarCategoriasPorBusqueda
+        Permite filtrar categorias por la barra de búsqueda*/
 function filtrarCategoriasPorBusqueda($familiaId, $cadena, &$categorias, &$usuarios) {
     $categorias = GestionarCategoria::obtenerCategoriasBD($familiaId);
     $usuarios = GestionarUsuario::obtenerUsuariosBD($familiaId);
@@ -56,22 +59,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idcategoria'], $_POST
     }
 }
 
+
+//<!-- Paso 1 del CU-10: Se obtienen las categorias. -->
 $categorias = null;
 $usuarios = null;
 
 $familiaId = $_SESSION['familia_id'];
 if ($cadena !== '') {
-    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos filtrados 
-        a mostrar segun la cadena ingresada en el buscador */
         filtrarCategoriasPorBusqueda($familiaId, $cadena, $categorias, $usuarios);
 } else {
-    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos
-        a mostrar en la tabla de la interfaz */
-
     $categorias = GestionarCategoria::obtenerCategoriasBD($familiaId);
     $usuarios = GestionarUsuario::obtenerUsuariosBD($familiaId);
-
-    //var_dump($usuarios);
 }
 
 //var_dump( $usuarios );
@@ -121,19 +119,19 @@ if ($cadena !== '') {
         <!-- Menú lateral -->
         <aside class="menu-lateral" id="menuLateral">
             <nav>
-                <a class="opcion-menu" href="daily_input.php">
+                <a class="opcion-menu" href="UI-04_RegistroDiario.php">
                     <i class="icono icono-documento"></i>Registro Diario
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-05_Balance.php">
                     <i class="icono icono-grafico"></i>Balance
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-07_CuentaPersonal.php">
                     <i class="icono icono-persona"></i>Cuenta
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-10_VisualizarAgenda.php">
                     <i class="icono icono-grafico"></i>Agenda
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-11_VisualizarRanking.php">
                     <i class="icono icono-grafico"></i>Ranking
                 </a>
                 <a class="opcion-menu activa" href="UI-16_VisualizarConceptos.php">
@@ -168,17 +166,18 @@ if ($cadena !== '') {
 
             <section class="contenedor-tablas">
                 <article class="tabla">
-                    <!-- Paso 8 del CU-15: Mostrar opción de Crear concepto. -->
+                    
                     <header>
                         <div class="encabezado-tabla-superior">
                             <form method="GET" action="UI-20_VisualizarCategoria.php" class="form-busqueda">
+                                <!-- Paso 2 del CU-10: Se muestra la búsqueda. -->
                                 <input 
                                     type="text" 
                                     name="cadena" 
                                     placeholder="Buscar..." 
                                     value="<?= htmlspecialchars($cadena) ?>"
                                     class="input-busqueda">
-                                <button type="submit" class="boton-buscar">Buscar</button>
+                                <button type="submit" class="boton-buscar" style="background-color: #4A5568;">Buscar</button>
 
 
                                 <?php if ($cadena !== ''): ?>
@@ -190,6 +189,7 @@ if ($cadena !== '') {
 
                             </form>
 
+                            <!-- Paso 3 del CU-10: Se muestra la opción de crear categoría. -->
                             <a href="UI-21_CrearCategoria.php" class="boton-crear">Crear categoría</a>
                         </div>
                         <h2 class="titulo-tabla">Configuración categoria</h2>
@@ -197,6 +197,8 @@ if ($cadena !== '') {
                         <div class="linea-azul"></div>
                     </header>
 
+
+                    <!-- Paso 4 del CU-10: Se presentan la lista de categorías. -->
                     <table class="tabla-datos">
                         <thead>
                             <tr>
@@ -225,7 +227,7 @@ if ($cadena !== '') {
                                         <?= htmlspecialchars($mapaUsuarios[$c->idUsuario] ?? 'Desconocido') ?>
                                     </td>
 
-
+                                    <!-- Paso 5 del CU-10: Se muestran opciones de gestión según el rol. -->
                                     <?php
                                         // Permite editar si es Admin Familiar o si el concepto lo subió el mismo usuario
                                         $puedeEditar = ($_SESSION['rol'] === 'Administrador familiar') || ($_SESSION['id_usuario'] == $c->idUsuario);
@@ -243,8 +245,6 @@ if ($cadena !== '') {
                                             <?= htmlspecialchars($c->estado) ?>
                                         </button>
                                     </td>
-                                    <!-- Paso 9 del CU-15: Mostrar opciones de gestión según el rol. -->
-                                    <!-- Paso 9.1/9.2: Si es familiar, solo puede editar los suyos. -->
 
                                     <td class="celda">
                                         <?php

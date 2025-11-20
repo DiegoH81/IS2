@@ -13,16 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usuario = trim($_POST['nombre']);
     $contrasena = trim($_POST['password']);
 
-    // Paso 8-12 del CU-01: Validar credenciales a través del gestor
+    // Paso 8-12 del CU-01: Validar credenciales a través del GTR-04
 
-    /*  Invoca la funcion validarCredenciales del GTR-04 Validar para verificar 
-        las credenciales ingresadas */
     if (Validar::solicitarValidacionCredenciales($usuario, $contrasena)) {
-        /*  Invoca la funcion obtenerUsuario del GTR-04 Validar para extraer la informacion del 
-            usuario ingresado */
         $usuarioData = Validar::solicitarUsuario($usuario);
         var_dump($usuarioData);
-        // Guardar datos en sesión
+        
 
         $_SESSION['id_usuario'] = $usuarioData->idUsuario;
         $_SESSION['nombre'] = $usuarioData->nombre;
@@ -33,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Paso 13 del CU-01: Redirigir al usuario
         //header("Location: UI-16_VisualizarConceptos.php");
-        header("Location: UI-16_VisualizarConceptos.php");
+        header("Location: UI-04_RegistroDiario.php");
         exit;
     } else {
         $error = "Usuario o contraseña incorrectos";
@@ -96,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <p style="text-align: center;">
                         ¿No tienes cuenta? 
-                        <a href="register.php" style="color: #3862AA; text-decoration: none; font-weight: bold;">
+                        <a href="UI-02_RegistrarUsuario.php" style="color: #3862AA; text-decoration: none; font-weight: bold;">
                             Regístrate
                         </a>
                     </p>

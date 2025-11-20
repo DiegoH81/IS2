@@ -1,0 +1,281 @@
+/* ===================================
+   ARCHIVO: css/register.css
+   Estilos para formularios de registro
+   =================================== */
+
+/* Contenedor principal del formulario */
+.contenedor-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px);
+    padding: 40px 20px;
+    background-color: #f3f4f6;
+}
+
+.contenedor-tablas-reg {
+    width: 100%;
+    max-width: 480px;
+}
+
+/* Tarjeta del formulario */
+.tabla {
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Título del formulario */
+.form-crear-concepto h2 {
+    font-size: 2.2em;
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+/* Campos del formulario */
+.campo-formulario {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.campo-formulario label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.campo-formulario input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.campo-formulario input::placeholder {
+    color: #aaa;
+}
+
+.campo-formulario input:focus {
+    outline: none;
+    border-color: #4a7ba7;
+    box-shadow: 0 0 0 3px rgba(74, 123, 167, 0.1);
+}
+
+/* Campo de contraseña con icono de ojo */
+.campo-password {
+    position: relative;
+    width: 100%;
+}
+
+.campo-password input {
+    padding-right: 45px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #666;
+    padding: 5px;
+    transition: color 0.3s ease;
+    line-height: 1;
+}
+
+.toggle-password:hover {
+    color: #4a7ba7;
+}
+
+.toggle-password:focus {
+    outline: none;
+}
+
+.botones-formulario {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+/* Estilos base para todos los botones */
+.boton-cancelar,
+.boton-registrar,
+.boton-registrar-familia {
+    width: 100%;
+    height: auto;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    justify-content: space-between; /* Mantén el espacio entre los botones */
+
+}
+
+/* Botón cancelar - Gris */
+.boton-cancelar {
+    background-color: #6c757d;
+    margin: 0 auto; /* Centra el botón "Cancelar" */
+    color: white;
+}
+
+.boton-cancelar:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+}
+
+/* Botón registrar - Azul */
+.boton-registrar {
+    background-color: #4a7ba7;
+    color: white;
+}
+
+.boton-registrar:hover {
+    background-color: #3d5a6c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(74, 123, 167, 0.3);
+}
+
+/* Botón registrar familia - Verde */
+.boton-registrar-familia {
+    background-color: #5cb85c;
+    color: white;
+}
+
+.boton-registrar-familia:hover {
+    background-color: #4cae4c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(92, 184, 92, 0.3);
+}
+
+/* Mensaje de error */
+.mensaje-error {
+    color: #dc3545;
+    text-align: center;
+    font-weight: 600;
+    padding: 12px;
+    background-color: #f8d7da;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #f5c6cb;
+    font-size: 14px;
+}
+
+/* Mensaje de éxito (opcional) */
+.mensaje-exito {
+    color: #155724;
+    text-align: center;
+    font-weight: 600;
+    padding: 12px;
+    background-color: #d4edda;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #c3e6cb;
+    font-size: 14px;
+}
+
+/* Link adicional (ej: "¿Ya tienes cuenta?") */
+.link-adicional {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+.link-adicional a {
+    color: #4a7ba7;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link-adicional a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .contenedor-form {
+        padding: 20px 15px;
+    }
+
+    .tabla {
+        padding: 30px 20px;
+    }
+
+    .form-crear-concepto h2 {
+        font-size: 1.8em;
+    }
+
+    .campo-formulario input {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .campo-password input {
+        padding-right: 40px;
+    }
+
+    .toggle-password {
+        font-size: 18px;
+        right: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contenedor-tablas-reg {
+        max-width: 100%;
+    }
+
+    .tabla {
+        padding: 25px 15px;
+    }
+
+    .form-crear-concepto h2 {
+        font-size: 1.6em;
+        margin-bottom: 25px;
+    }
+
+    .campo-formulario {
+        margin-bottom: 16px;
+    }
+
+    .campo-formulario label {
+        font-size: 13px;
+    }
+}
+
+/* Animación de entrada */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+

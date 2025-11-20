@@ -342,6 +342,7 @@
     border-radius: 8px;
     max-width: 600px;
     margin: auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
 .campo-formulario {

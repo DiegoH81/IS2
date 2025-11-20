@@ -1,4 +1,7 @@
 <?php
+/* FUN-48 filtrarUsuariosPorBusqueda
+        Permite filtrar usuarios por la barra de búsqueda*/
+
 function filtrarUsuariosPorBusqueda($familiaId, $cadena, &$usuarios) {
     $usuarios = GestionarUsuario::obtenerUsuariosBD($familiaId);
 
@@ -34,10 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_usuario'], $_POST[
     $idUsuario = intval($_POST['id_usuario']);
     $estado = (intval($_POST['estado']) === 1); // Convertir a booleano
     
-    // Llamar a la función para cambiar el estado
     $resultado = GestionarUsuario::cambiarEstadoUsuarioBD($idUsuario, $estado);
     
-    // Si es petición AJAX, devolver JSON
     if(isset($_POST['ajax'])) {
         header('Content-Type: application/json');
         if($resultado) {
@@ -52,19 +53,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_usuario'], $_POST[
 $usuarios = null;
 $familiaId = $_SESSION['familia_id'];
 
+//<!-- Paso 1 del CU-08: La UI-12 obtiene los usuarios -->
 if ($cadena !== '') {
-    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos filtrados 
-        a mostrar segun la cadena ingresada en el buscador */
         filtrarUsuariosPorBusqueda($familiaId, $cadena, $usuarios);
 } else {
-    /*  Invoca la funcion relacionarDatos del GTR-02 Gestionar concepto para extraer los conceptos
-        a mostrar en la tabla de la interfaz */
     $usuarios = GestionarUsuario::obtenerUsuariosBD($familiaId);
-
-    //var_dump($usuarios);
 }
 ?>
 
+<!-- Paso 2 del CU-08: La UI-12 se carga y presenta el campo de búsqueda -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -108,19 +105,19 @@ if ($cadena !== '') {
         <!-- Menú lateral -->
         <aside class="menu-lateral" id="menuLateral">
             <nav>
-                <a class="opcion-menu" href="daily_input.php">
+                <a class="opcion-menu" href="UI-04_RegistroDiario.php">
                     <i class="icono icono-documento"></i>Registro Diario
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-05_Balance.php">
                     <i class="icono icono-grafico"></i>Balance
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-07_CuentaPersonal.php">
                     <i class="icono icono-persona"></i>Cuenta
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-10_VisualizarAgenda.php">
                     <i class="icono icono-grafico"></i>Agenda
                 </a>
-                <a class="opcion-menu" href="#">
+                <a class="opcion-menu" href="UI-11_VisualizarRanking.php">
                     <i class="icono icono-grafico"></i>Ranking
                 </a>
                 <a class="opcion-menu activa" href="UI-16_VisualizarConceptos.php">
@@ -155,7 +152,6 @@ if ($cadena !== '') {
 
             <section class="contenedor-tablas">
                 <article class="tabla">
-                    <!-- Paso 8 del CU-15: Mostrar opción de Crear concepto. -->
                     <header>
                         <div class="encabezado-tabla-superior">
                             <form method="GET" action="UI-12_VisualizarUsuarios.php" class="form-busqueda">
@@ -165,7 +161,7 @@ if ($cadena !== '') {
                                     placeholder="Buscar..." 
                                     value="<?= htmlspecialchars($cadena) ?>"
                                     class="input-busqueda">
-                                <button type="submit" class="boton-buscar">Buscar</button>
+                                <button type="submit" class="boton-buscar" style="background-color: #4A5568;">Buscar</button>
 
 
                                 <?php if ($cadena !== ''): ?>
@@ -177,6 +173,7 @@ if ($cadena !== '') {
 
                             </form>
 
+                            <!-- Paso 3 del CU-08: La UI-12 muestra la opcion de crear usuario -->
                             <a href="UI-13_CrearUsuario.php" class="boton-crear">Crear usuario</a>
                         </div>
                         <h2 class="titulo-tabla">Configuración usuarios</h2>
@@ -184,6 +181,7 @@ if ($cadena !== '') {
                         <div class="linea-azul"></div>
                     </header>
 
+                    <!-- Paso 4 del CU-08: Presenta la lista de usuario con opciones (Habilitado/Deshabilitado) -->
                     <table class="tabla-datos">
                         <thead>
                             <tr>
@@ -223,11 +221,6 @@ if ($cadena !== '') {
                                             <?= $estadoTexto ?>
                                         </button>
                                     </td>
-
-
-
-                                    <!-- Paso 9 del CU-15: Mostrar opciones de gestión según el rol. -->
-                                    <!-- Paso 9.1/9.2: Si es familiar, solo puede editar los suyos. -->
 
                                     <td class="celda">
                                         <form action="UI-14_EditarUsuario.php" method="GET">

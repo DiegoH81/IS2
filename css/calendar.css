@@ -1,0 +1,240 @@
+/* ===================================
+   ESTILOS MEJORADOS PARA BALANCE POR RANGO
+   =================================== */
+
+/* Controles superiores */
+.controles-superiores {
+    padding: 20px 0;
+    margin-bottom: 30px;
+}
+
+.grupo-controles {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+/* Contenedor del switch - A LA IZQUIERDA */
+.contenedor-switch {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.texto-switch {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Contenedor derecho con botón y calendarios */
+.contenedor-filtro-derecha {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-left: auto !important; /* Forzar a la derecha */
+    position: relative;
+    flex-direction: row-reverse; /* Invertir orden: calendarios primero, luego botón */
+}
+
+/* Botón Balance por rango */
+.boton-balance-semanal {
+    padding: 10px 24px;
+    background-color: #3d5a6c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    white-space: nowrap;
+}
+
+.boton-balance-semanal:hover {
+    background-color: #4a7ba7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.boton-balance-semanal:active {
+    transform: translateY(0);
+}
+
+/* Contenedor de filtros de fechas - HORIZONTAL */
+#filtro-fechas {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 15px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px); /* Viene desde la izquierda */
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Grupo de fecha (label + input) */
+.grupo-fecha {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Labels de fecha */
+#filtro-fechas label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    white-space: nowrap;
+}
+
+/* Inputs de fecha - MÁS COMPACTOS */
+#filtro-fechas input[type="date"] {
+    padding: 8px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #333;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 150px;
+}
+
+#filtro-fechas input[type="date"]:hover {
+    border-color: #4a7ba7;
+    background-color: white;
+}
+
+#filtro-fechas input[type="date"]:focus {
+    outline: none;
+    border-color: #4a7ba7;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(74, 123, 167, 0.1);
+}
+
+/* Estilo para el ícono del calendario */
+#filtro-fechas input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+#filtro-fechas input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+/* Botón Aplicar fechas - MÁS COMPACTO */
+#aplicar-fechas {
+    padding: 8px 20px;
+    background-color: #4a7ba7;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(74, 123, 167, 0.3);
+}
+
+#aplicar-fechas:hover {
+    background-color: #3d5a6c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(74, 123, 167, 0.4);
+}
+
+#aplicar-fechas:active {
+    transform: translateY(0);
+}
+
+/* Separador entre elementos */
+.separador-vertical {
+    width: 1px;
+    height: 30px;
+    background-color: #e0e0e0;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .contenedor-filtro-derecha {
+        flex-wrap: wrap;
+    }
+    
+    #filtro-fechas {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 768px) {
+    .grupo-controles {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .contenedor-switch {
+        justify-content: space-between;
+    }
+    
+    .contenedor-filtro-derecha {
+        flex-direction: column;
+        width: 100%;
+        margin-left: 0;
+    }
+    
+    .boton-balance-semanal {
+        width: 100%;
+    }
+    
+    #filtro-fechas {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .grupo-fecha {
+        width: 100%;
+    }
+    
+    #filtro-fechas input[type="date"] {
+        width: 100%;
+    }
+    
+    #aplicar-fechas {
+        width: 100%;
+    }
+    
+    .separador-vertical {
+        display: none;
+    }
+}
+
+/* Animación al cerrar */
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-20px); /* Sale hacia la izquierda */
+    }
+}

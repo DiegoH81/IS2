@@ -32,5 +32,25 @@ class Validar {
     public static function solicitarUsuario($usuario) {
         return GestionarUsuario::obtenerUsuarioBD($usuario);
     }
+
+    /* FUN-51 obtenerFamiliaActual 
+        Se obtiene el id de la familia actual */
+    public static function obtenerFamiliaActual() {
+        return $_SESSION['familia_id'];
+    }
+
+    /* FUN-52 obtenerUsuarioActual 
+        Se obtienen los datos del usuario actual */
+    public static function obtenerUsuarioActual() {
+        return new Usuario(
+            $_SESSION['id_usuario'] ?? null,     // idUsuario
+            $_SESSION['usuario'] ?? null,        // usuario
+            $_SESSION['nombre'] ?? null,         // nombre
+            $_SESSION['contrasena'] ?? null,     // contrasena
+            $_SESSION['rol'] ?? null,            // rol
+            true,                                // estado, siempre activo por defecto
+            $_SESSION['familia_id'] ?? null      // idFamilia
+        );
+    }
 }
 ?>
