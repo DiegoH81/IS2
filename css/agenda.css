@@ -328,3 +328,84 @@
         text-align: left;
     }
 }
+
+/* Asegurar que el contenedor principal tenga altura fija */
+.contenedor-medio {
+    display: flex;
+    height: calc(100vh - 80px); /* Ajusta según la altura de tu header */
+    overflow: hidden;
+}
+
+/* El área de trabajo debe tener scroll */
+.area-trabajo {
+    flex: 1;
+    overflow-y: auto; /* Activa el scroll vertical */
+    overflow-x: hidden;
+    padding: 20px;
+    height: 100%;
+}
+
+/* Estilo personalizado para la barra de scroll */
+.area-trabajo::-webkit-scrollbar {
+    width: 10px;
+}
+
+.area-trabajo::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.area-trabajo::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+.area-trabajo::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Alternativa: Si prefieres que solo la lista de transacciones tenga scroll */
+.lista-transacciones {
+    max-height: 500px; /* Ajusta esta altura según tus necesidades */
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-bottom: 20px;
+}
+
+.lista-transacciones::-webkit-scrollbar {
+    width: 8px;
+}
+
+.lista-transacciones::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.lista-transacciones::-webkit-scrollbar-thumb {
+    background: #4a90e2;
+    border-radius: 4px;
+}
+
+.lista-transacciones::-webkit-scrollbar-thumb:hover {
+    background: #357abd;
+}
+
+/* Asegurar que el menú lateral no tenga scroll */
+.menu-lateral {
+    overflow: visible;
+    flex-shrink: 0;
+}
+
+/* Para garantizar que el body y html no interfieran */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Evita scroll doble */
+}
+
+.contenedor-principal {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}

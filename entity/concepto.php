@@ -1,7 +1,10 @@
 <?php
 require_once '../DatabaseConnection.php';
 
-// TAB-04 Concepto
+// ------------------------------------------------------------
+// TAB-02 Concepto
+// ------------------------------------------------------------
+
 class Concepto {
 
     public $idConcepto;
@@ -78,14 +81,10 @@ class Concepto {
     $usuario_id, 
     $categoria_id
     ) {
-        // Conectar a la base de datos
         $conn = Database::connect();
-
-        // Formatear fechas como YYYY-MM-DD
         $fecha_inicio = date('Y-m-d', strtotime($fecha_inicio));
         $fecha_fin    = date('Y-m-d', strtotime($fecha_fin));
 
-        // Preparar la consulta
         $query = "SELECT crearConcepto($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);";
         $params = [
             $nombre,
@@ -100,7 +99,6 @@ class Concepto {
             (int)$categoria_id
         ];
 
-        // Ejecutar la consulta
         $result = pg_query_params($conn, $query, $params);
     }
 
@@ -118,7 +116,6 @@ class Concepto {
         }
         
         
-        // Crear y retornar un objeto Concepto
         return new Concepto(
             $row['id_concepto'],
             $row['nombre'],

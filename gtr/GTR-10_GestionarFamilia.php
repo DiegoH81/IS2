@@ -2,7 +2,10 @@
 require_once '../DatabaseConnection.php';
 
 require_once '../entity/familia.php';
+
+// ------------------------------------------------------------
 // GTR-10 Gestionar familiar
+// ------------------------------------------------------------
 
 class GestionarFamilia {
 
@@ -19,8 +22,8 @@ class GestionarFamilia {
         return Familia::crearFamilia($nombre_familia, $codigo_familiar);
     }
 
-    /* FUN-21 crearFamiliaBD
-        Inserta un nuevo grupo familiar en la base de dato */
+    /* FUN-80 obtenerFamiliaPorCodigoBD
+        Se obtiene una familia en base al codigo familiar, pidiendosela a la entidad */
     public static function obtenerFamiliaPorCodigoBD($codigo_familiar) {
         return Familia::obtenerFamiliaPorCodigo($codigo_familiar);
     }

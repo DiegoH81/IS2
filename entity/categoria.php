@@ -1,7 +1,10 @@
 <?php
 require_once '../DatabaseConnection.php';
 
-// TAB-03 Categoria
+// ------------------------------------------------------------
+// TAB-05 Categoria
+// ------------------------------------------------------------
+
 class Categoria {
 
     public $idCategoria;
@@ -90,10 +93,9 @@ class Categoria {
             return null; // No se encontró la categoría
         }
 
-        // Convertir estado (por si viene como 't' o 'f')
+        // Convertir estado (t o f)
         $estado = ($data['estado'] === 't' || $data['estado'] === true);
 
-        // Crear y devolver la instancia
         return new Categoria(
             $data['idcategoria'],
             $data['nombre'],

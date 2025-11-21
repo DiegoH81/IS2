@@ -1,9 +1,3 @@
-/* ===================================
-   ARCHIVO: css/register.css
-   Estilos para formularios de registro
-   =================================== */
-
-/* Contenedor principal del formulario */
 .contenedor-form {
     display: flex;
     justify-content: center;
@@ -18,7 +12,6 @@
     max-width: 480px;
 }
 
-/* Tarjeta del formulario */
 .tabla {
     background: white;
     border-radius: 12px;
@@ -26,7 +19,6 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* Título del formulario */
 .form-crear-concepto h2 {
     font-size: 2.2em;
     text-align: center;
@@ -35,7 +27,6 @@
     font-weight: 600;
 }
 
-/* Campos del formulario */
 .campo-formulario {
     margin-bottom: 20px;
     position: relative;
@@ -70,7 +61,6 @@
     box-shadow: 0 0 0 3px rgba(74, 123, 167, 0.1);
 }
 
-/* Campo de contraseña con icono de ojo */
 .campo-password {
     position: relative;
     width: 100%;
@@ -111,7 +101,6 @@
     margin-top: 30px;
 }
 
-/* Estilos base para todos los botones */
 .boton-cancelar,
 .boton-registrar,
 .boton-registrar-familia {
@@ -128,11 +117,10 @@
     display: inline-block;
     text-align: center;
     font-family: Arial, sans-serif;
-    justify-content: space-between; /* Mantén el espacio entre los botones */
+    justify-content: space-between;
 
 }
 
-/* Botón cancelar - Gris */
 .boton-cancelar {
     background-color: #6c757d;
     margin: 0 auto; /* Centra el botón "Cancelar" */
@@ -145,7 +133,6 @@
     box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
 }
 
-/* Botón registrar - Azul */
 .boton-registrar {
     background-color: #4a7ba7;
     color: white;
@@ -157,7 +144,6 @@
     box-shadow: 0 4px 8px rgba(74, 123, 167, 0.3);
 }
 
-/* Botón registrar familia - Verde */
 .boton-registrar-familia {
     background-color: #5cb85c;
     color: white;
@@ -169,7 +155,6 @@
     box-shadow: 0 4px 8px rgba(92, 184, 92, 0.3);
 }
 
-/* Mensaje de error */
 .mensaje-error {
     color: #dc3545;
     text-align: center;
@@ -182,7 +167,6 @@
     font-size: 14px;
 }
 
-/* Mensaje de éxito (opcional) */
 .mensaje-exito {
     color: #155724;
     text-align: center;
@@ -195,7 +179,6 @@
     font-size: 14px;
 }
 
-/* Link adicional (ej: "¿Ya tienes cuenta?") */
 .link-adicional {
     text-align: center;
     margin-top: 20px;

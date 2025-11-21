@@ -317,8 +317,8 @@
 
 .boton-crear {
     text-decoration: none;
-    background-color: #4A5568; /* azul */
-    margin-left: auto;            /* empuja el botón al extremo derecho */
+    background-color: #4A5568;
+    margin-left: auto;         
 
     color: white;
     border: none;
@@ -330,7 +330,7 @@
 }
 
 .boton-crear:hover {
-    background-color: #0056b3; /* azul oscuro */
+    background-color: #0056b3;
 }
 
 .form-crear-concepto {
@@ -411,28 +411,28 @@ h1 {
 
 .grupo-botones {
   display: flex;
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center;     /* Centra verticalmente si cambia la altura */
-  gap: 10px;               /* Espacio entre botones */
-  width: 100%;             /* Asegura que ocupe todo el ancho */
-  margin-top: 20px;        /* (opcional) separación hacia arriba */
+  justify-content: center;
+  align-items: center;     
+  gap: 10px;               
+  width: 100%;             
+  margin-top: 20px;        
 }
 
 .boton-cancelar {
-    background-color: #9ca3af; /* gris suave */
+    background-color: #9ca3af; 
 }
 
 .boton-cancelar:hover {
-    background-color: #6b7280; /* gris más oscuro */
+    background-color: #6b7280; 
 }
 
 .grupo-campos {
     display: flex;
-    gap: 20px; /* espacio entre los campos */
+    gap: 20px; 
 }
 
 .campo-formulario {
-    flex: 1; /* para que ambos tengan el mismo ancho */
+    flex: 1; 
     display: flex;
     flex-direction: column;
 }

@@ -5,7 +5,10 @@ require_once 'GTR-01_GestionarUsuario.php';
 require_once 'GTR-02_GestionarConcepto.php';
 require_once 'GTR-09_GestionarCategoria.php';
 
-// GTR-02 Gestionar concepto
+// ------------------------------------------------------------
+// GTR-07 Gestionar transaccion
+// ------------------------------------------------------------
+
 
 class GestionarTransaccion {
 

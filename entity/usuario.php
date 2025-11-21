@@ -1,7 +1,10 @@
 <?php
 require_once '../DatabaseConnection.php';
 
-// TAB-02 Usuario
+// ------------------------------------------------------------
+// TAB-01 Usuario
+// ------------------------------------------------------------
+
 class Usuario {
 
     public $idUsuario;

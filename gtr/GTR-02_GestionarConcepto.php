@@ -4,7 +4,9 @@ require_once 'GTR-01_GestionarUsuario.php';
 require_once 'GTR-09_GestionarCategoria.php';
 require_once '../entity/concepto.php';
 
+// ------------------------------------------------------------
 // GTR-02 Gestionar concepto
+// ------------------------------------------------------------
 
 class GestionarConcepto {
 
@@ -45,7 +47,6 @@ class GestionarConcepto {
             //var_dump($usuarios);
             //var_dump($categorias);
     
-             // Crear índices para búsquedas rápidas
             $usuariosIndex = [];
             foreach ($usuarios as $u) {
                 $usuariosIndex[$u->idUsuario] = $u->nombre;
@@ -56,7 +57,6 @@ class GestionarConcepto {
                 $categoriasIndex[$cat->idCategoria] = $cat->nombre;
             }
             
-            // Construir array resultado
             foreach ($conceptos as $c) {
                 $resultado[] = [
                     'concepto_id' => $c->idConcepto,
@@ -79,7 +79,6 @@ class GestionarConcepto {
 
     /* FUN-11 crearConceptoBD 
         Inserta un nuevo concepto en la base de datos */
-
     public static function crearConceptoBD(
     $nombre, 
     $tipo, 

@@ -1,7 +1,9 @@
 <?php
 require_once '../DatabaseConnection.php';
 
-// TAB-0 Familia
+// ------------------------------------------------------------
+// TAB-03 Familia
+// ------------------------------------------------------------
 class Familia {
 
     public $idFamilia;
@@ -40,28 +42,24 @@ class Familia {
         return $row[0]; // Retorna el id de la nueva familia
     }
 
-
+    /* FUN-79 obtenerFamiliaPorCodigo 
+        Se obtiene una familia en base al codigo familiar */
     public static function obtenerFamiliaPorCodigo($codigo_familiar) {
         $conn = Database::connect();
 
-        // Ejecutar la consulta SQL
         $query = "SELECT obtenerFamiliaPorCodigo($1);";
         $params = array($codigo_familiar);
         $result = pg_query_params($conn, $query, $params);
         
-        // Verificar si la consulta devolvió alguna fila
         if ($result) {
             $row = pg_fetch_row($result);
             
-            // Si no se encontró ninguna fila, retornar -1
             if (!$row || $row[0] === null) {
                 return -1;  // Retorna -1 si no se encuentra ningún resultado
             }
             
-            // Si se encontró un resultado, retornar el valor
             return $row[0];
         } else {
-            // Si la consulta falló por alguna razón, retornar -1
             return -1;
         }
     }

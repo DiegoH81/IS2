@@ -1,4 +1,3 @@
-/* Info del usuario - ACTUALIZADO PARA SER VERTICAL */
 .info-usuario {
     display: flex;
     flex-direction: column;
@@ -17,7 +16,6 @@
     font-size: 13px;
 }
 
-/* Contenedor del medio */
 .contenedor-medio {
     display: flex;
     flex: 1;
@@ -29,7 +27,6 @@
     padding: 8px;
 }
 
-/* Area de trabajo */
 .area-trabajo {
     flex: 1;
     display: flex;
@@ -39,7 +36,6 @@
     overflow: hidden;
 }
 
-/* Controles superiores */
 .controles-superiores {
     display: flex;
     justify-content: space-between;
@@ -54,7 +50,6 @@
     gap: 16px;
 }
 
-/* Switch */
 .contenedor-switch {
     display: flex;
     align-items: center;
@@ -111,7 +106,6 @@ input:checked + .deslizador:before {
     transform: translateX(26px);
 }
 
-/* Caja de fecha */
 .caja-fecha {
     background: white;
     border: 2px solid #4299e1;
@@ -129,7 +123,6 @@ input:checked + .deslizador:before {
     width: 100%;
 }
 
-/* Botones */
 .boton-balance-rango {
     background-color: #374151;
     color: white;
@@ -161,7 +154,6 @@ input:checked + .deslizador:before {
     background-color: #1f2937;
 }
 
-/* Contenedor de las tablas */
 .contenedor-tablas {
     display: flex;
     justify-content: center;
@@ -172,7 +164,6 @@ input:checked + .deslizador:before {
     align-items: flex-start;
 }
 
-/* Cajas de tabla */
 .caja-tabla {
     background: white;
     padding: 20px;
@@ -239,7 +230,6 @@ input:checked + .deslizador:before {
     width: 100%;
 }
 
-/* Scrollbar para las tablas */
 .tabla-datos tbody::-webkit-scrollbar {
     width: 6px;
 }
@@ -299,7 +289,6 @@ input:checked + .deslizador:before {
     font-size: 15px;
 }
 
-/* Link editar */
 .link-editar {
     color: #2563eb;
     cursor: pointer;
@@ -310,7 +299,6 @@ input:checked + .deslizador:before {
     text-decoration: underline;
 }
 
-/* Boton mas */
 .boton-mas {
     position: absolute;
     bottom: 20px;
@@ -331,7 +319,6 @@ input:checked + .deslizador:before {
     transform: scale(1.1);
 }
 
-/* Seccion inferior */
 .seccion-inferior {
     display: flex;
     justify-content: space-between;
@@ -340,7 +327,6 @@ input:checked + .deslizador:before {
     flex-shrink: 0;
 }
 
-/* Caja resumen */
 .caja-resumen {
     background-color: #2d3748;
     color: white;
@@ -374,7 +360,6 @@ input:checked + .deslizador:before {
     color: white;
 }
 
-/* Para moviles */
 @media (max-width: 768px) {
     .menu-lateral {
         display: none;

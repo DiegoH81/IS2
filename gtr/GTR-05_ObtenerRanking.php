@@ -3,7 +3,10 @@ require_once '../DatabaseConnection.php';
 require_once 'GTR-01_GestionarUsuario.php';
 require_once 'GTR-07_GestionarTransaccion.php';
 
+// ------------------------------------------------------------
 // GTR-05 ObtenerRanking
+// ------------------------------------------------------------
+
 
 class ObtenerRanking {
 
@@ -20,7 +23,6 @@ class ObtenerRanking {
         $conceptos = GestionarTransaccion::solicitarConceptos($idFamilia);
         
         //var_dump($transacciones);
-        // Crear índices para búsquedas rápidas (indexar por id)
         $usuariosIndex = [];
         foreach ($usuarios as $u) {
             $usuariosIndex[$u->idUsuario] = $u->nombre;
@@ -36,7 +38,7 @@ class ObtenerRanking {
             $conceptosIndex[$c->idConcepto] = $c;
         }
 
-        // Relacionar las transacciones con sus conceptos, categorías y usuarios
+        // Relacionar las transacciones
         foreach ($transacciones as $t) {
             $conceptoObj = isset($conceptosIndex[$t->idConcepto]) 
                     ? $conceptosIndex[$t->idConcepto] 
@@ -59,39 +61,33 @@ class ObtenerRanking {
                 'usuario_id'    => $t->idUsuario
             ];
 
-            // Añadir la transacción con su relación
             $resultado[] = $transaccionRelacionada;
         }
 
-        return $resultado; // Retorna el array de datos relacionados
+        return $resultado;
     }
 
     /* FUN-60 obtenerIngresos 
         Obtiene el ranking de una familia, relacionando a los ingresos */
     public static function obtenerIngresos($idFamilia) {
-        // Obtener todas las transacciones relacionadas
         $transacciones = self::relacionarDatos($idFamilia);
-        
-        // Filtrar solo los ingresos
         $ingresos = array_filter($transacciones, function($transaccion) {
             return $transaccion['tipo'] === 'Ingreso';
         });
 
-        return $ingresos; // Retorna solo los ingresos
+        return $ingresos;
     }
 
     /* FUN-60 obtenerEgresos 
         Obtiene el ranking de una familia, relacionando a los egresos */
     public static function obtenerEgresos($idFamilia) {
-        // Obtener todas las transacciones relacionadas
         $transacciones = self::relacionarDatos($idFamilia);
         
-        // Filtrar solo los ingresos
         $ingresos = array_filter($transacciones, function($transaccion) {
             return $transaccion['tipo'] === 'Egreso';
         });
 
-        return $ingresos; // Retorna solo los ingresos
+        return $ingresos;
     }
 
     /* FUN-61 filtrarPorUltimas4Semanas 

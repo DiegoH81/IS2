@@ -2,7 +2,10 @@
 require_once '../DatabaseConnection.php';
 require_once '../entity/usuario.php';
 
+// ------------------------------------------------------------
 // GTR-01 Gestionar usuario
+// ------------------------------------------------------------
+
 
 class GestionarUsuario {
 
