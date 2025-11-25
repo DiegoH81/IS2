@@ -15,7 +15,7 @@ class GestionarRegistroDiario {
         // Inicializamos el array de resultados
         $resultado = [];
         
-        
+        // Obtener transacciones, categorias, usuarios y conceptos relacionados
         $transacciones = GestionarTransaccion::obtenerTransaccionesRangoBD($idFamilia, $fecha_inicio, $fecha_inicio);
         $categorias = GestionarTransaccion::solicitarCategorias($idFamilia);
         $usuarios = GestionarTransaccion::solicitarUsuarios($idFamilia);
@@ -36,16 +36,20 @@ class GestionarRegistroDiario {
             $conceptosIndex[$c->idConcepto] = $c;
         }
 
+        // Iterar transacciones
         foreach ($transacciones as $t) {
+
             $conceptoObj = isset($conceptosIndex[$t->idConcepto]) 
                     ? $conceptosIndex[$t->idConcepto] 
                     : null;
+
 
             $nombreCategoria = '';
             if ($conceptoObj && isset($categoriasIndex[$conceptoObj->idCategoria])) {
                 $nombreCategoria = $categoriasIndex[$conceptoObj->idCategoria];
             }
 
+            // Relacionar transaccion para obtener un concepto mostrable
             $transaccionRelacionada = [
                 'idTransaccion' => $t->idTransaccion,
                 'fecha'         => $t->fecha,
@@ -75,6 +79,7 @@ class GestionarRegistroDiario {
     public static function vistaUsuarioRegistroDiario($idFamilia, $fecha_inicio, $idUsuario) {
         $datosRelacionados = self::relacionarDatosRegistroDiario($idFamilia, $fecha_inicio);
 
+        // Solo aquellos conceptos creados por el usuario
         $datosUsuario = array_filter($datosRelacionados, function($transaccion) use ($idUsuario) {
             return $transaccion['usuario_id'] == $idUsuario;
         });

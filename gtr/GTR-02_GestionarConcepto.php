@@ -39,7 +39,9 @@ class GestionarConcepto {
         $resultado = [];
         
         if (!empty($conceptos)) {
+            
 
+            // Obtener usuarios y categorias pertinentes
             $usuarios = self::solicitarUsuarios($familia_id);
             $categorias = self::solicitarCategorias($familia_id);
             
@@ -57,6 +59,7 @@ class GestionarConcepto {
                 $categoriasIndex[$cat->idCategoria] = $cat->nombre;
             }
             
+            // Relacionar datos hasta obtener un concepto mostrable
             foreach ($conceptos as $c) {
                 $resultado[] = [
                     'concepto_id' => $c->idConcepto,
@@ -115,6 +118,14 @@ class GestionarConcepto {
         return Concepto::editarEstadoConcepto($id_concepto, $estado);
     }
     
+    
+    /* FUN-79 obtenerConceptosPorFechaBD 
+        Nos permite obtener los conceptos por una fecha, para poder ver cual es el siguiente
+        concepto a ser cobrado */
+    public static function obtenerConceptosPorFechaBD($fecha, $idFamilia)
+    {
+        return Concepto::obtenerConceptosPorFecha($fecha, $idFamilia);
+    }
 
 }
 ?>

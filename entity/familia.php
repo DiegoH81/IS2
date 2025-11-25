@@ -23,6 +23,8 @@ class Familia {
     public static function existeContrasenaFamiliar($contrasena_familiar) {
         $conn = Database::connect();
         $query = "SELECT existeContrasenaFamiliar($1);";
+        
+        // Relacionar datos a la query
         $params = array($contrasena_familiar);
         $result = pg_query_params($conn, $query, $params);
         $row = pg_fetch_row($result);
@@ -36,6 +38,8 @@ class Familia {
         $conn = Database::connect();
 
         $query = "SELECT crearFamilia($1, $2);";
+
+        // Relacionar datos a la query
         $params = array($codigo_familiar, $nombre_familia);
         $result = pg_query_params($conn, $query, $params);
         $row = pg_fetch_row($result);
@@ -48,13 +52,17 @@ class Familia {
         $conn = Database::connect();
 
         $query = "SELECT obtenerFamiliaPorCodigo($1);";
+
+        // Relacionar datos a la query
         $params = array($codigo_familiar);
         $result = pg_query_params($conn, $query, $params);
         
+
         if ($result) {
             $row = pg_fetch_row($result);
             
-            if (!$row || $row[0] === null) {
+            if (!$row || $row[0] === null)
+            {
                 return -1;  // Retorna -1 si no se encuentra ningún resultado
             }
             

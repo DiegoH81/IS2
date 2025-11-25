@@ -22,7 +22,7 @@ class ObtenerRanking {
         $usuarios = GestionarTransaccion::solicitarUsuarios($idFamilia);
         $conceptos = GestionarTransaccion::solicitarConceptos($idFamilia);
         
-        //var_dump($transacciones);
+
         $usuariosIndex = [];
         foreach ($usuarios as $u) {
             $usuariosIndex[$u->idUsuario] = $u->nombre;
@@ -38,7 +38,7 @@ class ObtenerRanking {
             $conceptosIndex[$c->idConcepto] = $c;
         }
 
-        // Relacionar las transacciones
+        // Iterando transacciones
         foreach ($transacciones as $t) {
             $conceptoObj = isset($conceptosIndex[$t->idConcepto]) 
                     ? $conceptosIndex[$t->idConcepto] 
@@ -49,6 +49,7 @@ class ObtenerRanking {
                 $nombreCategoria = $categoriasIndex[$conceptoObj->idCategoria];
             }
 
+            // Crear la transaccion relacionada
             $transaccionRelacionada = [
                 'idTransaccion' => $t->idTransaccion,
                 'fecha'         => $t->fecha,
@@ -93,7 +94,7 @@ class ObtenerRanking {
     /* FUN-61 filtrarPorUltimas4Semanas 
         Filtrar transacciones por las ultimas 4 semanas */
     public static function filtrarPorUltimas4Semanas($transacciones) {
-        $fechaLimite = date('Y-m-d', strtotime('-4 weeks'));  // Calcula la fecha de hace 4 semanas
+        $fechaLimite = date('Y-m-d', strtotime('-4 weeks'));
         return array_filter($transacciones, function($transaccion) use ($fechaLimite) {
             return $transaccion['fecha'] >= $fechaLimite;
         });
@@ -102,7 +103,7 @@ class ObtenerRanking {
     /* FUN-62 filtrarPorUltimos6Meses 
         Filtrar transacciones por l0s ultimas 6 meses */
     public static function filtrarPorUltimos6Meses($transacciones) {
-        $fechaLimite = date('Y-m-d', strtotime('-6 months'));  // Calcula la fecha de hace 6 meses
+        $fechaLimite = date('Y-m-d', strtotime('-6 months'));
         return array_filter($transacciones, function($transaccion) use ($fechaLimite) {
             return $transaccion['fecha'] >= $fechaLimite;
         });
@@ -111,7 +112,7 @@ class ObtenerRanking {
     /* FUN-63 filtrarPorUltimos12Meses 
         Filtrar transacciones por l0s ultimas 12 meses */
     public static function filtrarPorUltimos12Meses($transacciones) {
-        $fechaLimite = date('Y-m-d', strtotime('-12 months'));  // Calcula la fecha de hace 12 meses
+        $fechaLimite = date('Y-m-d', strtotime('-12 months'));
         return array_filter($transacciones, function($transaccion) use ($fechaLimite) {
             return $transaccion['fecha'] >= $fechaLimite;
         });

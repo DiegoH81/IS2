@@ -34,7 +34,6 @@ class GestionarTransaccion {
     /* FUN-69 obtenerTransaccionesRangoBD 
         Obtiene las transacciones de una familia, dentro de un rango */
     public static function obtenerTransaccionesRangoBD($idFamilia, $fecha_inicio, $fecha_fin) {
-        // Llamamos a la función de la entidad Transaccion
         return Transaccion::obtenerTransaccionesRango($idFamilia, $fecha_inicio, $fecha_fin);
     }
 
@@ -47,36 +46,49 @@ class GestionarTransaccion {
     /* FUN-71 obtenerBalanceBD 
         Obtiene el balance de una familia dentro de un rango de fechas */
     public static function obtenerBalanceBD($idFamilia, $fecha_inicio, $fecha_fin) {
-        // Llamamos a la función de la entidad Transaccion
         return Transaccion::obtenerBalance($idFamilia, $fecha_inicio, $fecha_fin);
     }
 
     /* FUN-72 obtenerIngresoBD 
         Obtiene el ingreso de una familia dentro de un rango de fechas */
     public static function obtenerIngresoBD($idFamilia, $fecha_inicio, $fecha_fin) {
-        // Llamamos a la función de la entidad Transaccion
         return Transaccion::obtenerIngreso($idFamilia, $fecha_inicio, $fecha_fin);
     }
 
     /* FUN-73 obtenerEgresoBD 
         Obtiene el egreso de una familia dentro de un rango de fechas */
     public static function obtenerEgresoBD($idFamilia, $fecha_inicio, $fecha_fin) {
-        // Llamamos a la función de la entidad Transaccion
         return Transaccion::obtenerEgreso($idFamilia, $fecha_inicio, $fecha_fin);
     }
 
     /* FUN-74 obtenerIngresoPorUsuarioBD 
         Obtiene el ingreso de un usuario especifico dentro de un rango de fechas */
     public static function obtenerIngresoPorUsuarioBD($idUsuario, $fecha_inicio, $fecha_fin) {
-        // Llamamos a la función de la entidad Transaccion
         return Transaccion::obtenerIngresoPorUsuario($idUsuario, $fecha_inicio, $fecha_fin);
     }
 
     /* FUN-75 obtenerEgresoPorUsuarioBD 
         Obtiene el egreso de un usuario especifico dentro de un rango de fechas */
     public static function obtenerEgresoPorUsuarioBD($idUsuario, $fecha_inicio, $fecha_fin) {
-        // Llamamos a la función de la entidad Transaccion
         return Transaccion::obtenerEgresoPorUsuario($idUsuario, $fecha_inicio, $fecha_fin);
     }
-}
+
+
+
+    /* FUN-76 hallarProyeccionIngresosBD 
+        Nos permite hallar la proyeccion esperada de ingresos a partir  de una fecha,
+        para lo que resta del año para una familia */
+    public static function hallarProyeccionIngresosBD($idFamilia, $fecha)
+    {
+        return Transaccion::hallarProyeccionIngresos($idFamilia, $fecha);
+    }
+
+    /* FUN-77 obtenerProyeccionEgresosBD 
+        Nos permite hallar la proyeccion esperada de egresos a partir  de una fecha,
+        para lo que resta del año para una familia */
+    public static function obtenerProyeccionEgresosBD($idFamilia, $fecha)
+    {
+        return Transaccion::obtenerProyeccionEgresos($idFamilia, $fecha);
+    }
+}   
 ?>
