@@ -288,9 +288,9 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                 <!-- Verificar si es domingo y mostrar la caja de Corte Semanal -->
                 <?php if ($diaActual == 'Sunday'): ?>
                     <article class="caja-resumen">
-                        <h4 class="titulo-resumen">Corte Semanal</h4>
+                        <h4 class="titulo-resumen" style="font-weight: bold;">Corte Semanal</h4>
                         <div class="linea-resumen">
-                            <span class="texto-resumen">Semanal</span>
+                            <span class="texto-resumen" style = "font-weight: bold; color: white;">Semanal</span>
                             <span class="valor-resumen">S/. <?php echo number_format($balanceUltimos7Dias, 2); ?></span>
                         </div>
                     </article>
@@ -302,10 +302,10 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                 <?php endif; ?>
 
                 <!-- Caja de resumen -->
-                <aside class="caja-resumen">
-                    <h4 class="titulo-resumen">Resumen del Balance</h4>
+                <aside class="caja-resumen" style="background-color: #3862AA;">
+                    <h4 class="titulo-resumen" style="font-weight: bold;">Resumen del Balance</h4>
                     <div class="linea-resumen">
-                        <span class="texto-resumen">Diario</span>
+                        <span class="texto-resumen" style = "font-weight: bold; color: white;">Diario</span>
                         <span class="valor-resumen">S/. <?php echo number_format($balanceCalculado, 2); ?></span>
                     </div>
                 </aside>

@@ -318,10 +318,10 @@ $balanceCalculado = $ingresos - $egresos;
 
                 
                 <!-- Paso 14 del CU-04: La UI-05 presenta los totales de ingresos, egresos y balances -->
-                <aside class="caja-resumen">
-                    <h4 class="titulo-resumen">Resumen del Balance</h4>
+                <aside class="caja-resumen" style="background-color: #3862AA;">
+                    <h4 class="titulo-resumen" style="font-weight: bold;" >Resumen del Balance</h4>
                     <div class="linea-resumen">
-                        <span class="texto-resumen">Rango</span>
+                        <span class="texto-resumen" style = "font-weight: bold; color: white;">Rango</span>
                         <span class="valor-resumen">S/. <?php echo number_format($balanceCalculado, 2); ?></span>
                     </div>
                 </aside>

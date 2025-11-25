@@ -44,6 +44,7 @@ class Validar {
     /* FUN-52 obtenerUsuarioActual 
         Se obtienen los datos del usuario actual */
     public static function obtenerUsuarioActual() {
+        // Crea nuevo usuario
         return new Usuario(
             $_SESSION['id_usuario'] ?? null,
             $_SESSION['usuario'] ?? null,     
@@ -53,6 +54,18 @@ class Validar {
             true,                             
             $_SESSION['familia_id'] ?? null
         );
+    }
+
+    /* FUN-83 validarTransacciones
+        Se encarga de verificar todas las transacciones*/
+
+    public static function validarTransacciones()
+    {
+        $conn = Database::connect();
+
+        $sql = "SELECT * FROM generar_transacciones_periodicas()";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
     }
 }
 ?>
