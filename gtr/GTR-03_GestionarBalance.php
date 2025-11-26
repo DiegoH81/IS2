@@ -2,22 +2,24 @@
 require_once '../DatabaseConnection.php';
 require_once 'GTR-07_GestionarTransaccion.php';
 
+// ------------------------------------------------------------
 // GTR-03 Gestionar balance
+// ------------------------------------------------------------
 
 class GestionarBalance
 {
-    public static function relacionarDatos($idFamilia, $fecha_inicio, $fecha_fin) {
-        // Inicializamos el array de resultados
+    /* FUN-81 relacionarDatosBalance
+        Se van a relacionar todos los datos necesarios para construir el balance*/
+    public static function relacionarDatosBalance($idFamilia, $fecha_inicio, $fecha_fin) {
         $resultado = [];
         
-        // Obtener las transacciones, balance, categorías, conceptos y usuarios
+        // Obtener transacciones, categorias, usuarios y conceptos
         $transacciones = GestionarTransaccion::obtenerTransaccionesRangoBD($idFamilia, $fecha_inicio, $fecha_fin);
         $categorias = GestionarTransaccion::solicitarCategorias($idFamilia);
         $usuarios = GestionarTransaccion::solicitarUsuarios($idFamilia);
         $conceptos = GestionarTransaccion::solicitarConceptos($idFamilia);
         
         //var_dump($transacciones);
-        // Crear índices para búsquedas rápidas (indexar por id)
         $usuariosIndex = [];
         foreach ($usuarios as $u) {
             $usuariosIndex[$u->idUsuario] = $u->nombre;
@@ -33,7 +35,7 @@ class GestionarBalance
             $conceptosIndex[$c->idConcepto] = $c;
         }
 
-        // Relacionar las transacciones con sus conceptos, categorías y usuarios
+        // Iterando transacciones
         foreach ($transacciones as $t) {
             
             $conceptoObj = isset($conceptosIndex[$t->idConcepto]) 
@@ -45,6 +47,7 @@ class GestionarBalance
                 $nombreCategoria = $categoriasIndex[$conceptoObj->idCategoria];
             }
 
+            // Crear la transaccion relacionada
             $transaccionRelacionada = [
                 'idTransaccion' => $t->idTransaccion,
                 'fecha'         => $t->fecha,
@@ -57,28 +60,28 @@ class GestionarBalance
                 'usuario_id'    => $t->idUsuario
             ];
 
-            // Añadir la transacción con su relación
             $resultado[] = $transaccionRelacionada;
         }
 
-        return $resultado; // Retorna el array de datos relacionados
+        return $resultado;
     }
 
-    public static function vistaFamiliar($idFamilia, $fecha_inicio, $fecha_fin) {
-        // Llamar a relacionarDatos sin ningún filtro adicional
-        return self::relacionarDatos($idFamilia, $fecha_inicio, $fecha_fin);
+    /* FUN-82 vistaFamiliarBalance
+        Se van a filtrar los datos para devolver la vista familiar de balance, tomando un rango de fechas como parametros*/
+    public static function vistaFamiliarBalance($idFamilia, $fecha_inicio, $fecha_fin) {
+        return self::relacionarDatosBalance($idFamilia, $fecha_inicio, $fecha_fin);
     }
 
-    public static function vistaUsuario($idFamilia, $fecha_inicio, $fecha_fin, $idUsuario) {
-        // Obtener todos los datos relacionados
-        $datosRelacionados = self::relacionarDatos($idFamilia, $fecha_inicio, $fecha_fin);
+    /* FUN-83 vistaUsuarioBalance
+        Se van a filtrar los datos para devolver la vista de usuario de balance, tomando un rango de fechas como parametros*/
+    public static function vistaUsuarioBalance($idFamilia, $fecha_inicio, $fecha_fin, $idUsuario) {
+        $datosRelacionados = self::relacionarDatosBalance($idFamilia, $fecha_inicio, $fecha_fin);
 
-        // Filtrar solo las transacciones que coinciden con el idUsuario
+        // Filtrar aquellas que tengan coincidan con la idUsuario actual
         $datosUsuario = array_filter($datosRelacionados, function($transaccion) use ($idUsuario) {
             return $transaccion['usuario_id'] == $idUsuario;
         });
 
-        // Devolver los datos filtrados
         return $datosUsuario;
     }
 }

@@ -1,5 +1,3 @@
-<!-- UI inactiva -->
-
 <?php
 
 // ------------------------------------------------------------
@@ -8,7 +6,6 @@
 // ------------------------------------------------------------
 
 session_start();
-require_once '../gtr/GTR-01_GestionarUsuario.php';
 require_once '../gtr/GTR-04_Validar.php';
 require_once '../gtr/GTR-07_GestionarTransaccion.php';
 require_once '../gtr/GTR-08_GestionarRegistroDiario.php';
@@ -22,32 +19,34 @@ $diaActual = date('l');
 $modo = isset($_GET['modo']) ? $_GET['modo'] : 'familiar';
 
 
+
+//$diaActual = "Sunday";
+//$fecha_hoy = "2025-11-20";
+//var_dump($fecha_hoy);
+
+
+
 //<!-- Paso 4-8 del CU-03: Se relacionan los datos para la transaccion -->
 //<!-- Paso 9 del CU-03: EL GTR-08 Calcula los ingresos y egresos para hallar el balance -->
 if ($modo == 'familiar') {
-    $datosRelacionados = GestionarRegistroDiario::vistaFamiliar($usuario->idFamilia, $fecha_hoy, $fecha_hoy);
+    $datosRelacionados = GestionarRegistroDiario::vistaFamiliarRegistroDiario($usuario->idFamilia, $fecha_hoy);
     $ingresos = GestionarTransaccion::obtenerIngresoBD($usuario->idFamilia, $fecha_hoy, $fecha_hoy);
     $egresos = GestionarTransaccion::obtenerEgresoBD($usuario->idFamilia, $fecha_hoy, $fecha_hoy);
 
     $ingresos_7Dias = GestionarTransaccion::obtenerIngresoBD($usuario->idFamilia, $fecha_hace_7_dias, $fecha_hoy);
     $egresos_7Dias = GestionarTransaccion::obtenerEgresoBD($usuario->idFamilia, $fecha_hace_7_dias, $fecha_hoy);
 } else {
-    $datosRelacionados = GestionarRegistroDiario::vistaUsuario($usuario->idFamilia, $fecha_hoy, $fecha_hoy, $usuario->idUsuario);
+    $datosRelacionados = GestionarRegistroDiario::vistaUsuarioRegistroDiario($usuario->idFamilia, $fecha_hoy, $usuario->idUsuario);
     $ingresos = GestionarTransaccion::obtenerIngresoPorUsuarioBD($usuario->idUsuario, $fecha_hoy, $fecha_hoy);
     $egresos = GestionarTransaccion::obtenerEgresoPorUsuarioBD($usuario->idUsuario, $fecha_hoy, $fecha_hoy);
 
-    $ingresos_7Dias = GestionarTransaccion::obtenerIngresoBD($usuario->idUsuario, $fecha_hace_7_dias, $fecha_hoy);
-    $egresos_7Dias = GestionarTransaccion::obtenerEgresoBD($usuario->idUsuario, $fecha_hace_7_dias, $fecha_hoy);
+    $ingresos_7Dias = GestionarTransaccion::obtenerIngresoPorUsuarioBD($usuario->idUsuario, $fecha_hace_7_dias, $fecha_hoy);
+    $egresos_7Dias = GestionarTransaccion::obtenerEgresoPorUsuarioBD($usuario->idUsuario, $fecha_hace_7_dias, $fecha_hoy);
 }
 
-//$datosRelacionados = GestionarRegistroDiario::relacionarDatos($usuario->idFamilia, "2025-10-26", "2025-10-26");
+
 $balanceCalculado = $ingresos - $egresos;
 $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
-
-//var_dump($datosRelacionados);
-//var_dump($balanceCalculado);
-
-
 ?>
 
 
@@ -285,14 +284,22 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
 
             <!-- Parte de abajo -->
             <footer class="seccion-inferior">
+                
+                <?php
+                    // Color para el balance semanal
+                    $colorSemanal = ($balanceUltimos7Dias >= 0) ? "color: #00ff5a;" : "color: #ff4d4d;";
+
+                    // Color para el balance diario
+                    $colorDiario = ($balanceCalculado >= 0) ? "color: #00ff5a;" : "color: #ff4d4d;";
+                ?>
 
                 <!-- Verificar si es domingo y mostrar la caja de Corte Semanal -->
                 <?php if ($diaActual == 'Sunday'): ?>
                     <article class="caja-resumen">
-                        <h4 class="titulo-resumen">Corte Semanal</h4>
+                        <h4 class="titulo-resumen" style="font-weight: bold;">Corte Semanal</h4>
                         <div class="linea-resumen">
-                            <span class="texto-resumen">Semanal</span>
-                            <span class="valor-resumen">S/. <?php echo number_format($balanceUltimos7Dias, 2); ?></span>
+                            <span class="texto-resumen" style = "font-weight: bold; color: white;">Semanal</span>
+                            <span class="valor-resumen" style="<?php echo $colorDiario; ?>">S/. <?php echo number_format($balanceUltimos7Dias, 2); ?></span>
                         </div>
                     </article>
                 <?php else: ?>
@@ -303,11 +310,11 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                 <?php endif; ?>
 
                 <!-- Caja de resumen -->
-                <aside class="caja-resumen">
-                    <h4 class="titulo-resumen">Resumen del Balance</h4>
+                <aside class="caja-resumen" style="background-color: #3862AA;">
+                    <h4 class="titulo-resumen" style="font-weight: bold;">Resumen del Balance</h4>
                     <div class="linea-resumen">
-                        <span class="texto-resumen">Diario</span>
-                        <span class="valor-resumen">S/. <?php echo number_format($balanceCalculado, 2); ?></span>
+                        <span class="texto-resumen" style = "font-weight: bold; color: white;">Diario</span>
+                        <span class="valor-resumen" style="<?php echo $colorSemanal; ?>">S/. <?php echo number_format($balanceCalculado, 2); ?></span>
                     </div>
                 </aside>
             </footer>

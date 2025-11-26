@@ -1,7 +1,10 @@
 <?php
 require_once '../DatabaseConnection.php';
 
-// TAB-04 Concepto
+// ------------------------------------------------------------
+// TAB-02 Concepto
+// ------------------------------------------------------------
+
 class Concepto {
 
     public $idConcepto;
@@ -37,10 +40,14 @@ class Concepto {
     public static function obtenerConceptos($familia_id) {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerConceptos($1);";
+
+        // Relacionar datos a la query
         $params = array($familia_id);
         $result = pg_query_params($conn, $query, $params);
         $rows = pg_fetch_all($result);
 
+
+        // Crear cada concepto (objeto)
         $conceptos = [];
         if ($rows) {
             foreach ($rows as $row) {
@@ -78,14 +85,10 @@ class Concepto {
     $usuario_id, 
     $categoria_id
     ) {
-        // Conectar a la base de datos
         $conn = Database::connect();
-
-        // Formatear fechas como YYYY-MM-DD
         $fecha_inicio = date('Y-m-d', strtotime($fecha_inicio));
         $fecha_fin    = date('Y-m-d', strtotime($fecha_fin));
 
-        // Preparar la consulta
         $query = "SELECT crearConcepto($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);";
         $params = [
             $nombre,
@@ -99,8 +102,7 @@ class Concepto {
             (int)$usuario_id,
             (int)$categoria_id
         ];
-
-        // Ejecutar la consulta
+        // Relacionar datos a la query
         $result = pg_query_params($conn, $query, $params);
     }
 
@@ -109,6 +111,8 @@ class Concepto {
     public static function obtenerConcepto($idConcepto) {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerConceptoPorId($1)";
+
+        // Relacionar datos a la query
         $params = array($idConcepto);
         $result = pg_query_params($conn, $query, $params);
         $row = pg_fetch_assoc($result);
@@ -117,8 +121,7 @@ class Concepto {
             return null; // No se encontró el concepto
         }
         
-        
-        // Crear y retornar un objeto Concepto
+        // Retornar un nuevo concepto (objeto)
         return new Concepto(
             $row['id_concepto'],
             $row['nombre'],
@@ -143,11 +146,13 @@ class Concepto {
         $fecha_fin    = date('Y-m-d', strtotime($fecha_fin));
 
         $query = "SELECT editarConcepto($1, $2, $3, $4, $5, $6, $7, $8, $9);";
+
+        // Relacionar datos a la query
         $params = array($id_concepto, $nombre, $tipo, $monto, $periodo, $periodicidad, $fecha_inicio, $fecha_fin, $p_id_categoria);
         $result = pg_query_params($conn, $query, $params);
     
-        if (!$result) {
-            error_log("Error al editar concepto: " . pg_last_error($conn));
+        if (!$result)
+        {
             return false;
         }
         return $result;
@@ -159,10 +164,44 @@ class Concepto {
         $conn = Database::connect();
         $estadoBool = $estado ? 't' : 'f';
         $query = "SELECT editarEstadoConcepto($1, $2);";
+
+        // Relacionar datos a la query
         $params = array($id_concepto, $estadoBool);
 
         return pg_query_params($conn, $query, $params);
     }
 
+
+    /* FUN-80 obtenerConceptosPorFecha 
+        Nos permite obtener los conceptos por una fecha, para poder ver cual es el siguiente
+        concepto a ser cobrado */
+    public static function obtenerConceptosPorFecha($fecha, $idFamilia)
+    {
+        $conn = Database::connect();
+
+        $query = "SELECT * FROM obtenerConceptosPorFecha($1, $2);";
+
+        // Relacionar datos a la query
+        $params = array($fecha, $idFamilia);
+        $result = pg_query_params($conn, $query, $params);
+
+        $conceptos = array();
+        
+        // Relacionar la consulta
+        while ($row = pg_fetch_assoc($result)) {
+            $concepto = (object) [
+                'tipo' => $row['tipo'],
+                'categoria' => $row['categoria'],
+                'nombre' => $row['nombre'],
+                'monto' => $row['monto'],
+                'dias_restantes' => $row['dias_restantes'],
+                'proxima_fecha' => $row['proxima_fecha']
+            ];
+
+            $conceptos[] = $concepto;
+        }
+
+        return $conceptos;
+    }
 }
 ?>

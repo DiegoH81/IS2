@@ -8,8 +8,8 @@
 
 .contenedor-tablas-reg {
     display: flex;
-    justify-content: center;   /* Centra horizontalmente */
-    align-items: center;       /* Centra verticalmente */
+    justify-content: center;
+    align-items: center;
     gap: 30px;
     flex: 1;
     padding: 20px;

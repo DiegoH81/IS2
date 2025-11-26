@@ -1,7 +1,10 @@
 <?php
 require_once '../DatabaseConnection.php';
 
-// TAB-02 Usuario
+// ------------------------------------------------------------
+// TAB-01 Usuario
+// ------------------------------------------------------------
+
 class Usuario {
 
     public $idUsuario;
@@ -29,10 +32,13 @@ class Usuario {
     public static function obtenerUsuarios($familia_id) {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerUsuarios($1);";
+
+        // Relacionar datos a la query
         $params = array($familia_id);
         $result = pg_query_params($conn, $query, $params);
         $rows = pg_fetch_all($result);
         
+        // Crear usuarios (objetos)
         $usuarios = [];
         if ($rows) {
             foreach ($rows as $row) {
@@ -96,9 +102,12 @@ class Usuario {
     public static function validarCredenciales($usuario, $contrasena) {
         $conn = Database::connect();
         $query = "SELECT validarCredenciales($1,$2)";
+
+        // Relacionar datos a la query
         $params = array($usuario, $contrasena);
         $result = pg_query_params($conn, $query, $params);
         $val = pg_fetch_result($result, 0, 0);
+
         return $val === 't';
     }
 
@@ -107,6 +116,8 @@ class Usuario {
     public static function usuarioDisponible($usuario) {
         $conn = Database::connect();
         $query = "SELECT usuariodisponible($1)";
+
+        // Relacionar datos a la query
         $params = array($usuario);
         $result = pg_query_params($conn, $query, $params);
         $val = pg_fetch_result($result, 0, 0);
@@ -118,6 +129,8 @@ class Usuario {
     public static function crearUsuario($usuario, $nombre, $contrasena, $rol, $familia_id) {
         $conn = Database::connect();
         $query = "SELECT crearUsuario($1, $2, $3, $4, $5);";
+
+        // Relacionar datos a la query
         $params = array($usuario, $nombre, $contrasena, $rol, $familia_id);
         pg_query_params($conn, $query, $params);
     }
@@ -127,11 +140,14 @@ class Usuario {
     public static function obtenerUsuario($usuario) {
         $conn = Database::connect();
         $query = "SELECT * FROM obtenerUsuario($1)";
+
+        // Relacionar datos a la query
         $params = array($usuario);
         $result = pg_query_params($conn, $query, $params);
         $row = pg_fetch_assoc($result);
         
         
+        // Retornar un nuevo usuario (objeto)
         return new Usuario(
             $row['id_usuario'],
             $row['usuario'],
@@ -150,6 +166,8 @@ class Usuario {
     public static function actualizarDatosUsuario($usuario, $nombre, $contrasena, $rol) {
         $conn = Database::connect();
         $query = "SELECT actualizarDatosUsuario($1, $2, $3, $4);";
+
+        // Relacionar datos a la query
         $params = array($usuario, $nombre, $contrasena, $rol);
         $result = pg_query_params($conn, $query, $params);
     }
@@ -160,6 +178,8 @@ class Usuario {
         $conn = Database::connect();
         $estadoBool = $estado ? 't' : 'f';
         $query = "SELECT editarEstadoUsuario($1, $2);";
+        
+        // Relacionar datos a la query
         $params = array($id, $estadoBool);
         return pg_query_params($conn, $query, $params);
     }

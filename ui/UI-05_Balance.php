@@ -1,5 +1,3 @@
-<!-- UI inactiva -->
-
 <?php
 
 // ------------------------------------------------------------
@@ -8,7 +6,6 @@
 // ------------------------------------------------------------
 
 session_start();
-require_once '../gtr/GTR-01_GestionarUsuario.php';
 require_once '../gtr/GTR-04_Validar.php';
 require_once '../gtr/GTR-07_GestionarTransaccion.php';
 require_once '../gtr/GTR-03_GestionarBalance.php';
@@ -37,11 +34,12 @@ $modo = isset($_GET['modo']) ? $_GET['modo'] : 'familiar';
 //<!-- Paso 12 del CU-04: El GTR-07 solicita las transacciones del periodo filtrado -->
 //<!-- Paso 13 del CU-04: El GTR-07 calcula los totales basados en los conceptos obtenidos en el periodo filtrado -->
 if ($modo == 'familiar') {
-    $datosRelacionados = GestionarBalance::vistaFamiliar($usuario->idFamilia, $fecha_inicio, $fecha_fin);
+    $datosRelacionados = GestionarBalance::vistaFamiliarBalance($usuario->idFamilia, $fecha_inicio, $fecha_fin);
     $ingresos = GestionarTransaccion::obtenerIngresoBD($usuario->idFamilia, $fecha_inicio, $fecha_fin);
     $egresos = GestionarTransaccion::obtenerEgresoBD($usuario->idFamilia, $fecha_inicio, $fecha_fin);
 } else {
-    $datosRelacionados = GestionarBalance::vistaUsuario($usuario->idFamilia, $fecha_inicio, $fecha_fin, $usuario->idUsuario);
+    $datosRelacionados = GestionarBalance::vistaUsuarioBalance($usuario->idFamilia, $fecha_inicio, $fecha_fin, $usuario->idUsuario);
+
     $ingresos = GestionarTransaccion::obtenerIngresoPorUsuarioBD($usuario->idUsuario, $fecha_inicio, $fecha_fin);
     $egresos = GestionarTransaccion::obtenerEgresoPorUsuarioBD($usuario->idUsuario, $fecha_inicio, $fecha_fin);
 }
@@ -67,7 +65,7 @@ $balanceCalculado = $ingresos - $egresos;
     
     <!-- CSS principal -->
     <link rel="stylesheet" href="../css/daily_input.css">
-     <link rel="stylesheet" href="../css/principal.css">
+    <link rel="stylesheet" href="../css/principal.css">
     <link rel="stylesheet" href="../css/configuracion.css">
     <link rel="stylesheet" href="../css/calendar.css">
     <!-- CSS de íconos -->
@@ -135,7 +133,7 @@ $balanceCalculado = $ingresos - $egresos;
         <main class="area-trabajo">
 
             <!-- Controles de arriba -->
-            <section class="controles-superiores">
+            <section class="controles-superiores" style="height: 10px;">
                 <div class="grupo-controles">
 
                     <!-- Paso 1 del CU-04: La UI-05 se carga y presenta el switch -->
@@ -149,7 +147,7 @@ $balanceCalculado = $ingresos - $egresos;
                     
                     <!-- Contenedor derecho: botón + calendarios -->
                     <div class="contenedor-filtro-derecha" style="margin-left: auto;">
-                        <button class="boton-balance-semanal" id="filtro-semanal">
+                        <button class="boton-balance-semanal" id="filtro-semanal" style="background-color: #3862AA;">
                             Balance por rango
                         </button>
                         
@@ -203,7 +201,7 @@ $balanceCalculado = $ingresos - $egresos;
 
                         <?php
                         // Filtrar ingresos
-                        // <!-- Paso 3 del CU-04: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
+
                         foreach ($datosRelacionados as $dato) {
                             if ($dato['tipo'] === 'Ingreso') {
 
@@ -245,9 +243,6 @@ $balanceCalculado = $ingresos - $egresos;
                     </table>
 
                     <!-- Paso 3 del CU-04: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
-                     <form action="UI-17_CrearConcepto.php" method="GET">
-                        <button type="submit" class="boton-mas">+</button>
-                    </form>
                 </article>
 
                 <!-- Tabla Egresos -->
@@ -312,10 +307,6 @@ $balanceCalculado = $ingresos - $egresos;
                         </tfoot>
                     </table>
 
-                    <!-- Paso 3 del CU-04: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
-                    <form action="UI-17_CrearConcepto.php" method="GET">
-                        <button type="submit" class="boton-mas">+</button>
-                    </form>
                 </article>
             </section>
 
@@ -325,13 +316,17 @@ $balanceCalculado = $ingresos - $egresos;
                 <article>
                 </article>
 
-                
-                //<!-- Paso 14 del CU-04: La UI-05 presenta los totales de ingresos, egresos y balances -->
-                <aside class="caja-resumen">
-                    <h4 class="titulo-resumen">Resumen del Balance</h4>
+                <?php
+                    // Color para el balance
+                    $colorBalance = ($balanceCalculado >= 0) ? "color: #00ff5a;" : "color: #ff4d4d;";
+                ?>
+
+                <!-- Paso 14 del CU-04: La UI-05 presenta los totales de ingresos, egresos y balances -->
+                <aside class="caja-resumen" style="background-color: #3862AA;">
+                    <h4 class="titulo-resumen" style="font-weight: bold;" >Resumen del Balance</h4>
                     <div class="linea-resumen">
-                        <span class="texto-resumen">Rango</span>
-                        <span class="valor-resumen">S/. <?php echo number_format($balanceCalculado, 2); ?></span>
+                        <span class="texto-resumen" style = "font-weight: bold; color: white;">Rango</span>
+                        <span class="valor-resumen" style="<?php echo $colorBalance; ?>" >S/. <?php echo number_format($balanceCalculado, 2); ?></span>
                     </div>
                 </aside>
             </footer>

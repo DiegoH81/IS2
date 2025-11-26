@@ -2,25 +2,25 @@
 require_once '../DatabaseConnection.php';
 require_once 'GTR-07_GestionarTransaccion.php';
 
-// GTR-02 Gestionar concepto
+// ------------------------------------------------------------
+// GTR-08 Gestionar Registro Diario
+// ------------------------------------------------------------
 
 class GestionarRegistroDiario {
 
 
-    /* FUN-76 relacionarDatos 
+    /* FUN-76 relacionarDatosRegistroDiario
         Relaciona los datos de para poder construir los datos para registro diario */
-    public static function relacionarDatos($idFamilia, $fecha_inicio, $fecha_fin) {
+    public static function relacionarDatosRegistroDiario($idFamilia, $fecha_inicio) {
         // Inicializamos el array de resultados
         $resultado = [];
         
-        // Obtener las transacciones, balance, categorías, conceptos y usuarios
-        $transacciones = GestionarTransaccion::obtenerTransaccionesRangoBD($idFamilia, $fecha_inicio, $fecha_fin);
+        // Obtener transacciones, categorias, usuarios y conceptos relacionados
+        $transacciones = GestionarTransaccion::obtenerTransaccionesRangoBD($idFamilia, $fecha_inicio, $fecha_inicio);
         $categorias = GestionarTransaccion::solicitarCategorias($idFamilia);
         $usuarios = GestionarTransaccion::solicitarUsuarios($idFamilia);
         $conceptos = GestionarTransaccion::solicitarConceptos($idFamilia);
         
-        //var_dump($transacciones);
-        // Crear índices para búsquedas rápidas (indexar por id)
         $usuariosIndex = [];
         foreach ($usuarios as $u) {
             $usuariosIndex[$u->idUsuario] = $u->nombre;
@@ -36,17 +36,20 @@ class GestionarRegistroDiario {
             $conceptosIndex[$c->idConcepto] = $c;
         }
 
-        // Relacionar las transacciones con sus conceptos, categorías y usuarios
+        // Iterar transacciones
         foreach ($transacciones as $t) {
+
             $conceptoObj = isset($conceptosIndex[$t->idConcepto]) 
                     ? $conceptosIndex[$t->idConcepto] 
                     : null;
+
 
             $nombreCategoria = '';
             if ($conceptoObj && isset($categoriasIndex[$conceptoObj->idCategoria])) {
                 $nombreCategoria = $categoriasIndex[$conceptoObj->idCategoria];
             }
 
+            // Relacionar transaccion para obtener un concepto mostrable
             $transaccionRelacionada = [
                 'idTransaccion' => $t->idTransaccion,
                 'fecha'         => $t->fecha,
@@ -59,32 +62,28 @@ class GestionarRegistroDiario {
                 'usuario_id'    => $t->idUsuario
             ];
 
-            // Añadir la transacción con su relación
             $resultado[] = $transaccionRelacionada;
         }
 
-        return $resultado; // Retorna el array de datos relacionados
+        return $resultado;
     }
 
-    /* FUN-77 vistaFamiliar 
+    /* FUN-77 vistaFamiliarRegistroDiario 
         Filtra los datos para obtener los conceptos para la vista familiar */
-    public static function vistaFamiliar($idFamilia, $fecha_inicio, $fecha_fin) {
-        // Llamar a relacionarDatos sin ningún filtro adicional
-        return self::relacionarDatos($idFamilia, $fecha_inicio, $fecha_fin);
+    public static function vistaFamiliarRegistroDiario($idFamilia, $fecha_inicio) {
+        return self::relacionarDatosRegistroDiario($idFamilia, $fecha_inicio);
     }
 
-    /* FUN-78 vistaUsuario 
+    /* FUN-78 vistaUsuarioRegistroDiario 
         Filtra los datos para obtener los conceptos para la vista de usuario */
-    public static function vistaUsuario($idFamilia, $fecha_inicio, $fecha_fin, $idUsuario) {
-        // Obtener todos los datos relacionados
-        $datosRelacionados = self::relacionarDatos($idFamilia, $fecha_inicio, $fecha_fin);
+    public static function vistaUsuarioRegistroDiario($idFamilia, $fecha_inicio, $idUsuario) {
+        $datosRelacionados = self::relacionarDatosRegistroDiario($idFamilia, $fecha_inicio);
 
-        // Filtrar solo las transacciones que coinciden con el idUsuario
+        // Solo aquellos conceptos creados por el usuario
         $datosUsuario = array_filter($datosRelacionados, function($transaccion) use ($idUsuario) {
             return $transaccion['usuario_id'] == $idUsuario;
         });
 
-        // Devolver los datos filtrados
         return $datosUsuario;
     }
 }

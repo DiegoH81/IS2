@@ -4,7 +4,9 @@ require_once 'GTR-01_GestionarUsuario.php';
 require_once 'GTR-09_GestionarCategoria.php';
 require_once '../entity/concepto.php';
 
+// ------------------------------------------------------------
 // GTR-02 Gestionar concepto
+// ------------------------------------------------------------
 
 class GestionarConcepto {
 
@@ -37,7 +39,9 @@ class GestionarConcepto {
         $resultado = [];
         
         if (!empty($conceptos)) {
+            
 
+            // Obtener usuarios y categorias pertinentes
             $usuarios = self::solicitarUsuarios($familia_id);
             $categorias = self::solicitarCategorias($familia_id);
             
@@ -45,7 +49,6 @@ class GestionarConcepto {
             //var_dump($usuarios);
             //var_dump($categorias);
     
-             // Crear índices para búsquedas rápidas
             $usuariosIndex = [];
             foreach ($usuarios as $u) {
                 $usuariosIndex[$u->idUsuario] = $u->nombre;
@@ -56,7 +59,7 @@ class GestionarConcepto {
                 $categoriasIndex[$cat->idCategoria] = $cat->nombre;
             }
             
-            // Construir array resultado
+            // Relacionar datos hasta obtener un concepto mostrable
             foreach ($conceptos as $c) {
                 $resultado[] = [
                     'concepto_id' => $c->idConcepto,
@@ -79,7 +82,6 @@ class GestionarConcepto {
 
     /* FUN-11 crearConceptoBD 
         Inserta un nuevo concepto en la base de datos */
-
     public static function crearConceptoBD(
     $nombre, 
     $tipo, 
@@ -116,6 +118,14 @@ class GestionarConcepto {
         return Concepto::editarEstadoConcepto($id_concepto, $estado);
     }
     
+    
+    /* FUN-79 obtenerConceptosPorFechaBD 
+        Nos permite obtener los conceptos por una fecha, para poder ver cual es el siguiente
+        concepto a ser cobrado */
+    public static function obtenerConceptosPorFechaBD($fecha, $idFamilia)
+    {
+        return Concepto::obtenerConceptosPorFecha($fecha, $idFamilia);
+    }
 
 }
 ?>

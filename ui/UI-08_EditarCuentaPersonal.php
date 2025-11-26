@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <!-- Paso 6 del CU-05-1: Se selecciona la opcion de no guardar -->
                             <div class="grupo-botones">
                                 <button type="button" class="boton-crear boton-cancelar" onclick="window.location.href='UI-07_CuentaPersonal.php'">Cancelar</button>
-                                <button type="submit" class="boton-crear">Guardar</button>
+                                <button type="submit" class="boton-crear" style="background-color: #3862AA;">Guardar</button>
                             </div>
 
                         </div>

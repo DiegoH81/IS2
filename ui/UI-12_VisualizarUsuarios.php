@@ -161,7 +161,7 @@ if ($cadena !== '') {
                                     placeholder="Buscar..." 
                                     value="<?= htmlspecialchars($cadena) ?>"
                                     class="input-busqueda">
-                                <button type="submit" class="boton-buscar" style="background-color: #4A5568;">Buscar</button>
+                                <button type="submit" class="boton-buscar" style="background-color: #335ca4ff;">Buscar</button>
 
 
                                 <?php if ($cadena !== ''): ?>
@@ -223,6 +223,7 @@ if ($cadena !== '') {
                                     </td>
 
                                     <td class="celda">
+
                                         <form action="UI-14_EditarUsuario.php" method="GET">
                                             <input type="hidden" name="usuario" value="<?= htmlspecialchars($u->usuario) ?>">
                                             <button type="submit" class="link-editar"
@@ -230,6 +231,7 @@ if ($cadena !== '') {
                                                 Editar
                                             </button>
                                         </form>
+                                        
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

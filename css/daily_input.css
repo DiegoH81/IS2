@@ -1,8 +1,3 @@
-/* ===================================
-          CSS INTEGRADO - daily_input.css
-          =================================== */
-
-/* Reseteo básico */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -16,7 +11,6 @@ body {
     overflow: hidden;
 }
 
-/* Contenedor principal */
 .contenedor-principal {
     display: flex;
     flex-direction: column;
@@ -24,7 +18,6 @@ body {
     background-color: #f3f4f6;
 }
 
-/* Barra superior - DIVIDIDA EN DOS SECCIONES */
 .barra-superior {
     height: 80px;
     display: flex;
@@ -32,7 +25,6 @@ body {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Sección izquierda - mismo color que el menú */
 .seccion-izquierda {
     width: 240px;
     background-color: #2d3748;
@@ -49,7 +41,6 @@ body {
     text-align: center;
 }
 
-/* Sección derecha - barra blanca */
 .seccion-derecha {
     flex: 1;
     background-color: white;
@@ -64,10 +55,6 @@ body {
     color: #374151;
 }
 
-
-
-
-/* Menu lateral - ACTUALIZADO */
 .menu-lateral {
     background-color: #2d3748;
     width: 240px;
@@ -77,8 +64,6 @@ body {
     flex-shrink: 0;
 }
 
-
-/* Area de trabajo */
 .area-trabajo {
     flex: 1;
     display: flex;
@@ -88,7 +73,6 @@ body {
     overflow: hidden;
 }
 
-/* Controles superiores */
 .controles-superiores {
     display: flex;
     justify-content: space-between;
@@ -97,9 +81,6 @@ body {
     flex-shrink: 0;
 }
 
-
-
-/* Switch */
 .contenedor-switch {
     display: flex;
     align-items: center;
@@ -156,7 +137,6 @@ input:checked + .deslizador:before {
     transform: translateX(26px);
 }
 
-/* Caja de fecha */
 .caja-fecha {
     background: white;
     border: 2px solid #4299e1;
@@ -174,9 +154,8 @@ input:checked + .deslizador:before {
     width: 100%;
 }
 
-/* Botones */
 .boton-balance-rango {
-    background-color: #374151;
+    background-color: #3862AA;
     color: white;
     font-weight: 600;
     padding: 10px 24px;
@@ -187,11 +166,11 @@ input:checked + .deslizador:before {
 }
 
 .boton-balance-rango:hover {
-    background-color: #1f2937;
+    background-color: #2a497f;
 }
 
 .boton-balance-semanal {
-    background-color: #374151;
+    background-color: #3862AA;
     color: white;
     font-weight: 600;
     padding: 12px 24px;
@@ -203,10 +182,9 @@ input:checked + .deslizador:before {
 }
 
 .boton-balance-semanal:hover {
-    background-color: #1f2937;
+    background-color: #29477c;
 }
 
-/* Contenedor de las tablas */
 .contenedor-tablas {
     display: flex;
     justify-content: center;
@@ -217,7 +195,6 @@ input:checked + .deslizador:before {
     align-items: flex-start;
 }
 
-/* Cajas de tabla */
 .caja-tabla {
     background: white;
     padding: 20px;
@@ -284,7 +261,6 @@ input:checked + .deslizador:before {
     width: 100%;
 }
 
-/* Scrollbar para las tablas */
 .tabla-datos tbody::-webkit-scrollbar {
     width: 6px;
 }
@@ -419,7 +395,6 @@ input:checked + .deslizador:before {
     color: white;
 }
 
-/* Para moviles */
 @media (max-width: 768px) {
     .menu-lateral {
         display: none;

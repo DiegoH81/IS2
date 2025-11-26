@@ -177,7 +177,7 @@ if ($cadena !== '') {
                                     placeholder="Buscar..." 
                                     value="<?= htmlspecialchars($cadena) ?>"
                                     class="input-busqueda">
-                                <button type="submit" class="boton-buscar" style="background-color: #4A5568;">Buscar</button>
+                                <button type="submit" class="boton-buscar" style="background-color: #335ca4ff;">Buscar</button>
 
 
                                 <?php if ($cadena !== ''): ?>

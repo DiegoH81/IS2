@@ -2,7 +2,9 @@
 require_once '../DatabaseConnection.php';
 require_once '../entity/categoria.php';
 
+// ------------------------------------------------------------
 // GTR-09 Gestionar categoria
+// ------------------------------------------------------------
 
 class GestionarCategoria {
 

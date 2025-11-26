@@ -1,9 +1,3 @@
-/* ===================================
-  ARCHIVO: css/configuracion.css
-  Estilos adicionales para la página de configuración
-  Este archivo complementa daily_input.css
-  =================================== */
-
 /* Contenedor con submenu */
 .area-con-submenu {
     display: flex;
@@ -39,9 +33,9 @@
 }
 
 .opcion-submenu.activa {
-    background-color: #4a5568;
+    background-color: #3862AA;
     color: white;
-    border-left-color: #4a5568;
+    border-left-color: #3862AA;
 }
 
 /* Contenido principal de configuración */
@@ -100,9 +94,9 @@
     pointer-events: none;
 }
 
-/* Botón crear usuario */
+
 .boton-crear-usuario {
-    background-color: #374151;
+    background-color: #3862AA;
     color: white;
     padding: 10px 24px;
     border: none;
@@ -114,12 +108,11 @@
 }
 
 .boton-crear-usuario:hover {
-    background-color: #1f2937;
+    background-color: #243f6e;
     transform: translateY(-1px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Contenedor de tabla */
 .contenedor-tabla-usuarios {
     background: white;
     border-radius: 8px;
@@ -127,7 +120,6 @@
     overflow: hidden;
 }
 
-/* Tabla de usuarios */
 .tabla {
     width: 80%;
     border-collapse: collapse;
@@ -165,7 +157,6 @@
     font-size: 14px;
 }
 
-/* Columnas específicas */
 .columna-usuario {
     width: 25%;
 }
@@ -183,7 +174,6 @@
     text-align: center;
 }
 
-/* Columnas para tabla de conceptos */
 .columna-concepto {
     width: 25%;
 }
@@ -212,7 +202,6 @@
     text-align: center;
 }
 
-/* Link de borrar */
 .link-borrar {
     color: #4b5563;
     text-decoration: underline;
@@ -225,7 +214,6 @@
     color: #ef4444;
 }
 
-/* Link de editar para conceptos */
 .link-editar-concepto {
     color: #4b5563;
     text-decoration: underline;
@@ -317,8 +305,8 @@
 
 .boton-crear {
     text-decoration: none;
-    background-color: #4A5568; /* azul */
-    margin-left: auto;            /* empuja el botón al extremo derecho */
+    background-color: #3862AA;
+    margin-left: auto;         
 
     color: white;
     border: none;
@@ -330,7 +318,7 @@
 }
 
 .boton-crear:hover {
-    background-color: #0056b3; /* azul oscuro */
+    background-color: #223b67;
 }
 
 .form-crear-concepto {
@@ -411,28 +399,28 @@ h1 {
 
 .grupo-botones {
   display: flex;
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center;     /* Centra verticalmente si cambia la altura */
-  gap: 10px;               /* Espacio entre botones */
-  width: 100%;             /* Asegura que ocupe todo el ancho */
-  margin-top: 20px;        /* (opcional) separación hacia arriba */
+  justify-content: center;
+  align-items: center;     
+  gap: 10px;               
+  width: 100%;             
+  margin-top: 20px;        
 }
 
 .boton-cancelar {
-    background-color: #9ca3af; /* gris suave */
+    background-color: #9ca3af; 
 }
 
 .boton-cancelar:hover {
-    background-color: #6b7280; /* gris más oscuro */
+    background-color: #6b7280; 
 }
 
 .grupo-campos {
     display: flex;
-    gap: 20px; /* espacio entre los campos */
+    gap: 20px; 
 }
 
 .campo-formulario {
-    flex: 1; /* para que ambos tengan el mismo ancho */
+    flex: 1; 
     display: flex;
     flex-direction: column;
 }
