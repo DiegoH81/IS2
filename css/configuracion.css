@@ -33,9 +33,9 @@
 }
 
 .opcion-submenu.activa {
-    background-color: #4a5568;
+    background-color: #3862AA;
     color: white;
-    border-left-color: #4a5568;
+    border-left-color: #3862AA;
 }
 
 /* Contenido principal de configuración */
@@ -96,7 +96,7 @@
 
 
 .boton-crear-usuario {
-    background-color: #374151;
+    background-color: #3862AA;
     color: white;
     padding: 10px 24px;
     border: none;
@@ -108,7 +108,7 @@
 }
 
 .boton-crear-usuario:hover {
-    background-color: #1f2937;
+    background-color: #243f6e;
     transform: translateY(-1px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -305,7 +305,7 @@
 
 .boton-crear {
     text-decoration: none;
-    background-color: #4A5568;
+    background-color: #3862AA;
     margin-left: auto;         
 
     color: white;
@@ -318,7 +318,7 @@
 }
 
 .boton-crear:hover {
-    background-color: #0056b3;
+    background-color: #223b67;
 }
 
 .form-crear-concepto {

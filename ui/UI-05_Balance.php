@@ -147,7 +147,7 @@ $balanceCalculado = $ingresos - $egresos;
                     
                     <!-- Contenedor derecho: botón + calendarios -->
                     <div class="contenedor-filtro-derecha" style="margin-left: auto;">
-                        <button class="boton-balance-semanal" id="filtro-semanal">
+                        <button class="boton-balance-semanal" id="filtro-semanal" style="background-color: #3862AA;">
                             Balance por rango
                         </button>
                         

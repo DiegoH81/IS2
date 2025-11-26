@@ -124,8 +124,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deshabilitar']))
                         <div style="text-align:center;">
 
                             <div class="grupo-botones">
-                                <button type="submit" name="deshabilitar" class="boton-crear boton-cancelar">Deshabilitar</button>
-                                <button type="button" class="boton-crear" onclick="window.location.href='UI-08_EditarCuentaPersonal.php'">Editar Perfil</button>
+                                <button type="submit" name="deshabilitar" class="boton-crear boton-cancelar" \>Deshabilitar</button>
+                                <button type="button" class="boton-crear" onclick="window.location.href='UI-08_EditarCuentaPersonal.php'" style="background-color: #3862AA;">Editar Perfil</button>
                             </div>
 
                         </div>

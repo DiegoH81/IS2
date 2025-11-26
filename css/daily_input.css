@@ -155,7 +155,7 @@ input:checked + .deslizador:before {
 }
 
 .boton-balance-rango {
-    background-color: #374151;
+    background-color: #3862AA;
     color: white;
     font-weight: 600;
     padding: 10px 24px;
@@ -166,11 +166,11 @@ input:checked + .deslizador:before {
 }
 
 .boton-balance-rango:hover {
-    background-color: #1f2937;
+    background-color: #2a497f;
 }
 
 .boton-balance-semanal {
-    background-color: #374151;
+    background-color: #3862AA;
     color: white;
     font-weight: 600;
     padding: 12px 24px;
@@ -182,7 +182,7 @@ input:checked + .deslizador:before {
 }
 
 .boton-balance-semanal:hover {
-    background-color: #1f2937;
+    background-color: #29477c;
 }
 
 .contenedor-tablas {

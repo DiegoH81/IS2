@@ -171,13 +171,13 @@ if ($cadena !== '') {
                                     placeholder="Buscar..." 
                                     value="<?= htmlspecialchars($cadena) ?>"
                                     class="input-busqueda">
-                                <button type="submit" class="boton-buscar" style="background-color: #4A5568;">Buscar</button>
+                                <button type="submit" class="boton-buscar" style="background-color: #335ca4ff;">Buscar</button>
                                 <?php if ($cadena !== ''): ?>
                                     <a href="UI-16_VisualizarConceptos.php" class="boton-limpiar">Limpiar</a>
                                 <?php endif; ?>
                             </form>
 
-                            <a href="UI-17_CrearConcepto.php" class="boton-crear">Crear concepto</a>
+                            <a href="UI-17_CrearConcepto.php" class="boton-crear" >Crear concepto</a>
                         </div>
                         <h2 class="titulo-tabla">Configuración conceptos</h2>
                         <div class="linea-separadora"></div>

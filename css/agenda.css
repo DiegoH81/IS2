@@ -55,6 +55,7 @@
     font-size: 14px;
     font-weight: 500;
     transition: all 0.3s ease;
+    
 }
 
 .tab-filtro:hover {
@@ -62,7 +63,7 @@
 }
 
 .tab-filtro.activo {
-    background-color: #4a7ba7;
+    background-color: #3862AA;
     color: white;
 }
 
@@ -107,11 +108,11 @@
 }
 
 .btn-ingresos {
-    background-color: #4a7ba7;
+    background-color: #3862AA;;
 }
 
 .btn-egresos {
-    background-color: #5a8fb7;
+    background-color: #3862AA;;
 }
 
 .valor-proyeccion {
@@ -131,7 +132,7 @@
     padding: 12px 25px;
     border: none;
     border-radius: 5px;
-    background-color: #4a7ba7;
+    background-color: #3862AA;;
     color: white;
     font-size: 14px;
     font-weight: 500;
