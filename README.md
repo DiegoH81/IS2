@@ -66,7 +66,7 @@ git config --global user.email "tuemail@ejemplo.com"
 
 1. **Crear base de datos**
 
-En pgAdmin crear una base de datos con el nombre: OAB_DB (o 
+En pgAdmin crear una base de datos con el nombre: OAB_DB
 
 2. **Importar la BD desde el repositorio**
 
