@@ -284,6 +284,14 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
 
             <!-- Parte de abajo -->
             <footer class="seccion-inferior">
+                
+                <?php
+                    // Color para el balance semanal
+                    $colorSemanal = ($balanceUltimos7Dias >= 0) ? "color: #00ff5a;" : "color: #ff4d4d;";
+
+                    // Color para el balance diario
+                    $colorDiario = ($balanceCalculado >= 0) ? "color: #00ff5a;" : "color: #ff4d4d;";
+                ?>
 
                 <!-- Verificar si es domingo y mostrar la caja de Corte Semanal -->
                 <?php if ($diaActual == 'Sunday'): ?>
@@ -291,7 +299,7 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                         <h4 class="titulo-resumen" style="font-weight: bold;">Corte Semanal</h4>
                         <div class="linea-resumen">
                             <span class="texto-resumen" style = "font-weight: bold; color: white;">Semanal</span>
-                            <span class="valor-resumen">S/. <?php echo number_format($balanceUltimos7Dias, 2); ?></span>
+                            <span class="valor-resumen" style="<?php echo $colorDiario; ?>">S/. <?php echo number_format($balanceUltimos7Dias, 2); ?></span>
                         </div>
                     </article>
                 <?php else: ?>
@@ -306,7 +314,7 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                     <h4 class="titulo-resumen" style="font-weight: bold;">Resumen del Balance</h4>
                     <div class="linea-resumen">
                         <span class="texto-resumen" style = "font-weight: bold; color: white;">Diario</span>
-                        <span class="valor-resumen">S/. <?php echo number_format($balanceCalculado, 2); ?></span>
+                        <span class="valor-resumen" style="<?php echo $colorSemanal; ?>">S/. <?php echo number_format($balanceCalculado, 2); ?></span>
                     </div>
                 </aside>
             </footer>

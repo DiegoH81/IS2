@@ -1,9 +1,3 @@
-/* ===================================
-  ARCHIVO: css/configuracion.css
-  Estilos adicionales para la página de configuración
-  Este archivo complementa daily_input.css
-  =================================== */
-
 /* Contenedor con submenu */
 .area-con-submenu {
     display: flex;
@@ -100,7 +94,7 @@
     pointer-events: none;
 }
 
-/* Botón crear usuario */
+
 .boton-crear-usuario {
     background-color: #374151;
     color: white;
@@ -119,7 +113,6 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Contenedor de tabla */
 .contenedor-tabla-usuarios {
     background: white;
     border-radius: 8px;
@@ -127,7 +120,6 @@
     overflow: hidden;
 }
 
-/* Tabla de usuarios */
 .tabla {
     width: 80%;
     border-collapse: collapse;
@@ -165,7 +157,6 @@
     font-size: 14px;
 }
 
-/* Columnas específicas */
 .columna-usuario {
     width: 25%;
 }
@@ -183,7 +174,6 @@
     text-align: center;
 }
 
-/* Columnas para tabla de conceptos */
 .columna-concepto {
     width: 25%;
 }
@@ -212,7 +202,6 @@
     text-align: center;
 }
 
-/* Link de borrar */
 .link-borrar {
     color: #4b5563;
     text-decoration: underline;
@@ -225,7 +214,6 @@
     color: #ef4444;
 }
 
-/* Link de editar para conceptos */
 .link-editar-concepto {
     color: #4b5563;
     text-decoration: underline;

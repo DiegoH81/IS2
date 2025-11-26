@@ -219,9 +219,8 @@ body {
 }
 
 
-/* Menu lateral - ACTUALIZADO */
 .menu-lateral {
-    background-color: #2d3748;
+    background-color: #4c6eaa;
     width: 240px;
     padding: 8px;
     display: flex;
@@ -245,7 +244,7 @@ body {
 }
 
 .opcion-menu.activa {
-    background-color: #4a5568;
+    background-color: #2f528f;
     border-left: 4px solid #fc8181;
     color: white;
 }

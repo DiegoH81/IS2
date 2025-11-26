@@ -65,7 +65,7 @@ $balanceCalculado = $ingresos - $egresos;
     
     <!-- CSS principal -->
     <link rel="stylesheet" href="../css/daily_input.css">
-     <link rel="stylesheet" href="../css/principal.css">
+    <link rel="stylesheet" href="../css/principal.css">
     <link rel="stylesheet" href="../css/configuracion.css">
     <link rel="stylesheet" href="../css/calendar.css">
     <!-- CSS de íconos -->
@@ -316,13 +316,17 @@ $balanceCalculado = $ingresos - $egresos;
                 <article>
                 </article>
 
-                
+                <?php
+                    // Color para el balance
+                    $colorBalance = ($balanceCalculado >= 0) ? "color: #00ff5a;" : "color: #ff4d4d;";
+                ?>
+
                 <!-- Paso 14 del CU-04: La UI-05 presenta los totales de ingresos, egresos y balances -->
                 <aside class="caja-resumen" style="background-color: #3862AA;">
                     <h4 class="titulo-resumen" style="font-weight: bold;" >Resumen del Balance</h4>
                     <div class="linea-resumen">
                         <span class="texto-resumen" style = "font-weight: bold; color: white;">Rango</span>
-                        <span class="valor-resumen">S/. <?php echo number_format($balanceCalculado, 2); ?></span>
+                        <span class="valor-resumen" style="<?php echo $colorBalance; ?>" >S/. <?php echo number_format($balanceCalculado, 2); ?></span>
                     </div>
                 </aside>
             </footer>
