@@ -55,7 +55,7 @@ Descargar: https://www.postgresql.org/download/
 Durante la instalación: Crear una contraseña para el usuario postgres y
 guardarla (se necesitará para la conexión)
 
-3.Git
+3. **Git**
 
 Descargar: https://git-scm.com/
 Configurar usuario con los siguientes comandos:
