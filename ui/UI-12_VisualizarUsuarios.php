@@ -182,7 +182,7 @@ if ($cadena !== '') {
                     </header>
 
                     <!-- Paso 4 del CU-08: Presenta la lista de usuario con opciones (Habilitado/Deshabilitado) -->
-                    <table class="tabla-datos">
+                    <table class="tabla-datos" style="height: 600px;">
                         <thead>
                             <tr>
                                 <th class="encabezado-tabla">Usuario</th>
@@ -192,7 +192,7 @@ if ($cadena !== '') {
                                 <th class="encabezado-tabla">Acción</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="display: block; overflow-y: auto; max-height: 500px;">
                         <?php if ($usuarios && count($usuarios) > 0): ?>
                             <?php foreach ($usuarios as $u): ?>
                                 <tr class="fila-tabla" id="fila-<?= $u->idUsuario ?>">

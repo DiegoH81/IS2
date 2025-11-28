@@ -8,9 +8,11 @@
 session_start();
 require_once '../gtr/GTR-02_GestionarConcepto.php';
 require_once '../gtr/GTR-09_GestionarCategoria.php';
+require_once '../gtr/GTR-04_Validar.php';
 
 $categorias = GestionarCategoria::obtenerCategoriasBD($_SESSION['familia_id']);
 
+$from = $_GET['from'] ?? 'visualizar_conceptos';
 
 // Verificar si el formulario fue enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -49,7 +51,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Paso 18 del CU-09-1: Mostrar mensaje de confirmación.
     // Paso 19 del CU-09-1: Redirigir a la interfaz de Visualizar conceptos (UI-16).
-    header("Location: UI-16_VisualizarConceptos.php");
+
+    $from = $_POST['from'] ?? 'visualizar_conceptos';
+
+
+    // Generar la transaccion en la bd
+    validar::validarTransacciones();
+
+
+    if ($from === 'registro_diario') {
+        header("Location: UI-04_RegistroDiario.php");
+        exit;
+    } else {
+        header("Location: UI-16_VisualizarConceptos.php");
+        exit;
+    }
     exit;
 }
 ?>
@@ -208,6 +224,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="campo-formulario">
                             <button type="submit" class="boton-crear">Guardar concepto</button>
                         </div>
+
+                        <input type="hidden" name="from" value="<?php echo $from; ?>">
                     </form>
                 </article>
             </section>

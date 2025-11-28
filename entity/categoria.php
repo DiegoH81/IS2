@@ -65,7 +65,7 @@ class Categoria {
         return $result !== false;
     }
     /* FUN-30 actualizarCategoria
-        Permite actualizar una categoria ya existente*/
+        Permite actualizar una categoria ya existente, */
     public static function actualizarCategoria($id, $nombre, $descripcion) {
         $conn = Database::connect();
         $query = "SELECT actualizarCategoria($1, $2, $3);";

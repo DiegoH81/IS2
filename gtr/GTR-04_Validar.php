@@ -62,10 +62,9 @@ class Validar {
     public static function validarTransacciones()
     {
         $conn = Database::connect();
-
+        
         $sql = "SELECT * FROM generar_transacciones_periodicas()";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
+        pg_query($conn, $sql);
     }
 }
 ?>
