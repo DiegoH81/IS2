@@ -88,6 +88,7 @@ if ($cadena !== '') {
 
     <link rel="stylesheet" href="../css/modal.css">
     <link rel="stylesheet" href="../css/busqueda.css">
+    
 </head>
 <body>
 
@@ -159,8 +160,8 @@ if ($cadena !== '') {
             
 
             <!-- Paso 6 del CU-09: La UI-16 presenta la lista de conceptos. -->
-            <section class="contenedor-tablas">
-                <article class="tabla">
+            <section class="contenedor-tablas" >
+                <article class="tabla" >
                     <!-- Paso 8 del CU-09: Mostrar opción de Crear concepto. -->
                     <header>
                         <div class="encabezado-tabla-superior">
@@ -185,7 +186,7 @@ if ($cadena !== '') {
                         <div class="linea-azul"></div>
                     </header>
 
-                    <table class="tabla-datos" >
+                    <table class="tabla-datos" style="height: 600px;" >
                         <thead>
                             <tr>
                                 <th class="encabezado-tabla">Concepto</th>
@@ -198,7 +199,7 @@ if ($cadena !== '') {
                                 <th class="encabezado-tabla">Acción</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="display: block; overflow-y: auto; max-height: 500px;" >
                         <?php if ($conceptos && count($conceptos) > 0): ?>
                             <?php foreach ($conceptos as $c): ?>
                                 <tr class="fila-tabla" id="fila-<?= $c['concepto_id'] ?>">

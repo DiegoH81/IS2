@@ -199,7 +199,7 @@ if ($cadena !== '') {
 
 
                     <!-- Paso 4 del CU-10: Se presentan la lista de categorías. -->
-                    <table class="tabla-datos">
+                    <table class="tabla-datos" style="height: 600px;">
                         <thead>
                             <tr>
                                 <th class="encabezado-tabla">Nombre</th>
@@ -209,7 +209,7 @@ if ($cadena !== '') {
                                 <th class="encabezado-tabla">Acción</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="display: block; overflow-y: auto; max-height: 500px;">
                         <?php if ($categorias && count($categorias) > 0): ?>
                             <?php
                                 // Crear un mapa id_usuario → nombre para buscar rápido
