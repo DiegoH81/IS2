@@ -208,7 +208,8 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                     </table>
                     
                     <!-- Paso 3 del CU-03: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
-                     <form action="UI-17_CrearConcepto.php" method="GET">
+                    <form action="UI-17_CrearConcepto.php" method="GET">
+                        <input type="hidden" name="from" value="registro_diario">
                         <button type="submit" class="boton-mas">+</button>
                     </form>
                 </article>
@@ -277,6 +278,7 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
 
                     <!-- Paso 3 del CU-03: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
                     <form action="UI-17_CrearConcepto.php" method="GET">
+                        <input type="hidden" name="from" value="registro_diario">
                         <button type="submit" class="boton-mas">+</button>
                     </form>
                 </article>

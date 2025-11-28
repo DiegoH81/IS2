@@ -177,7 +177,8 @@ if ($cadena !== '') {
                                 <?php endif; ?>
                             </form>
 
-                            <a href="UI-17_CrearConcepto.php" class="boton-crear" >Crear concepto</a>
+                            <a href="UI-17_CrearConcepto.php?from=visualizar_conceptos" class="boton-crear">Crear concepto</a>
+
                         </div>
                         <h2 class="titulo-tabla">Configuración conceptos</h2>
                         <div class="linea-separadora"></div>
