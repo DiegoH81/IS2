@@ -110,6 +110,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <a class="opcion-submenu activa" href="UI-20_VisualizarCategoria.php">
                         <i></i>Categorías
                     </a>
+                    <a class="opcion-submenu" href="UI-23_VisualizarTransaccion.php">
+                        <i></i>Transacciones
+                    </a>
                 </nav>
             </aside>
 

@@ -113,6 +113,24 @@ if ($cadena !== '') {
 
         <!-- Área principal -->
         <main class="contenedor-medio">
+            <aside class="submenu-configuracion" id="Sub_menuConfig">
+                <nav>
+                    <?php if ($_SESSION['rol'] === 'Administrador familiar'): ?>
+                        <a class="opcion-submenu" href="UI-12_VisualizarUsuarios.php">
+                            <i></i>Usuarios
+                        </a>
+                    <?php endif; ?>
+                    <a class="opcion-submenu" href="UI-16_VisualizarConceptos.php">
+                        <i></i>Conceptos
+                    </a>
+                    <a class="opcion-submenu" href="UI-20_VisualizarCategoria.php">
+                        <i></i>Categorías
+                    </a>
+                    <a class="opcion-submenu activa" href="UI-23_VisualizarTransaccion.php">
+                        <i></i>Transacciones
+                    </a>
+                </nav>
+            </aside>
             <section class="contenedor-tablas">
                 <article class="tabla">
                     <header>
@@ -173,6 +191,7 @@ if ($cadena !== '') {
                                     <td class="celda">
                                         <form action="UI-24_EditarTransaccion.php" method="GET">
                                             <input type="hidden" name="idtransaccion" value="<?= $t['idTransaccion'] ?>">
+                                            <input type="hidden" name="origen" value="visualizar_transacciones">
                                             <button type="submit" class="link-editar"
                                             <?= !$puedeEditarFinal ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : '' ?>
                                             <?= !$esReciente ? 'title="No se puede editar transacciones con más de 30 días"' : '' ?>

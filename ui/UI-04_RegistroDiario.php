@@ -75,6 +75,8 @@ if ($modo == 'familiar') {
     $egresos_7Dias = GestionarTransaccion::obtenerEgresoPorUsuarioBD($usuario->idUsuario, $fecha_hace_7_dias, $fecha_hoy);
 }
 
+//var_dump($datosRelacionados);
+
 $balanceCalculado = $ingresos - $egresos;
 $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
 ?>
@@ -184,7 +186,6 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                             if ($dato['tipo'] === 'Ingreso') {
                                 $puedeEditar = (
                                     $dato['usuario_id'] == $usuario->idUsuario
-                                    || $usuario->rol === "Administrador familiar"
                                 );
 
                                 echo "<tr class='fila-tabla'>
@@ -194,8 +195,9 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                                         <td class='celda'>{$dato['usuario']}</td>
                                         <td class='celda derecha'>";
                                 ?>
-                                    <form action="UI-18_EditarConcepto.php" method="GET">
-                                        <input type="hidden" name="id" value="<?= $dato['idConcepto'] ?>">
+                                    <form action="UI-24_EditarTransaccion.php" method="GET">
+                                        <input type="hidden" name="idtransaccion" value="<?= $dato['idTransaccion'] ?>">
+                                        <input type="hidden" name="origen" value="registro_diario">
                                         <button type="submit" class="link-editar" <?= !$puedeEditar ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?>>
                                             Editar
                                         </button>
@@ -241,7 +243,6 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                             if ($dato['tipo'] === 'Egreso') {
                                 $puedeEditar = (
                                     $dato['usuario_id'] == $usuario->idUsuario
-                                    || $usuario->rol === "Administrador familiar"
                                 );
 
                                 echo "<tr class='fila-tabla'>
@@ -251,8 +252,9 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                                         <td class='celda'>{$dato['usuario']}</td>
                                         <td class='celda derecha'>";
                                 ?>
-                                    <form action="UI-18_EditarConcepto.php" method="GET">
-                                        <input type="hidden" name="id" value="<?= $dato['idConcepto'] ?>">
+                                    <form action="UI-24_EditarTransaccion.php" method="GET">
+                                        <input type="hidden" name="idtransaccion" value="<?= $dato['idTransaccion'] ?>">
+                                        <input type="hidden" name="origen" value="registro_diario">
                                         <button type="submit" class="link-editar" <?= !$puedeEditar ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?>>
                                             Editar
                                         </button>

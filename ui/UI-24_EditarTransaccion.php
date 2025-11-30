@@ -15,7 +15,9 @@ if (!isset($_GET['idtransaccion'])) {
 $idTransaccion = $_GET['idtransaccion'];
 $familiaId = $_SESSION['familia_id'];
 
-// Paso 1: Obtener la transacción seleccionada
+$origen = isset($_GET['origen']) ? $_GET['origen'] : 'visualizar_transacciones';
+
+
 $transaccion = GestionarTransaccion::obtenerTransaccionPorIdBD($idTransaccion);
 
 if (!$transaccion) {
@@ -52,7 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $monto = $_POST['monto'];
     $tipo = $_POST['tipo'];
     $idConcepto = $_POST['concepto'];
-    // El usuario YA NO se cambia, se mantiene el original
+    $origenPost = $_POST['origen'];
+
     $idUsuario = $transaccion->idUsuario;
 
     // Paso 10: Actualizar la transacción
@@ -68,7 +71,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Paso 11: Redirigir con mensaje de éxito
     $_SESSION['mensaje_exito'] = 'Transacción editada exitosamente';
-    header("Location: UI-23_VisualizarTransaccion.php");
+
+    if ($origenPost === 'registro_diario') {
+        header("Location: UI-04_RegistroDiario.php");
+    } else {
+        header("Location: UI-23_VisualizarTransaccion.php");
+    }
     exit;
 }
 
@@ -139,6 +147,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </aside>
 
         <main class="contenedor-medio">
+            <aside class="submenu-configuracion" id="Sub_menuConfig">
+                <nav>
+                    <?php if ($_SESSION['rol'] === 'Administrador familiar'): ?>
+                        <a class="opcion-submenu" href="UI-12_VisualizarUsuarios.php">
+                            <i></i>Usuarios
+                        </a>
+                    <?php endif; ?>
+                    <a class="opcion-submenu" href="UI-16_VisualizarConceptos.php">
+                        <i></i>Conceptos
+                    </a>
+                    <a class="opcion-submenu" href="UI-20_VisualizarCategoria.php">
+                        <i></i>Categorías
+                    </a>
+                    <a class="opcion-submenu activa" href="UI-23_VisualizarTransaccion.php">
+                        <i></i>Transacciones
+                    </a>
+                </nav>
+            </aside>
             <section class="contenedor-tablas">
                 <article class="tabla">
                     <header>
@@ -151,6 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <!-- Paso 8-9: Se validan los datos y se comprueba que no hayan campos vacíos -->
                     <form class="form-crear-concepto" method="POST">
+                        <input type="hidden" name="origen" value="<?= htmlspecialchars($origen) ?>">
 
                         <h1 style="text-align: center;">Editando transacción</h1>
 
@@ -209,7 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <!-- Paso 9: Botones de acción -->
                         <div style="text-align:center;">
                             <div class="grupo-botones">
-                                <button type="button" class="boton-crear boton-cancelar" onclick="window.location.href='UI-23_VisualizarTransaccion.php'">Cancelar</button>
+                                <button type="button" class="boton-crear boton-cancelar" onclick="cancelarEdicion('<?= htmlspecialchars($origen) ?>')">Cancelar</button>
                                 <button type="submit" class="boton-crear">Guardar</button>
                             </div>
                         </div>
@@ -221,5 +248,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
-</body>
+</body><script>
+function cancelarEdicion(origen) {
+    if (origen === 'registro_diario') {
+        window.location.href = 'UI-04_RegistroDiario.php';
+    } else {
+        window.location.href = 'UI-23_VisualizarTransaccion.php';
+    }
+}
+</script>
 </html>
