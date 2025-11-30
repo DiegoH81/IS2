@@ -175,7 +175,7 @@ class Concepto {
                 'tipo' => $row['tipo'],
                 'categoria' => $row['categoria'],
                 'nombre' => $row['nombre'],
-                'monto' => $row['monto'],
+                'monto' => $row['monto_promedio'],
                 'dias_restantes' => $row['dias_restantes'],
                 'proxima_fecha' => $row['proxima_fecha']
             ];

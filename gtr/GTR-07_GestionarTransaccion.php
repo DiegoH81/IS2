@@ -104,5 +104,59 @@ class GestionarTransaccion {
     {
         Transaccion::crearTransaccion($fecha, $monto, $tipo, $familia_id, $concepto_id, $usuario_id);
     }
+
+
+    /* FUN-85 relacionarDatosTransacciones
+        Se relacionan los datos para poder hallar una transaccion mostrable*/
+
+    public static function relacionarDatosTransacciones($idFamilia) {
+        $resultado = [];
+        
+        $transacciones = GestionarTransaccion::obtenerTransaccionesPorFamiliaBD($idFamilia);
+        $conceptos = GestionarTransaccion::solicitarConceptos($idFamilia);
+        $usuarios = GestionarTransaccion::solicitarUsuarios($idFamilia);
+        
+        // Crear índices para búsqueda rápida
+        $usuariosIndex = [];
+        foreach ($usuarios as $u) {
+            $usuariosIndex[$u->idUsuario] = $u->nombre;
+        }
+
+        $conceptosIndex = [];
+        foreach ($conceptos as $c) {
+            $conceptosIndex[$c->idConcepto] = $c->nombre;
+        }
+
+        // Iterando transacciones
+        foreach ($transacciones as $t) {
+            // Crear la transacción relacionada
+            $transaccionRelacionada = [
+                'idTransaccion' => $t->idTransaccion,
+                'fecha'         => $t->fecha,
+                'monto'         => $t->monto,
+                'tipo'          => $t->tipo,
+                'concepto'      => isset($conceptosIndex[$t->idConcepto]) ? $conceptosIndex[$t->idConcepto] : 'Sin concepto',
+                'idConcepto'    => $t->idConcepto,
+                'usuario'       => isset($usuariosIndex[$t->idUsuario]) ? $usuariosIndex[$t->idUsuario] : 'Sin usuario',
+                'idUsuario'     => $t->idUsuario
+            ];
+
+            $resultado[] = $transaccionRelacionada;
+        }
+
+        return $resultado;
+    }
+
+    /* FUN-88 obtenerTransaccionPorIdBD
+    Obtiene una transacción específica por su ID */
+    public static function obtenerTransaccionPorIdBD($idTransaccion) {
+        return Transaccion::obtenerTransaccionPorId($idTransaccion);
+    }
+
+    /* FUN-89 editarTransaccionBD
+        Edita una transacción en la base de datos */
+    public static function editarTransaccionBD($idTransaccion, $fecha, $monto, $tipo, $idFamilia, $idConcepto, $idUsuario) {
+        return Transaccion::editarTransaccion($idTransaccion, $fecha, $monto, $tipo, $idFamilia, $idConcepto, $idUsuario);
+    }
 }   
 ?>

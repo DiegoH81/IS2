@@ -34,6 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_transaccion']))
         $usuario->idUsuario
     );
     
+    //var_dump($usuario);
+
     // Recargar la página
     header("Location: UI-04_RegistroDiario.php?modo=" . $modo);
     exit;
@@ -355,23 +357,16 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
     </div>
 </div>
 
+
+
 <script>
 // Datos de conceptos desde PHP - OBTENIDOS DESDE GTR-02
 const conceptosData = <?php echo json_encode(array_values($conceptosHabilitados)); ?>;
 const categoriasData = <?php echo json_encode($categoriasIndex); ?>;
 
-// Debug detallado - ver qué datos llegan
-console.log('=== DEBUG DE CONCEPTOS ===');
-console.log('Total de conceptos habilitados:', conceptosData.length);
-console.log('Conceptos completos:', conceptosData);
-
 // Contar por tipo
 const countIngresos = conceptosData.filter(c => c.tipo === 'Ingreso').length;
 const countEgresos = conceptosData.filter(c => c.tipo === 'Egreso').length;
-console.log('Ingresos disponibles:', countIngresos);
-console.log('Egresos disponibles:', countEgresos);
-console.log('Categorías disponibles:', categoriasData);
-console.log('========================');
 
 document.addEventListener('DOMContentLoaded', function() {
     const switchBtn = document.querySelector('#switchFamilia');
@@ -391,8 +386,6 @@ function abrirModal(tipo) {
     const mensajeSin = document.getElementById('mensajeSinConceptos');
     const btnCrear = document.getElementById('btnCrear');
     
-    console.log('=== ABRIENDO MODAL ===');
-    console.log('Tipo solicitado:', tipo);
     
     // Configurar título y tipo
     titulo.textContent = tipo === 'Ingreso' ? 'Nuevo Ingreso' : 'Nuevo Egreso';
@@ -403,11 +396,9 @@ function abrirModal(tipo) {
     
     // Filtrar conceptos por tipo
     const conceptosFiltrados = conceptosData.filter(concepto => {
-        console.log(`Concepto: "${concepto.nombre}" | Tipo: "${concepto.tipo}" | Estado: ${concepto.estado}`);
         return concepto.tipo === tipo;
     });
     
-    console.log(`Conceptos filtrados para ${tipo}:`, conceptosFiltrados.length);
     
     if (conceptosFiltrados.length === 0) {
         // Mostrar mensaje de error
@@ -455,9 +446,6 @@ function mostrarCategoria() {
     if (select.value) {
         const option = select.options[select.selectedIndex];
         const categoriaId = option.dataset.categoria;
-        
-        console.log('Categoría ID seleccionada:', categoriaId);
-        console.log('Nombre de categoría:', categoriasData[categoriaId]);
         
         if (categoriasData[categoriaId]) {
             nombreCategoria.textContent = categoriasData[categoriaId];

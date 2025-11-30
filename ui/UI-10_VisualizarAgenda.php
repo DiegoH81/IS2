@@ -203,8 +203,6 @@ if ($filtro === 'ingresos') {
                                 <span class="concepto"><?php echo htmlspecialchars($ag->nombre); ?></span>
                             </div>
                             
-                            <span class="monto">S/<?php echo number_format($ag->monto, 2); ?></span>
-                            
                             <div class="estado-transaccion">
                                 <?php if ($esUrgente): ?>
                                     <i class="icono-alerta"><i class="fa-solid fa-triangle-exclamation"></i></i>

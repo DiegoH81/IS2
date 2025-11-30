@@ -115,7 +115,7 @@
 }
 
 .info-categoria {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: #764ba2;
     color: white;
     padding: 14px 18px;
     border-radius: 12px;
@@ -135,7 +135,7 @@
 .btn-crear-transaccion {
     width: 100%;
     padding: 16px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: #4C6EAA;
     color: white;
     border: none;
     border-radius: 12px;
@@ -164,7 +164,6 @@
     font-size: 18px;
 }
 
-/* Mensaje cuando no hay conceptos */
 .mensaje-sin-conceptos {
     background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
     border: 2px solid #feb2b2;
@@ -184,7 +183,6 @@
     font-size: 20px;
 }
 
-/* Mejorar el botón + */
 .boton-mas {
     position: absolute;
     right: 20px;
@@ -196,12 +194,10 @@
     transform: scale(1.1) rotate(90deg);
 }
 
-/* Asegurar que la caja-tabla tenga posición relativa */
 .caja-tabla {
     position: relative;
 }
 
-/* Input de monto con estilo especial */
 input[type="number"] {
     font-size: 18px;
     font-weight: 600;

@@ -223,5 +223,55 @@ class Transaccion {
     return $result;
     }
 
+    /* FUN-86 obtenerTransaccionPorId
+    Obtiene una transacción específica por su ID */
+    public static function obtenerTransaccionPorId($idTransaccion) {
+        $conn = Database::connect();
+        $query = "SELECT * FROM obtener_transaccion_por_id($1);";
+        
+        $params = array($idTransaccion);
+        $result = pg_query_params($conn, $query, $params);
+        $row = pg_fetch_assoc($result);
+        
+        if ($row) {
+            return new Transaccion(
+                $row['idtransaccion'],
+                $row['fecha'],
+                $row['monto'],
+                $row['tipo'],
+                $row['idfamilia'],
+                $row['idconcepto'],
+                $row['idusuario']
+            );
+        }
+        
+        return null;
+    }
+
+    /* FUN-87 editarTransaccion
+        Edita una transacción existente en la base de datos */
+    public static function editarTransaccion($idTransaccion, $fecha, $monto, $tipo, $idFamilia, $idConcepto, $idUsuario) {
+        $conn = Database::connect();
+        $query = "SELECT editar_transaccion($1, $2, $3, $4, $5, $6, $7);";
+        
+        $params = array(
+            $idTransaccion,
+            $fecha,
+            $monto,
+            $tipo,
+            $idFamilia,
+            $idConcepto,
+            $idUsuario
+        );
+        
+        $result = pg_query_params($conn, $query, $params);
+        
+        if (!$result) {
+            throw new Exception("Error al editar la transacción");
+        }
+        
+        return true;
+    }
+
 }
 ?>

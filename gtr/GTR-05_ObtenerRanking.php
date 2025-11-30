@@ -65,6 +65,40 @@ class ObtenerRanking {
             $resultado[] = $transaccionRelacionada;
         }
 
+        // Agrupar
+        $agrupados = [];
+
+        foreach ($transacciones as $t) {
+            $conceptoObj = $conceptosIndex[$t->idConcepto] ?? null;
+
+            $categoria = $conceptoObj && isset($categoriasIndex[$conceptoObj->idCategoria])
+                        ? $categoriasIndex[$conceptoObj->idCategoria]
+                        : '';
+
+            // Clave única para agrupar
+            $key = $t->idConcepto . '-' . $t->idUsuario;
+
+            if (!isset($agrupados[$key])) {
+                // Crear entrada inicial
+                $agrupados[$key] = [
+                    'idTransaccion' => $t->idTransaccion,
+                    'fecha'         => $t->fecha,
+                    'monto'         => $t->monto,
+                    'tipo'          => $t->tipo,
+                    'categoria'     => $categoria,
+                    'concepto'      => $conceptoObj?->nombre ?? '',
+                    'idConcepto'    => $t->idConcepto,
+                    'usuario'       => $usuariosIndex[$t->idUsuario] ?? '',
+                    'usuario_id'    => $t->idUsuario
+                ];
+            } else {
+                // Sumar repetidos
+                $agrupados[$key]['monto'] += $t->monto;
+            }
+        }
+
+        $resultado = array_values($agrupados);
+
         return $resultado;
     }
 
