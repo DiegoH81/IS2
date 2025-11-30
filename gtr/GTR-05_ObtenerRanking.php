@@ -10,9 +10,9 @@ require_once 'GTR-07_GestionarTransaccion.php';
 
 class ObtenerRanking {
 
-    /* FUN-59 relacionarDatos
+    /* FUN-59 relacionarDatosRanking
         Obtiene el ranking de una familia, relacionando diversos datos*/
-    public static function relacionarDatos($idFamilia) {
+    public static function relacionarDatosRanking($idFamilia) {
         // Inicializamos el array de resultados
         $resultado = [];
         
@@ -71,7 +71,7 @@ class ObtenerRanking {
     /* FUN-60 obtenerIngresos 
         Obtiene el ranking de una familia, relacionando a los ingresos */
     public static function obtenerIngresos($idFamilia) {
-        $transacciones = self::relacionarDatos($idFamilia);
+        $transacciones = self::relacionarDatosRanking($idFamilia);
         $ingresos = array_filter($transacciones, function($transaccion) {
             return $transaccion['tipo'] === 'Ingreso';
         });
@@ -82,7 +82,7 @@ class ObtenerRanking {
     /* FUN-60 obtenerEgresos 
         Obtiene el ranking de una familia, relacionando a los egresos */
     public static function obtenerEgresos($idFamilia) {
-        $transacciones = self::relacionarDatos($idFamilia);
+        $transacciones = self::relacionarDatosRanking($idFamilia);
         
         $ingresos = array_filter($transacciones, function($transaccion) {
             return $transaccion['tipo'] === 'Egreso';

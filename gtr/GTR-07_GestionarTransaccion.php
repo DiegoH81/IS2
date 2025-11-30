@@ -90,5 +90,19 @@ class GestionarTransaccion {
     {
         return Transaccion::obtenerProyeccionEgresos($idFamilia, $fecha);
     }
+
+    /* FUN-84 crearTransacciónBD
+        Se creara una transacción en la base de datos*/
+
+    public static function crearTransaccionBD(
+    $fecha,
+    $monto,
+    $tipo,
+    $familia_id,
+    $concepto_id,
+    $usuario_id )
+    {
+        Transaccion::crearTransaccion($fecha, $monto, $tipo, $familia_id, $concepto_id, $usuario_id);
+    }
 }   
 ?>

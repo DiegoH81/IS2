@@ -8,7 +8,6 @@
 session_start();
 require_once '../gtr/GTR-02_GestionarConcepto.php';
 require_once '../gtr/GTR-09_GestionarCategoria.php';
-require_once '../gtr/GTR-04_Validar.php';
 
 $categorias = GestionarCategoria::obtenerCategoriasBD($_SESSION['familia_id']);
 
@@ -16,48 +15,34 @@ $from = $_GET['from'] ?? 'visualizar_conceptos';
 
 // Verificar si el formulario fue enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombre   = $_POST['nombre'];
-    $tipo     = $_POST['tipo'];
-    $monto    = $_POST['monto'];
-    $fecha_inicio    = $_POST['fecha_inicio'];
-    $fecha_fin       = $_POST['fecha_fin'];
-    $periodicidad    = $_POST['periodo'];
-    $categoria_id    = $_POST['categoria'];
-
-    // Paso 9 del CU-09-1: Determinar la periodicidad seleccionada por el usuario.
-    $periodo_sel = $_POST['periodo'];
-    switch ($periodo_sel) {
-        case 'Diario': $periodo = 1; break;
-        case 'Semanal': $periodo = 7; break;
-        case 'Quincenal': $periodo = 15; break;
-        case 'Mensual': $periodo = 30; break;
-        case 'Eventual': $periodo = 0; break;
-        case 'Personalizado':
-            $periodo = $_POST['periodoPersonalizado'];
-            break;
+    $nombre        = $_POST['nombre'];
+    $tipo          = $_POST['tipo'];
+    $categoria_id  = $_POST['categoria'];
+    
+    // Si se activó la periodicidad
+    if (isset($_POST['activar_periodicidad']) && $_POST['activar_periodicidad'] === '1') {
+        $periodo = $_POST['periodo'];
+        $fecha_inicio = $_POST['fechaInicio'];
+        $fecha_fin = $_POST['fechaFin'];
+        
+    } else {
+        // Por defecto: Eventual (0) y fechas actuales
+        $periodo = 0;
+        $fecha_inicio = date('Y-m-d');
+        $fecha_fin = date('Y-m-d');
     }
+
     GestionarConcepto::crearConceptoBD(
         $nombre,
         $tipo,
-        $monto,
         $periodo,
-        $periodicidad,
         $fecha_inicio,
-        $fecha_fin,
         $_SESSION['familia_id'],
         $_SESSION['id_usuario'],
         $categoria_id
     );
 
-    // Paso 18 del CU-09-1: Mostrar mensaje de confirmación.
-    // Paso 19 del CU-09-1: Redirigir a la interfaz de Visualizar conceptos (UI-16).
-
     $from = $_POST['from'] ?? 'visualizar_conceptos';
-
-
-    // Generar la transaccion en la bd
-    validar::validarTransacciones();
-
 
     if ($from === 'registro_diario') {
         header("Location: UI-04_RegistroDiario.php");
@@ -66,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: UI-16_VisualizarConceptos.php");
         exit;
     }
-    exit;
 }
 ?>
 
@@ -79,6 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../css/principal.css">
     <link rel="stylesheet" href="../css/configuracion.css">
     <link rel="stylesheet" href="../css/icons.css">
+    <link rel="stylesheet" href="../css/editar_concepto.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 <div class="contenedor-principal">
@@ -152,12 +138,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
 
-                    <!-- Paso 3 del CU-09-1: La interfaz muestra la opción de Crear categoría. -->
-                    <!-- Paso 4 del CU-09-1: El AC-02 ingresa el nombre del concepto y selecciona la categoría. -->
-                    <!-- Paso 5 del CU-09-1: La interfaz muestra las categorías disponibles. -->
-                    <!-- Paso 6 del CU-09-1: El AC-02 selecciona una categoría. -->
-
                     <form class="form-crear-concepto" method="POST">
+                        <input type="hidden" name="activar_periodicidad" id="activarPeriodicidad" value="0">
+                        <input type="hidden" name="from" value="<?= htmlspecialchars($from) ?>">
 
                         <!-- Categoría -->
                         <div class="campo-formulario">
@@ -171,61 +154,88 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        
-                        <!-- Paso 7 del CU-09-1: El AC-02 selecciona el tipo de concepto (Ingreso o Egreso). -->
+
+                        <!-- Nombre -->
                         <div class="campo-formulario">
                             <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Ingrese solo letras" name="nombre" placeholder="Ingrese nombre" required>
+                            <input type="text" id="nombre" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Ingrese solo letras" name="nombre" placeholder="Ingrese nombre del concepto" required>
                         </div>
 
                         <!-- Tipo -->
                         <div class="campo-formulario">
                             <label>Tipo:</label>
-                            <div class="opciones-radio">
-                                <label><input type="radio" name="tipo" value="Ingreso" required> Ingreso</label>
-                                <label><input type="radio" name="tipo" value="Egreso" required> Egreso</label>
+                            <div class="opciones-tipo-moderno">
+                                <div class="tarjeta-tipo">
+                                    <input type="radio" name="tipo" value="Ingreso" id="tipoIngreso" required>
+                                    <label for="tipoIngreso">
+                                        <div class="icono-tipo"><i class="fa-solid fa-piggy-bank"></i></div>
+                                        <div class="nombre-tipo">Ingreso</div>
+                                    </label>
+                                </div>
+                                <div class="tarjeta-tipo">
+                                    <input type="radio" name="tipo" value="Egreso" id="tipoEgreso" required>
+                                    <label for="tipoEgreso">
+                                        <div class="icono-tipo"><i class="fa-solid fa-money-bill-1"></i></div>
+                                        <div class="nombre-tipo">Egreso</div>
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Paso 8 del CU-09-1: El AC-02 ingresa el monto. -->
-                        <div class="campo-formulario">
-                            <label for="monto">Monto:</label>
-                            <input type="number" id="monto" name="monto" step="0.01" min="0" placeholder="S/. 0.00" required>
+
+                        <!-- Botón para activar periodicidad -->
+                        <div class="campo-formulario centro">
+                            <button type="button" class="boton-toggle" id="btnTogglePeriodicidad">
+                                <span id="textoBoton">Configurar periodicidad</span>
+                                <span class="icono-flecha">▼</span>
+                            </button>
                         </div>
 
-                        <!-- Paso 9 del CU-09-1: El AC-02 selecciona el período. -->
-                        <div class="campo-formulario">
-                            <label>Periodo:</label>
-                            <div class="opciones-radio columna-vertical">
-                                <label><input type="radio" name="periodo" value="Diario" required> Diario</label><br>
-                                <label><input type="radio" name="periodo" value="Semanal" required> Semanal</label><br>
-                                <label><input type="radio" name="periodo" value="Quincenal" required> Quincenal</label><br>
-                                <label><input type="radio" name="periodo" value="Mensual" required> Mensual</label><br>
-                                <label><input type="radio" name="periodo" value="Personalizado" required> Personalizado</label><br>
-                                <label><input type="radio" name="periodo" value="Eventual" required> Eventual</label>
+                        <!-- Sección de Periodicidad (oculta por defecto) -->
+                        <div class="seccion-periodicidad" id="seccionPeriodicidad">
+                            <h3>Configuración de Periodicidad</h3>
+                            
+                            <!-- Período -->
+                            <div class="campo-formulario">
+                                <label>Periodo:</label>
+                                <div class="opciones-periodo-moderno">
+                                    <?php 
+                                    $periodos = [
+                                        'Diario'    => ['valor' => 1, 'icono' => '<i class="fa-solid fa-sun"></i>'],
+                                        'Semanal'   => ['valor' => 7, 'icono' => '<i class="fa-solid fa-calendar-week"></i>'],
+                                        'Quincenal' => ['valor' => 15, 'icono' => '<i class="fa-solid fa-calendar-days"></i>'],
+                                        'Mensual'   => ['valor' => 30, 'icono' => '<i class="fa-solid fa-calendar"></i>'],
+                                        'Eventual'  => ['valor' => 0, 'icono' => '<i class="fa-solid fa-check"></i>']
+                                    ];
+
+                                    foreach ($periodos as $nombre => $info) {
+                                        $valor = $info['valor'];
+                                        $icono = $info['icono'];
+                                        $id = "periodo_" . strtolower($nombre);
+                                        // Por defecto seleccionar Eventual
+                                        $checked = ($nombre === 'Eventual') ? 'checked' : '';
+                                        echo "<div class='tarjeta-periodo'>
+                                                <input type='radio' name='periodo' value='$valor' id='$id' $checked> 
+                                                <label for='$id'>$icono ‎ $nombre</label>
+                                            </div>";
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+
+                            <!-- Fechas -->
+                            <div class="campo-formulario">
+                                <label>Día de inicio</label>
+                                <div class="fechas">
+                                    <input type="date" name="fechaInicio" id="fechaInicio" value="<?= date('Y-m-d') ?>">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="periodicidad-personalizada" style="display:none; margin-top:10px;">
-                            <label>Periodicidad:</label>
-                            <input type="number" name="periodoPersonalizado" step="1" min="2" placeholder="Ingrese número">
-                        </div>
-
-                        <!-- Paso 10 y 11 del CU-09-1: El AC-02 selecciona las fechas de inicio y fin. -->
+                        <!-- Botón Guardar -->
                         <div class="campo-formulario">
-                            <label>Día de inicio / Día de fin:</label>
-                            <div class="fechas">
-                                <input type="date" name="fecha_inicio" required>
-                                <input type="date" name="fecha_fin" required>
-                            </div>
+                            <button type="submit" class="boton-crear">Crear concepto</button>
                         </div>
-
-                        <!-- Paso 12 del CU-09-1: El AC-02 selecciona la opción Crear. -->
-                        <div class="campo-formulario">
-                            <button type="submit" class="boton-crear">Guardar concepto</button>
-                        </div>
-
-                        <input type="hidden" name="from" value="<?php echo $from; ?>">
                     </form>
                 </article>
             </section>
@@ -234,22 +244,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script>
-// Paso 9 del CU-17: Mostrar campo de periodicidad si se selecciona "Personalizado".
 document.addEventListener('DOMContentLoaded', function() {
-    const radiosPeriodo = document.querySelectorAll('input[name="periodo"]');
-    const campoPersonalizado = document.querySelector('.periodicidad-personalizada');
+    const btnToggle = document.getElementById('btnTogglePeriodicidad');
+    const seccionPeriodicidad = document.getElementById('seccionPeriodicidad');
+    const inputActivar = document.getElementById('activarPeriodicidad');
+    const textoBoton = document.getElementById('textoBoton');
+    const fechaInicio = document.getElementById('fechaInicio');
+    const fechaFin = document.getElementById('fechaFin');
 
-    radiosPeriodo.forEach(radio => {
-        radio.addEventListener('change', function() {
-            if (this.value === "Personalizado") {
-                campoPersonalizado.style.display = "flex";
-                campoPersonalizado.style.alignItems = "center";
-                campoPersonalizado.style.gap = "10px";
-            } else {
-                campoPersonalizado.style.display = "none";
-            }
-        });
+    btnToggle.addEventListener('click', function() {
+        if (seccionPeriodicidad.classList.contains('activa')) {
+            desactivarPeriodicidad();
+        } else {
+            activarPeriodicidad();
+        }
     });
+
+    function activarPeriodicidad() {
+        seccionPeriodicidad.classList.add('activa');
+        btnToggle.classList.add('activo');
+        inputActivar.value = '1';
+        textoBoton.textContent = 'Ocultar periodicidad';
+        fechaInicio.required = true;
+        fechaFin.required = true;
+    }
+
+    function desactivarPeriodicidad() {
+        seccionPeriodicidad.classList.remove('activa');
+        btnToggle.classList.remove('activo');
+        inputActivar.value = '0';
+        textoBoton.textContent = 'Configurar periodicidad';
+        fechaInicio.required = false;
+        fechaFin.required = false;
+    }
 });
 </script>
 </body>

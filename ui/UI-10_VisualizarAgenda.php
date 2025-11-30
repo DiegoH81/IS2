@@ -169,10 +169,8 @@ if ($filtro === 'ingresos') {
                 <?php if ($agendaFiltrada && count($agendaFiltrada) > 0): ?>
                     <?php foreach ($agendaFiltrada as $ag): ?>
                         <?php 
-                            // Obtener días restantes
                             $diasRestantes = (int)$ag->dias_restantes;
                             
-                            // Determinar si es urgente (menos de 7 días)
                             $esUrgente = $diasRestantes < 7;
                             
                             // Formatear la fecha en español
@@ -225,12 +223,6 @@ if ($filtro === 'ingresos') {
                 <?php endif; ?>
             </div>
 
-            <!-- Paginación -->
-            <div class="paginacion">
-                <span class="pagina-actual">1-2</span>
-                <button class="btn-paginacion">&lt;</button>
-                <button class="btn-paginacion">&gt;</button>
-            </div>
         </main>
     </div>
 </div>

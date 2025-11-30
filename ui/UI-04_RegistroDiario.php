@@ -9,6 +9,7 @@ session_start();
 require_once '../gtr/GTR-04_Validar.php';
 require_once '../gtr/GTR-07_GestionarTransaccion.php';
 require_once '../gtr/GTR-08_GestionarRegistroDiario.php';
+require_once '../gtr/GTR-02_GestionarConcepto.php';
 
 $usuario = Validar::obtenerUsuarioActual();
 
@@ -18,16 +19,44 @@ $fecha_hace_7_dias = date('Y-m-d', strtotime('-7 days'));
 $diaActual = date('l');
 $modo = isset($_GET['modo']) ? $_GET['modo'] : 'familiar';
 
+// Procesar creación de transacción
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['crear_transaccion'])) {
+    $concepto_id = $_POST['concepto_id'];
+    $monto = $_POST['monto'];
+    $tipo = $_POST['tipo'];
+    
+    GestionarTransaccion::crearTransaccionBD(
+        $fecha_hoy,
+        $monto,
+        $tipo,
+        $usuario->idFamilia,
+        $concepto_id,
+        $usuario->idUsuario
+    );
+    
+    // Recargar la página
+    header("Location: UI-04_RegistroDiario.php?modo=" . $modo);
+    exit;
+}
 
+$todosLosConceptos = GestionarConcepto::obtenerConceptosBD($usuario->idFamilia);
 
-//$diaActual = "Sunday";
-//$fecha_hoy = "2025-11-20";
-//var_dump($fecha_hoy);
+// Filtrar solo conceptos habilitados/activos
+$conceptosHabilitados = array_filter($todosLosConceptos, function($concepto) {
+    return (
+        $concepto->estado === 't'
+    );
+});
 
+// Obtener categorías para mostrar
+$categorias = GestionarTransaccion::solicitarCategorias($usuario->idFamilia);
 
+// Indexar categorías
+$categoriasIndex = [];
+foreach ($categorias as $cat) {
+    $categoriasIndex[$cat->idCategoria] = $cat->nombre;
+}
 
-//<!-- Paso 4-8 del CU-03: Se relacionan los datos para la transaccion -->
-//<!-- Paso 9 del CU-03: EL GTR-08 Calcula los ingresos y egresos para hallar el balance -->
 if ($modo == 'familiar') {
     $datosRelacionados = GestionarRegistroDiario::vistaFamiliarRegistroDiario($usuario->idFamilia, $fecha_hoy);
     $ingresos = GestionarTransaccion::obtenerIngresoBD($usuario->idFamilia, $fecha_hoy, $fecha_hoy);
@@ -44,33 +73,28 @@ if ($modo == 'familiar') {
     $egresos_7Dias = GestionarTransaccion::obtenerEgresoPorUsuarioBD($usuario->idUsuario, $fecha_hace_7_dias, $fecha_hoy);
 }
 
-
 $balanceCalculado = $ingresos - $egresos;
 $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
 ?>
 
-
-<!-- Paso 10 del CU-03: La UI-04 Muestra los campos pertinentes -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro Diario</title>
-
     
-    <!-- CSS principal -->
     <link rel="stylesheet" href="../css/daily_input.css">
-     <link rel="stylesheet" href="../css/principal.css">
+    <link rel="stylesheet" href="../css/principal.css">
     <link rel="stylesheet" href="../css/configuracion.css">
-    <!-- CSS de íconos -->
     <link rel="stylesheet" href="../css/icons.css">
-
+    <link rel="stylesheet" href="../css/new_mas_form.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    
 </head>
 <body>
 <div class="contenedor-principal">
-
-    <!-- Cabecera -->
     <header class="barra-superior">
         <section class="seccion-izquierda">
             <h1 class="titulo-app">On a budget</h1>
@@ -81,18 +105,16 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
 
             <div class="info-usuario">
                 <span class="nombre-usuario">
-                        <?php echo htmlspecialchars($_SESSION['nombre']); ?>
+                    <?php echo htmlspecialchars($_SESSION['nombre']); ?>
                 </span>
                 <span class="rol-usuario">
-                        <?php echo htmlspecialchars($_SESSION['rol']); ?>
+                    <?php echo htmlspecialchars($_SESSION['rol']); ?>
                 </span>
             </div>
         </section>
     </header>
 
-    <!-- Contenido principal -->
     <div class="contenedor-medio">
-        <!-- Menu lateral - ACTUALIZADO -->
         <aside class="menu-lateral" id="menuLateral">
             <nav>
                 <a class="opcion-menu activa" href="UI-04_RegistroDiario.php">
@@ -122,15 +144,9 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
             </footer>
         </aside>
 
-        <!-- Area principal -->
         <main class="area-trabajo">
-            <!-- Paso 1 del CU-03: La interfaz se carga y presenta el switch -->
-
-            <!-- Controles de arriba -->
             <section class="controles-superiores">
-                <!-- Toggle y calendario -->
                 <div class="grupo-controles">
-                    <!-- Switch familiar/personal -->
                     <div class="contenedor-switch">
                         <span class="texto-switch">PERSONAL / FAMILIAR</span>
                         <label class="boton-switch">
@@ -141,9 +157,7 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                 </div>
             </section>
 
-            <!-- Paso 2 del CU-03: Muestra ingresos y egresos -->
             <section class="contenedor-tablas">
-
                 <!-- Tabla Ingresos -->
                 <article class="caja-tabla">
                     <header>
@@ -163,13 +177,9 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                         </tr>
                         </thead>
                         <tbody>
-
                         <?php
-                        // Filtrar ingresos
-                        //<!-- Paso 3 del CU-03: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
                         foreach ($datosRelacionados as $dato) {
                             if ($dato['tipo'] === 'Ingreso') {
-
                                 $puedeEditar = (
                                     $dato['usuario_id'] == $usuario->idUsuario
                                     || $usuario->rol === "Administrador familiar"
@@ -181,23 +191,18 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                                         <td class='celda'>S/. {$dato['monto']}</td>
                                         <td class='celda'>{$dato['usuario']}</td>
                                         <td class='celda derecha'>";
-
-                                    ?>
-                                        <form action="UI-18_EditarConcepto.php" method="GET">
-                                            <input type="hidden" name="id" value="<?= $dato['idConcepto'] ?>">
-                                            <button type="submit" class="link-editar" <?= !$puedeEditar ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?>>
-                                            
-                                                Editar
-                                            </button>
-                                        </form>
-                                    <?php
-
-                                echo "   </td>
-                                    </tr>";
+                                ?>
+                                    <form action="UI-18_EditarConcepto.php" method="GET">
+                                        <input type="hidden" name="id" value="<?= $dato['idConcepto'] ?>">
+                                        <button type="submit" class="link-editar" <?= !$puedeEditar ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?>>
+                                            Editar
+                                        </button>
+                                    </form>
+                                <?php
+                                echo "   </td></tr>";
                             }
                         }
                         ?>
-
                         </tbody>
                         <tfoot>
                         <tr class="fila-total">
@@ -207,11 +212,7 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                         </tfoot>
                     </table>
                     
-                    <!-- Paso 3 del CU-03: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
-                    <form action="UI-17_CrearConcepto.php" method="GET">
-                        <input type="hidden" name="from" value="registro_diario">
-                        <button type="submit" class="boton-mas">+</button>
-                    </form>
+                    <button type="button" class="boton-mas" onclick="abrirModal('Ingreso')">+</button>
                 </article>
 
                 <!-- Tabla Egresos -->
@@ -234,11 +235,8 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                         </thead>
                         <tbody>
                         <?php
-                        // Filtrar egresos
-                        //<!-- Paso 3 del CU-03: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
                         foreach ($datosRelacionados as $dato) {
                             if ($dato['tipo'] === 'Egreso') {
-
                                 $puedeEditar = (
                                     $dato['usuario_id'] == $usuario->idUsuario
                                     || $usuario->rol === "Administrador familiar"
@@ -250,23 +248,18 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                                         <td class='celda'>S/. {$dato['monto']}</td>
                                         <td class='celda'>{$dato['usuario']}</td>
                                         <td class='celda derecha'>";
-
-                                    ?>
-                                        <form action="UI-18_EditarConcepto.php" method="GET">
-                                            <input type="hidden" name="id" value="<?= $dato['idConcepto'] ?>">
-                                            <button type="submit" class="link-editar" <?= !$puedeEditar ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?>>
-                                            
-                                                Editar
-                                            </button>
-                                        </form>
-                                    <?php
-
-                                echo "   </td>
-                                    </tr>";
+                                ?>
+                                    <form action="UI-18_EditarConcepto.php" method="GET">
+                                        <input type="hidden" name="id" value="<?= $dato['idConcepto'] ?>">
+                                        <button type="submit" class="link-editar" <?= !$puedeEditar ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : '' ?>>
+                                            Editar
+                                        </button>
+                                    </form>
+                                <?php
+                                echo "   </td></tr>";
                             }
                         }
                         ?>
-
                         </tbody>
                         <tfoot>
                         <tr class="fila-total">
@@ -276,76 +269,221 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                         </tfoot>
                     </table>
 
-                    <!-- Paso 3 del CU-03: La UI presenta la opcion para agregar nuevos conceptos y editar conceptos existentes -->
-                    <form action="UI-17_CrearConcepto.php" method="GET">
-                        <input type="hidden" name="from" value="registro_diario">
-                        <button type="submit" class="boton-mas">+</button>
-                    </form>
+                    <button type="button" class="boton-mas" onclick="abrirModal('Egreso')">+</button>
                 </article>
             </section>
 
-            <!-- Parte de abajo -->
             <footer class="seccion-inferior">
-                
                 <?php
-                    // Color para el balance semanal
                     $colorSemanal = ($balanceUltimos7Dias >= 0) ? "color: #00ff5a;" : "color: #ff4d4d;";
-
-                    // Color para el balance diario
-                    $colorDiario = ($balanceCalculado >= 0) ? "color: #00ff5a;" : "color: #ff4d4d;";
+                    $colorDiario = ($balanceCalculado >= 0) ? "color: #00ff5a;" : "color: #d01b1bff;";
                 ?>
 
-                <!-- Verificar si es domingo y mostrar la caja de Corte Semanal -->
                 <?php if ($diaActual == 'Sunday'): ?>
-                    <article class="caja-resumen">
+                    <article class="caja-resumen" style="background-color: #88a5d5ff;">
                         <h4 class="titulo-resumen" style="font-weight: bold;">Corte Semanal</h4>
                         <div class="linea-resumen">
                             <span class="texto-resumen" style = "font-weight: bold; color: white;">Semanal</span>
-                            <span class="valor-resumen" style="<?php echo $colorDiario; ?>">S/. <?php echo number_format($balanceUltimos7Dias, 2); ?></span>
+                            <span class="valor-resumen" style="<?php echo $colorSemanal; ?>">S/. <?php echo number_format($balanceUltimos7Dias, 2); ?></span>
                         </div>
                     </article>
                 <?php else: ?>
-                    <!-- Mostrar artículo vacío si no es domingo -->
-                    <article>
-                        <!-- No contenido aquí, solo un artículo vacío -->
-                    </article>
+                    <article></article>
                 <?php endif; ?>
 
-                <!-- Caja de resumen -->
-                <aside class="caja-resumen" style="background-color: #3862AA;">
+                <aside class="caja-resumen" style="background-color: #88a5d5ff;">
                     <h4 class="titulo-resumen" style="font-weight: bold;">Resumen del Balance</h4>
                     <div class="linea-resumen">
                         <span class="texto-resumen" style = "font-weight: bold; color: white;">Diario</span>
-                        <span class="valor-resumen" style="<?php echo $colorSemanal; ?>">S/. <?php echo number_format($balanceCalculado, 2); ?></span>
+                        <span class="valor-resumen" style="<?php echo $colorDiario; ?>">S/. <?php echo number_format($balanceCalculado, 2); ?></span>
                     </div>
                 </aside>
             </footer>
-
         </main>
     </div>
 </div>
 
-<!-- JavaScript -->
+<!--   BOTON MÁS    -->
+
+<!-- Modal para crear transacción -->
+<div class="modal-overlay" id="modalTransaccion">
+    <div class="modal-contenido">
+        <div class="modal-header">
+            <h2 class="modal-titulo">
+                <i class="fas fa-plus-circle"></i>
+                <span id="tituloModal">Nueva Transacción</span>
+            </h2>
+            <button class="btn-cerrar" onclick="cerrarModal()">&times;</button>
+        </div>
+
+        <form method="POST" id="formTransaccion">
+            <input type="hidden" name="crear_transaccion" value="1">
+            <input type="hidden" name="tipo" id="tipoTransaccion">
+
+            <div class="form-grupo">
+                <label for="concepto_id">
+                    <i class="fas fa-list"></i> Concepto
+                </label>
+                <select name="concepto_id" id="concepto_id" required onchange="mostrarCategoria()">
+                    <option value="">Seleccione un concepto</option>
+                </select>
+                <div id="mensajeSinConceptos" class="mensaje-sin-conceptos" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>No hay conceptos disponibles para este tipo</span>
+                </div>
+            </div>
+
+            <div class="form-grupo" id="contenedorCategoria" style="display: none;">
+                <div class="info-categoria">
+                    <i class="fas fa-tag"></i>
+                    <span>Categoría: <strong id="nombreCategoria"></strong></span>
+                </div>
+            </div>
+
+            <div class="form-grupo">
+                <label for="monto">
+                    <i class="fas fa-dollar-sign"></i> Monto (S/.)
+                </label>
+                <input type="number" name="monto" id="monto" step="0.01" min="0.01" placeholder="0.00" required>
+            </div>
+
+            <button type="submit" class="btn-crear-transaccion" id="btnCrear">
+                <i class="fas fa-check-circle"></i> 
+                <span>Crear Transacción</span>
+            </button>
+        </form>
+    </div>
+</div>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Obtener el valor del switch
-        const switchBtn = document.querySelector('#switchFamilia');
+// Datos de conceptos desde PHP - OBTENIDOS DESDE GTR-02
+const conceptosData = <?php echo json_encode(array_values($conceptosHabilitados)); ?>;
+const categoriasData = <?php echo json_encode($categoriasIndex); ?>;
 
-        if (switchBtn) {
-            switchBtn.addEventListener('change', function() {
-                // Cuando se cambia el estado del switch, lo redirigimos a la página con el parámetro
-                let modo = this.checked ? 'familiar' : 'personal'; // Si está checkeado es 'familiar', sino 'personal'
-                
-                // Redirigir con el parámetro de modo en la URL
-                window.location.href = `UI-04_RegistroDiario.php?modo=${modo}`;
-            });
-        }
+// Debug detallado - ver qué datos llegan
+console.log('=== DEBUG DE CONCEPTOS ===');
+console.log('Total de conceptos habilitados:', conceptosData.length);
+console.log('Conceptos completos:', conceptosData);
+
+// Contar por tipo
+const countIngresos = conceptosData.filter(c => c.tipo === 'Ingreso').length;
+const countEgresos = conceptosData.filter(c => c.tipo === 'Egreso').length;
+console.log('Ingresos disponibles:', countIngresos);
+console.log('Egresos disponibles:', countEgresos);
+console.log('Categorías disponibles:', categoriasData);
+console.log('========================');
+
+document.addEventListener('DOMContentLoaded', function() {
+    const switchBtn = document.querySelector('#switchFamilia');
+    if (switchBtn) {
+        switchBtn.addEventListener('change', function() {
+            let modo = this.checked ? 'familiar' : 'personal';
+            window.location.href = `UI-04_RegistroDiario.php?modo=${modo}`;
+        });
+    }
+});
+
+function abrirModal(tipo) {
+    const modal = document.getElementById('modalTransaccion');
+    const titulo = document.getElementById('tituloModal');
+    const selectConcepto = document.getElementById('concepto_id');
+    const tipoInput = document.getElementById('tipoTransaccion');
+    const mensajeSin = document.getElementById('mensajeSinConceptos');
+    const btnCrear = document.getElementById('btnCrear');
+    
+    console.log('=== ABRIENDO MODAL ===');
+    console.log('Tipo solicitado:', tipo);
+    
+    // Configurar título y tipo
+    titulo.textContent = tipo === 'Ingreso' ? 'Nuevo Ingreso' : 'Nuevo Egreso';
+    tipoInput.value = tipo;
+    
+    // Limpiar y llenar select de conceptos
+    selectConcepto.innerHTML = '<option value="">Seleccione un concepto</option>';
+    
+    // Filtrar conceptos por tipo
+    const conceptosFiltrados = conceptosData.filter(concepto => {
+        console.log(`Concepto: "${concepto.nombre}" | Tipo: "${concepto.tipo}" | Estado: ${concepto.estado}`);
+        return concepto.tipo === tipo;
     });
+    
+    console.log(`Conceptos filtrados para ${tipo}:`, conceptosFiltrados.length);
+    
+    if (conceptosFiltrados.length === 0) {
+        // Mostrar mensaje de error
+        mensajeSin.style.display = 'flex';
+        selectConcepto.disabled = true;
+        btnCrear.disabled = true;
+        btnCrear.style.opacity = '0.5';
+        btnCrear.style.cursor = 'not-allowed';
+    } else {
+        // Llenar el select con los conceptos
+        mensajeSin.style.display = 'none';
+        selectConcepto.disabled = false;
+        btnCrear.disabled = false;
+        btnCrear.style.opacity = '1';
+        btnCrear.style.cursor = 'pointer';
+        
+        conceptosFiltrados.forEach(concepto => {
+            const option = document.createElement('option');
+            option.value = concepto.idConcepto;
+            option.textContent = concepto.nombre;
+            option.dataset.categoria = concepto.idCategoria;
+            selectConcepto.appendChild(option);
+        });
+    }
+    
+    // Limpiar formulario
+    document.getElementById('formTransaccion').reset();
+    document.getElementById('contenedorCategoria').style.display = 'none';
+    tipoInput.value = tipo;
+    
+    // Mostrar modal
+    modal.classList.add('activo');
+}
 
+function cerrarModal() {
+    const modal = document.getElementById('modalTransaccion');
+    modal.classList.remove('activo');
+}
 
+function mostrarCategoria() {
+    const select = document.getElementById('concepto_id');
+    const contenedor = document.getElementById('contenedorCategoria');
+    const nombreCategoria = document.getElementById('nombreCategoria');
+    
+    if (select.value) {
+        const option = select.options[select.selectedIndex];
+        const categoriaId = option.dataset.categoria;
+        
+        console.log('Categoría ID seleccionada:', categoriaId);
+        console.log('Nombre de categoría:', categoriasData[categoriaId]);
+        
+        if (categoriasData[categoriaId]) {
+            nombreCategoria.textContent = categoriasData[categoriaId];
+            contenedor.style.display = 'block';
+        } else {
+            contenedor.style.display = 'none';
+        }
+    } else {
+        contenedor.style.display = 'none';
+    }
+}
 
+// Cerrar modal al hacer clic fuera
+document.getElementById('modalTransaccion').addEventListener('click', function(e) {
+    if (e.target === this) {
+        cerrarModal();
+    }
+});
+
+// Cerrar modal con tecla ESC
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        cerrarModal();
+    }
+});
 </script>
 
 </body>
 </html>
-

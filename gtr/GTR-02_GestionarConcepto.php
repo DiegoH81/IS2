@@ -68,9 +68,7 @@ class GestionarConcepto {
                     'tipo'        => $c->tipo,
                     'subido_por'  => $usuariosIndex[$c->idUsuario] ?? '',
                     'usuario_id'  => $c->idUsuario,
-                    'costo'       => $c->monto,
                     'periodo'     => $c->periodo,
-                    'periodicidad'=> $c->periodicidad,
                     'estado'      => ($c->estado === 't') ? 'Habilitado' : 'Deshabilitado'
                 ];
             }
@@ -85,16 +83,13 @@ class GestionarConcepto {
     public static function crearConceptoBD(
     $nombre, 
     $tipo, 
-    $monto, 
     $periodo, 
-    $periodicidad, 
     $fecha_inicio, 
-    $fecha_fin, 
     $familia_id, 
     $usuario_id, 
     $categoria_id
     ) {
-        Concepto::crearConcepto($nombre, $tipo, $monto, $periodo, $periodicidad, $fecha_inicio, $fecha_fin, $familia_id, $usuario_id, $categoria_id);
+        Concepto::crearConcepto($nombre, $tipo, $periodo, $fecha_inicio, $familia_id, $usuario_id, $categoria_id);
     }
 
 
@@ -107,8 +102,8 @@ class GestionarConcepto {
 
     /* FUN-13 editarConceptoBD
         Actualiza la informacion de un concepto en la base de datos segun su id */
-    public static function editarConceptoBD($id_concepto, $nombre, $tipo, $monto, $periodo, $periodicidad, $fecha_inicio, $fecha_fin, $p_id_categoria ) {
-        return $result = Concepto::editarConcepto($id_concepto, $nombre, $tipo, $monto, $periodo, $periodicidad, $fecha_inicio, $fecha_fin, $p_id_categoria );
+    public static function editarConceptoBD($id_concepto, $nombre, $tipo, $periodo, $fecha_inicio, $p_id_categoria ) {
+        return $result = Concepto::editarConcepto($id_concepto, $nombre, $tipo, $periodo, $fecha_inicio, $p_id_categoria );
     }
 
 

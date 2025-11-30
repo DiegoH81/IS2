@@ -189,6 +189,39 @@ class Transaccion {
         $row = pg_fetch_assoc($result);
         return $row['hallar_proyeccion_egresos'];
     }
-    
+
+    /* FUN-83 crearTransacción
+        Se creara una transacción en la base de datos*/
+
+    public static function crearTransaccion(
+    $fecha,
+    $monto,
+    $tipo,
+    $familia_id,
+    $concepto_id,
+    $usuario_id )
+    {
+    $conn = Database::connect();
+
+    // Formatear fecha a YYYY-MM-DD
+    $fecha = date('Y-m-d', strtotime($fecha));
+
+    $query = "SELECT crearTransaccion($1, $2, $3, $4, $5, $6);";
+
+    $params = [
+        $fecha,
+        (float)$monto,
+        $tipo,
+        (int)$familia_id,
+        (int)$concepto_id,
+        (int)$usuario_id
+    ];
+
+    // Ejecutar con parámetros
+    $result = pg_query_params($conn, $query, $params);
+
+    return $result;
+    }
+
 }
 ?>

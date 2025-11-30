@@ -193,7 +193,6 @@ if ($cadena !== '') {
                                 <th class="encabezado-tabla">Categoría</th>
                                 <th class="encabezado-tabla">Tipo</th>
                                 <th class="encabezado-tabla">Subido por</th>
-                                <th class="encabezado-tabla">Costo</th>
                                 <th class="encabezado-tabla">Periodo</th>
                                 <th class="encabezado-tabla">Estado</th>
                                 <th class="encabezado-tabla">Acción</th>
@@ -207,8 +206,15 @@ if ($cadena !== '') {
                                     <td class="celda"><?= htmlspecialchars($c['categoria']) ?></td>
                                     <td class="celda"><?= htmlspecialchars($c['tipo']) ?></td>
                                     <td class="celda"><?= htmlspecialchars($c['subido_por']) ?></td>
-                                    <td class="celda">S/. <?= number_format($c['costo'], 2) ?></td>
-                                    <td class="celda"><?= htmlspecialchars($c['periodicidad']) ?></td>
+                                    <td class="celda">
+                                         <?php 
+                                            if ($c['periodo'] == 0) {
+                                                echo "Sin recordatorio";
+                                            } else {
+                                                echo "Cada " . $c['periodo'] . " dias";
+                                            }
+                                        ?>
+                                    </td>
 
                                     <td class="celda celda-estado">
                                         <?php

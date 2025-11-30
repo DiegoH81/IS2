@@ -55,16 +55,5 @@ class Validar {
             $_SESSION['familia_id'] ?? null
         );
     }
-
-    /* FUN-83 validarTransacciones
-        Se encarga de verificar todas las transacciones*/
-
-    public static function validarTransacciones()
-    {
-        $conn = Database::connect();
-        
-        $sql = "SELECT * FROM generar_transacciones_periodicas()";
-        pg_query($conn, $sql);
-    }
 }
 ?>

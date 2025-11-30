@@ -1,0 +1,208 @@
+/* Estilos para las tarjetas de tipo */
+.opciones-tipo-moderno {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.tarjeta-tipo {
+    flex: 1;
+    position: relative;
+}
+
+.tarjeta-tipo input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.tarjeta-tipo label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f5f7fa;
+    border: 2px solid #d1d9e6;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.tarjeta-tipo input[type="radio"]:checked + label {
+    
+    background-color: #667eea;
+    border-color: #667eea;
+    color: white;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.tarjeta-tipo label:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.icono-tipo {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.nombre-tipo {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* Estilos para las tarjetas de período */
+.opciones-periodo-moderno {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.tarjeta-periodo {
+    position: relative;
+}
+
+.tarjeta-periodo input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.tarjeta-periodo label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 10px;
+    background: white;
+    border: 2px solid #e0e6ed;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    text-align: center;
+    min-height: 55px;
+}
+
+.tarjeta-periodo input[type="radio"]:checked + label {
+    
+    background-color: #2F80ED;
+    border-color: #2F80ED;
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(47, 128, 237, 0.3);
+}
+
+.tarjeta-periodo label:hover {
+    border-color: #2F80ED;
+}
+
+.seccion-periodicidad {
+    margin-top: 20px;
+    padding: 25px;
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+    border-radius: 4px;
+    border: 2px solid #e0e6ed;
+    display: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.seccion-periodicidad.activa {
+    display: block;
+    animation: slideDown 0.4s ease-out;
+}
+
+
+
+.boton-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 30px;
+    background-color: #667eea;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.boton-toggle:hover {
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.boton-toggle.activo {
+    background-color: #11998e;
+    box-shadow: 0 4px 15px rgba(3, 167, 66, 0.3);
+}
+
+.boton-toggle.activo:hover {
+    box-shadow: 0 6px 20px rgba(56, 239, 125, 0.4);
+}
+
+.icono-flecha {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    font-size: 18px;
+}
+
+.boton-toggle.activo .icono-flecha {
+    transform: rotate(180deg);
+}
+
+.campo-formulario.centro {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.seccion-periodicidad h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #2d3748;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.seccion-periodicidad h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 2px;
+}
+
+/* Mejorar el campo de fecha */
+.campo-formulario input[type="date"] {
+    padding: 12px 15px;
+    border: 2px solid #e0e6ed;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.campo-formulario input[type="date"]:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Ícono negro por defecto */
+.tarjeta-tipo .icono-tipo i {
+    color: black;
+    transition: color 0.3s ease;
+}
+
+/* Ícono blanco cuando la tarjeta está seleccionada */
+.tarjeta-tipo input[type="radio"]:checked + label .icono-tipo i {
+    color: white !important;
+}

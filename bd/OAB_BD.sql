@@ -953,7 +953,7 @@ $$;
 ALTER FUNCTION public.obtenerconceptoporid(p_concepto_id integer) OWNER TO postgres;
 
 
-/* FUN-BD-23 obtenerconceptos
+/* FUN-BD-23 obtenerConceptos
         Obtiene todos los conceptos registrados en una familia,
         
         Devuelve: Los conceptos de una familia */
