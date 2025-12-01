@@ -91,3 +91,22 @@ extension=pdo_pgsql
 2. Activar Apache
 3. Ir al botón Admin (del módulo Apache)
 4. Se abrirá en el navegador la URL del proyecto, por ejemplo: http://localhost/IS2/
+
+# Capturas de ejecución
+
+Interfaz de Registro Diario, donde el usuario puede visualizar las transacciones del día.
+
+<img width="1920" height="1080" alt="registroDiario" src="https://github.com/user-attachments/assets/04c8caab-ec90-4b4c-885f-59a6c91a23fd" />
+
+Formulario de creación de transaccion, donde el usuario ingresa el concepto y monto de una transacción para crearla.
+
+<img width="1920" height="1080" alt="crearTransaccion" src="https://github.com/user-attachments/assets/08da2d67-1ef8-42a0-92c8-1820d3ecebc7" />
+
+Interfaz de agenda, donde el usuario puede ver que conceptos tienen una fecha cercana posible para instanciar una transacción.
+
+<img width="1920" height="1080" alt="agenda" src="https://github.com/user-attachments/assets/a22d5d5b-4236-421f-8b8e-d2785315b45a" />
+
+Interfaz de ranking, donde el usuario puede visualizar que transacciones de egresos e ingresos son los que tienen los montos mas altos.
+
+<img width="1920" height="1080" alt="ranking" src="https://github.com/user-attachments/assets/173900b5-b2e1-45ed-a347-9c4951b1d10d" />
+
