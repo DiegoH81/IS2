@@ -9,16 +9,19 @@ session_start();
 require_once '../gtr/GTR-02_GestionarConcepto.php';
 require_once '../gtr/GTR-09_GestionarCategoria.php';
 
+//<!-- Paso 1 del CU-09-1: El GTR-02 obtiene las categorias necesarioas -->
 $categorias = GestionarCategoria::obtenerCategoriasBD($_SESSION['familia_id']);
 
 $from = $_GET['from'] ?? 'visualizar_conceptos';
 
-// Verificar si el formulario fue enviado
+// <!-- Paso 10 del CU-09-1: Se selecciona la opcion crear -->
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre        = $_POST['nombre'];
     $tipo          = $_POST['tipo'];
     $categoria_id  = $_POST['categoria'];
     
+    // <!-- Paso 11-13 del CU-09-1: Se empiezan los procesos de validacion pertinentes -->
     // Si se activó la periodicidad
     if (isset($_POST['activar_periodicidad']) && $_POST['activar_periodicidad'] === '1') {
         $periodo = $_POST['periodo'];
@@ -32,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fecha_fin = date('Y-m-d');
     }
 
+    // <!-- Paso 14 del CU-09-1: Se crea un nuevo concepto -->
     GestionarConcepto::crearConceptoBD(
         $nombre,
         $tipo,
@@ -44,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $from = $_POST['from'] ?? 'visualizar_conceptos';
 
+    // <!-- Paso 15-16 del CU-09-1: Se muestra un mensaje de confirmacion, y se redirige a las paginas pertinentes -->
     if ($from === 'registro_diario') {
         header("Location: UI-04_RegistroDiario.php");
         exit;
@@ -54,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+<!-- Paso 2-3 del CU-09-1: La UI-17 se carga mostrando las opciones necsarios -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -141,11 +147,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
 
+
+                    <!-- Paso 4 del CU-09-1: El AC-02 Ingresa el nombre del conceptoy el nombre de la categoría -->
                     <form class="form-crear-concepto" method="POST">
                         <input type="hidden" name="activar_periodicidad" id="activarPeriodicidad" value="0">
                         <input type="hidden" name="from" value="<?= htmlspecialchars($from) ?>">
 
-                        <!-- Categoría -->
+                        <!-- Paso 5 del CU-09-1: Se cargan las categorias pertinentes -->
                         <div class="campo-formulario">
                             <label for="categoria">Categoría:</label>
                             <select id="categoria" name="categoria" required>
@@ -157,6 +165,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php endforeach; ?>
                             </select>
                         </div>
+
+
+                        <!-- Paso 6-9 del CU-09-1: El AC-02 Empieza a registrar los cambios -->
 
                         <!-- Nombre -->
                         <div class="campo-formulario">
@@ -236,6 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <!-- Botón Guardar -->
+                        <!-- Paso 10 del CU-09-1: Se selecciona la opcion crear -->
                         <div class="campo-formulario">
                             <button type="submit" class="boton-crear">Crear concepto</button>
                         </div>

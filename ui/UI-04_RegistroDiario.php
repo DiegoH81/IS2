@@ -59,6 +59,9 @@ foreach ($categorias as $cat) {
     $categoriasIndex[$cat->idCategoria] = $cat->nombre;
 }
 
+//<!-- Paso 4-8 del CU-03: El GTR-08 llamando a diversos gestores empieza a relacionar datos para ser mostrados -->
+//<!-- Paso 9 del CU-03: El GTR-08 calcula el toal de ingresos, egresos y balances -->
+
 if ($modo == 'familiar') {
     $datosRelacionados = GestionarRegistroDiario::vistaFamiliarRegistroDiario($usuario->idFamilia, $fecha_hoy);
     $ingresos = GestionarTransaccion::obtenerIngresoBD($usuario->idFamilia, $fecha_hoy, $fecha_hoy);
@@ -81,6 +84,8 @@ $balanceCalculado = $ingresos - $egresos;
 $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
 ?>
 
+
+<!-- Paso 1-3 del CU-03: La UI-04 se carga y presenta los campos pertinentes -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -163,13 +168,13 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
 
             <section class="contenedor-tablas">
                 <!-- Tabla Ingresos -->
+                <!-- Paso 10 del CU-03: La UI-04 muestra los campos: nombre, categoria, costo, usuario y editar -->
                 <article class="caja-tabla">
                     <header>
                         <h2 class="titulo-tabla">Ingresos</h2>
                         <div class="linea-separadora"></div>
                         <div class="linea-azul"></div>
                     </header>
-
                     <table class="tabla-datos">
                         <thead>
                         <tr>
@@ -219,7 +224,9 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
                     <button type="button" class="boton-mas" onclick="abrirModal('Ingreso')">+</button>
                 </article>
 
+
                 <!-- Tabla Egresos -->
+                <!-- Paso 10 del CU-03: La UI-04 muestra los campos: nombre, categoria, costo, usuario y editar -->
                 <article class="caja-tabla">
                     <header>
                         <h2 class="titulo-tabla">Egresos</h2>
@@ -360,13 +367,23 @@ $balanceUltimos7Dias = $ingresos_7Dias - $egresos_7Dias;
 </div>
 
 
+<!-- ======================================== -->
+<!-- ======================================== -->
+<!-- ======================================== -->
+
+
+<!-- ------------------------------------------------------------ -->
+<!-- UI-04: Registro Diario -->
+<!-- Caso de uso asociado: CU-11.1 Crear transacción -->
+<!-- ------------------------------------------------------------ -->
+
 
 <script>
-// Datos de conceptos desde PHP - OBTENIDOS DESDE GTR-02
+// <!-- Paso 1-2 del CU-11.1: El formulario de crear transaccion se carga, mostrando el boton para crear y cancelar -->
 const conceptosData = <?php echo json_encode(array_values($conceptosHabilitados)); ?>;
 const categoriasData = <?php echo json_encode($categoriasIndex); ?>;
 
-// Contar por tipo
+
 const countIngresos = conceptosData.filter(c => c.tipo === 'Ingreso').length;
 const countEgresos = conceptosData.filter(c => c.tipo === 'Egreso').length;
 
@@ -380,6 +397,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// <!-- Paso 3-5 del CU-11.1: El AC-02 Familiar empieza a ingresar datos -->
 function abrirModal(tipo) {
     const modal = document.getElementById('modalTransaccion');
     const titulo = document.getElementById('tituloModal');
@@ -389,28 +407,23 @@ function abrirModal(tipo) {
     const btnCrear = document.getElementById('btnCrear');
     
     
-    // Configurar título y tipo
     titulo.textContent = tipo === 'Ingreso' ? 'Nuevo Ingreso' : 'Nuevo Egreso';
     tipoInput.value = tipo;
     
-    // Limpiar y llenar select de conceptos
     selectConcepto.innerHTML = '<option value="">Seleccione un concepto</option>';
     
-    // Filtrar conceptos por tipo
     const conceptosFiltrados = conceptosData.filter(concepto => {
         return concepto.tipo === tipo;
     });
     
     
     if (conceptosFiltrados.length === 0) {
-        // Mostrar mensaje de error
         mensajeSin.style.display = 'flex';
         selectConcepto.disabled = true;
         btnCrear.disabled = true;
         btnCrear.style.opacity = '0.5';
         btnCrear.style.cursor = 'not-allowed';
     } else {
-        // Llenar el select con los conceptos
         mensajeSin.style.display = 'none';
         selectConcepto.disabled = false;
         btnCrear.disabled = false;
@@ -426,12 +439,10 @@ function abrirModal(tipo) {
         });
     }
     
-    // Limpiar formulario
     document.getElementById('formTransaccion').reset();
     document.getElementById('contenedorCategoria').style.display = 'none';
     tipoInput.value = tipo;
     
-    // Mostrar modal
     modal.classList.add('activo');
 }
 
@@ -439,6 +450,9 @@ function cerrarModal() {
     const modal = document.getElementById('modalTransaccion');
     modal.classList.remove('activo');
 }
+
+// <!-- Paso 6-9 del CU-11.1: La UI-04 empieza el proceso de validacion necesario -->
+// <!-- Paso 10 del CU-11.1: Se crea la transaccion y se cierra el formuarlio -->
 
 function mostrarCategoria() {
     const select = document.getElementById('concepto_id');
@@ -460,14 +474,12 @@ function mostrarCategoria() {
     }
 }
 
-// Cerrar modal al hacer clic fuera
 document.getElementById('modalTransaccion').addEventListener('click', function(e) {
     if (e.target === this) {
         cerrarModal();
     }
 });
 
-// Cerrar modal con tecla ESC
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         cerrarModal();

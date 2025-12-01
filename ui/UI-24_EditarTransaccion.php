@@ -2,7 +2,7 @@
 
 // ------------------------------------------------------------
 // UI-25: Editar transacción
-// Caso de uso asociado: Editar transacción
+// Caso de uso asociado: CU-11-2 Editar transacción
 // ------------------------------------------------------------
 
 session_start();
@@ -24,7 +24,7 @@ if (!$transaccion) {
     die("Transacción no encontrada");
 }
 
-// Verificar permisos: Admin familiar o usuario que creó la transacción
+//<!-- Paso 6-7 del CU-11-2: La UI-24 Empieza a validar los datos -->
 $puedeEditar = ($_SESSION['rol'] === 'Administrador familiar') || ($_SESSION['id_usuario'] == $transaccion->idUsuario);
 
 // Verificar que la transacción tenga menos de 30 días
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $idUsuario = $transaccion->idUsuario;
 
-    // Paso 10: Actualizar la transacción
+    //<!-- Paso 8 del CU-11-2: Se actualiza la informacion de la transacción -->
     GestionarTransaccion::editarTransaccionBD(
         $idTransaccion,
         $fecha,
@@ -69,9 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $idUsuario
     );
     
-    // Paso 11: Redirigir con mensaje de éxito
     $_SESSION['mensaje_exito'] = 'Transacción editada exitosamente';
 
+    //<!-- Paso 9 del CU-11-2: La UI-24 nos redirige a las interfaces pertinentes -->
     if ($origenPost === 'registro_diario') {
         header("Location: UI-04_RegistroDiario.php");
     } else {
@@ -82,8 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 ?>
 
-<!-- Paso 2-3: La interfaz se carga y presenta los campos pertinentes -->
 
+<!-- Paso 1 del CU-11-2: La UI-24 se carga y presenta los campos -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -175,19 +175,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <?php if(isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
 
-                    <!-- Paso 8-9: Se validan los datos y se comprueba que no hayan campos vacíos -->
+                    <!-- Paso 3-4 del CU-11-2: El AC-02 Familiar modifica los campos necesarios -->
                     <form class="form-crear-concepto" method="POST">
                         <input type="hidden" name="origen" value="<?= htmlspecialchars($origen) ?>">
 
                         <h1 style="text-align: center;">Editando transacción</h1>
 
-                        <!-- Paso 4: Fecha de la transacción -->
                         <div class="campo-formulario">
                             <label for="fecha">Fecha:</label>
                             <input type="date" id="fecha" name="fecha" value="<?= htmlspecialchars($transaccion->fecha) ?>" required>
                         </div>
 
-                        <!-- Paso 5: Tipo de transacción -->
                         <div class="campo-formulario">
                             <label for="tipo">Tipo:</label>
                             <select id="tipo" name="tipo" required>
@@ -197,7 +195,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </select>
                         </div>
 
-                        <!-- Paso 6: Concepto -->
                         <div class="campo-formulario">
                             <label for="concepto">Concepto:</label>
                             <select id="concepto" name="concepto" required>
@@ -210,13 +207,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </select>
                         </div>
 
-                        <!-- Paso 7: Monto -->
                         <div class="campo-formulario">
                             <label for="monto">Monto (S/):</label>
                             <input type="number" id="monto" name="monto" step="0.01" min="0.01" value="<?= htmlspecialchars($transaccion->monto) ?>" placeholder="0.00" required>
                         </div>
 
-                        <!-- Paso 8: Usuario responsable (NO EDITABLE) -->
                         <div class="campo-formulario">
                             <label for="usuario">Usuario:</label>
                             <input type="text" id="usuario" name="usuario_display" 
@@ -233,7 +228,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                    style="background-color: #f0f0f0; cursor: not-allowed;">
                         </div>
 
-                        <!-- Paso 9: Botones de acción -->
+                        <!-- Paso 2 del CU-11-2: La UI-24 se carga y presenta la opcion de Cancelar y Guardar -->
+                        <!-- Paso 5 del CU-11-2: El AC-02 Selecciona la opcion guardar -->
                         <div style="text-align:center;">
                             <div class="grupo-botones">
                                 <button type="button" class="boton-crear boton-cancelar" onclick="cancelarEdicion('<?= htmlspecialchars($origen) ?>')">Cancelar</button>

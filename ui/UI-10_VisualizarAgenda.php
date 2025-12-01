@@ -15,12 +15,12 @@ require_once '../gtr/GTR-06_ControladorDeAgenda.php';
 //                         relacionando los datos relacionados -->
 
 
-$fecha_hoy = date('Y-m-d');  // Obtiene la fecha de hoy en formato YYYY-MM-DD
+$fecha_hoy = date('Y-m-d');
 $usuario = Validar::obtenerUsuarioActual();
 $agenda = ControladorAgenda::solicitarConceptosPorFecha($fecha_hoy, $usuario->idFamilia);
 
 //<!-- Paso 6-7 del CU-06: El GTR-06 obtiene la proyeccion esperada y los ordena -->
-$start_year = date('Y') . '-01-01';  // Esto dará la fecha en formato "YYYY-01-01", es decir, el 1 de enero del año actual.
+$start_year = date('Y') . '-01-01';
 $proyeccion_ingresos = ControladorAgenda::obtenerProyeccionIngresos($usuario->idFamilia, $start_year);
 $proyeccion_egresos = ControladorAgenda::obtenerProyeccionEgresos($usuario->idFamilia, $start_year);
 $balance_esperado = $proyeccion_ingresos - $proyeccion_egresos;

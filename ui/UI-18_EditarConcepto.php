@@ -21,7 +21,7 @@ if (!$concepto) {
     die("Concepto no encontrado");
 }
 
-// Paso 12 del CU-09-2: El AC-02-Familiar selecciona la opción Guardar.
+// Paso 9 del CU-09-2: El AC-02-Familiar selecciona la opción Guardar.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre        = $_POST['nombre'];
     $tipo          = $_POST['tipo'];
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fecha_inicio = date('Y-m-d');
     }
 
-    //<!-- Paso 17 del CU-09-2: El GTR-02 actualiza la informacion del concepto. -->
+    //<!-- Paso 12 del CU-09-2: El GTR-02 actualiza la informacion del concepto. -->
     $resultado = GestionarConcepto::editarConceptoBD(
         $id_concepto,
         $nombre,
@@ -50,12 +50,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     var_dump($id_concepto, $nombre, $tipo, $periodo, $fecha_inicio, $fecha_inicio, $categoriaId);
 
-    //<!-- Paso 18 del CU-09-2: Se redirige a la UI-16 VisualizarConceptos. -->
+    //<!-- Paso 13 del CU-09-2: Se redirige a la UI-16 VisualizarConceptos. -->
     header("Location: UI-16_VisualizarConceptos.php");
     exit;
 }
 ?>
 
+<!-- Paso 2 del CU-09-2: La UI-18 se carga y muestra los campos -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -135,6 +136,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </nav>
             </aside>
 
+
+            <!-- Paso 3 del CU-09-2: El AC-02 Ingresa los campos pertinentes -->
+            <!-- Paso 4 del CU-09-2: La interfaz muestra los campos con informacion actualizada -->
             <section class="contenedor-tablas">
                 <article class="tabla">
                     <header>
@@ -169,6 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <!-- Tipo -->
+                        <!-- Paso 6 del CU-09-2: Se mofica ingreso o egreso de ser necesario -->
                         <div class="campo-formulario">
                             <label>Tipo:</label>
                             <div class="opciones-tipo-moderno">
@@ -198,6 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <!-- Sección de Periodicidad (oculta por defecto) -->
+                        <!-- Paso 7 del CU-09-2: Se modifica el periodo de ser necesario -->
                         <div class="seccion-periodicidad" id="seccionPeriodicidad">
                             <h3>Configuración de Periodicidad</h3>
                             
@@ -229,6 +235,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <!-- Fecha de inicio -->
+                            <!-- Paso 8 del CU-09-2: Se modifica la fecha de inicio en caso de ser necesario -->
                             <div class="campo-formulario">
                                 <label>Día de inicio:</label>
                                 <div class="fechas">
@@ -240,7 +247,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                         </div>
 
-                        <!-- Botón Guardar -->
+                        
+                        <!-- Paso 9 del CU-09-2: eL AC-02 selecciona la opcion guardar -->
                         <div class="campo-formulario">
                             <button type="submit" class="boton-crear">Guardar concepto</button>
                         </div>

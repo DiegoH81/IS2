@@ -18,8 +18,11 @@ function filtrarTransaccionesPorBusqueda($familiaId, $cadena, &$transacciones) {
 <?php
 // ------------------------------------------------------------
 // UI-23: Visualizar transacción
+// Caso de uso asociado: CU-11 - Gestionar Transacciones
 // ------------------------------------------------------------
 
+
+//<!-- Paso 1 del CU-11: El GTR-07 obtiene los datos necesarios para poder ser visualizados -->
 session_start();
 require_once '../gtr/GTR-07_GestionarTransaccion.php';
 
@@ -42,6 +45,7 @@ if ($cadena !== '') {
 }
 ?>
 
+<!-- Paso 2-3 del CU-11: La UI-23 Presenta las interfaces -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -155,6 +159,7 @@ if ($cadena !== '') {
                         <div class="linea-azul"></div>
                     </header>
 
+                    <!-- Paso 4 del CU-11: Se muestra la tabla y las distintas opciones de gestion según el rol -->
                     <table class="tabla-datos" style="height: 600px;">
                         <thead>
                             <tr>
